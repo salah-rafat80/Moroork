@@ -44,4 +44,4 @@ def parse_postman(filepath):
         f.write("# Morourak API Documentation\n\n" + data.get("info", {}).get("description", "") + "\n\n" + md)
 
 if __name__ == "__main__":
-    parse_postman("Morourak.postman_collection (1).json")
+    parse_postman("Api/Morourak.postman_collection_last.json")
