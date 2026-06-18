@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/features/checkout/models/applicant_details.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
@@ -107,7 +108,7 @@ class _EditApplicantDetailsScreenState
       textDirection: TextDirection.rtl,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: AppColors.lightGreyBg,
         drawer: const AppDrawer(),
         body: Column(
           children: [
@@ -134,7 +135,7 @@ class _EditApplicantDetailsScreenState
                           fontFamily: 'Tajawal',
                           fontSize: 17.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       SizedBox(height: 16.h),
@@ -156,7 +157,7 @@ class _EditApplicantDetailsScreenState
                           Divider(
                             height: 1.h,
                             thickness: 1.h,
-                            color: const Color(0xFFDADADA),
+                            color: AppColors.greyBorder,
                           ),
                           SizedBox(height: 12.h),
 
@@ -195,7 +196,7 @@ class _EditApplicantDetailsScreenState
                                 fontFamily: 'Cairo',
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.w700,
-                                color: const Color(0xFFE53935),
+                                color: AppColors.alertRed,
                               ),
                             ),
                           ),
@@ -203,7 +204,7 @@ class _EditApplicantDetailsScreenState
                           Divider(
                             height: 1.h,
                             thickness: 1.h,
-                            color: const Color(0xFFDADADA),
+                            color: AppColors.greyBorder,
                           ),
                           SizedBox(height: 12.h),
 
@@ -224,7 +225,7 @@ class _EditApplicantDetailsScreenState
                       PrimaryButton(
                         label: 'حفظ التغيرات',
                         onPressed: _onSave,
-                        backgroundColor: const Color(0xFF27AE60),
+                        backgroundColor: AppColors.primary,
                       ),
 
                       SizedBox(height: 12.h),
@@ -264,7 +265,7 @@ class _SectionHeader extends StatelessWidget {
         fontFamily: 'Tajawal',
         fontSize: 17.sp,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF222222),
+        color: AppColors.textPrimary,
       ),
     );
   }
@@ -281,14 +282,14 @@ class _FormCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFDADADA)),
-        boxShadow: const [
+        border: Border.all(color: AppColors.greyBorder),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x1F000000),
+            color: AppColors.shadowLight,
             blurRadius: 4,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -328,7 +329,7 @@ class _LabeledField extends StatelessWidget {
           textDirection: TextDirection.rtl,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(icon, size: 18.sp, color: const Color(0xFF27AE60)),
+            Icon(icon, size: 18.sp, color: AppColors.primary),
             SizedBox(width: 6.w),
             Text(
               label,
@@ -336,7 +337,7 @@ class _LabeledField extends StatelessWidget {
                 fontFamily: 'Cairo',
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF707070),
+                color: AppColors.mediumGrey,
               ),
             ),
           ],
@@ -354,7 +355,7 @@ class _LabeledField extends StatelessWidget {
             fontFamily: 'Cairo',
             fontSize: 15.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF222222),
+            color: AppColors.textPrimary,
           ),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
@@ -362,26 +363,26 @@ class _LabeledField extends StatelessWidget {
               vertical: 12.h,
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: AppColors.inputFieldBg,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
-              borderSide: const BorderSide(color: Color(0xFFDADADA)),
+              borderSide: BorderSide(color: AppColors.greyBorder),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
-              borderSide: const BorderSide(
-                color: Color(0xFF27AE60),
+              borderSide: BorderSide(
+                color: AppColors.primary,
                 width: 1.5,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
-              borderSide: const BorderSide(color: Color(0xFFE53935)),
+              borderSide: BorderSide(color: AppColors.alertRed),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
-              borderSide: const BorderSide(
-                color: Color(0xFFE53935),
+              borderSide: BorderSide(
+                color: AppColors.alertRed,
                 width: 1.5,
               ),
             ),
@@ -389,7 +390,7 @@ class _LabeledField extends StatelessWidget {
               fontFamily: 'Cairo',
               fontSize: 10.sp,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFFE53935),
+              color: AppColors.alertRed,
             ),
           ),
         ),
@@ -425,7 +426,7 @@ class _ReadOnlyField extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 18.sp, color: const Color(0xFF707070)),
+                Icon(icon, size: 18.sp, color: AppColors.mediumGrey),
                 SizedBox(width: 6.w),
                 Text(
                   label,
@@ -433,7 +434,7 @@ class _ReadOnlyField extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF707070),
+                    color: AppColors.mediumGrey,
                   ),
                 ),
               ],
@@ -443,7 +444,7 @@ class _ReadOnlyField extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
               decoration: BoxDecoration(
-                color: const Color(0xFFEBEBEB),
+                color: AppColors.borderMedium,
                 borderRadius: BorderRadius.circular(5.r),
               ),
               child: Text(
@@ -452,7 +453,7 @@ class _ReadOnlyField extends StatelessWidget {
                   fontFamily: 'Cairo',
                   fontSize: 9.sp,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF707070),
+                  color: AppColors.mediumGrey,
                 ),
               ),
             ),
@@ -469,7 +470,7 @@ class _ReadOnlyField extends StatelessWidget {
             fontFamily: 'Cairo',
             fontSize: 15.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF222222),
+            color: AppColors.textPrimary,
           ),
         ),
       ],
@@ -493,9 +494,9 @@ class _OutlinedActionButton extends StatelessWidget {
         width: double.infinity,
         height: 52.h,
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F9F9),
+          color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: const Color(0xFF27AE60)),
+          border: Border.all(color: AppColors.primary),
         ),
         child: Center(
           child: Text(
@@ -504,7 +505,7 @@ class _OutlinedActionButton extends StatelessWidget {
               fontFamily: 'Cairo',
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF27AE60),
+              color: AppColors.primary,
             ),
           ),
         ),

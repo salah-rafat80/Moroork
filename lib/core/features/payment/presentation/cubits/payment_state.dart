@@ -25,3 +25,19 @@ class PaymentFailure extends PaymentState {
 
   const PaymentFailure(this.message);
 }
+
+class PaymentVerifying extends PaymentState {
+  const PaymentVerifying();
+}
+
+class PaymentVerifySuccess extends PaymentState {
+  final String status;
+
+  const PaymentVerifySuccess(this.status);
+}
+
+class PaymentVerifyFailure extends PaymentState {
+  final String message;
+
+  const PaymentVerifyFailure(this.message);
+}

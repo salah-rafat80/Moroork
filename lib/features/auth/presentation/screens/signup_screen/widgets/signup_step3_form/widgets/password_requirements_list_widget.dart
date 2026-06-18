@@ -42,7 +42,7 @@ class PasswordRequirementsListWidget extends StatelessWidget {
           isMet: hasSpecialChar,
         ),
         PasswordRequirementItem(
-          text: 'يجب ألا تكون كلمة المرور مطابقة عن اسم المستخدم',
+          text: 'يجب ألا تكون كلمة المرور مطابقة لاسم المستخدم',
           isMet: notSameAsUsername,
         ),
       ],

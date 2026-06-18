@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import '../api_error_handler.dart';
 
 class ErrorInterceptor extends Interceptor {
   @override

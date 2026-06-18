@@ -1,18 +1,16 @@
+import 'package:traffic/core/constants/colors.dart';
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/service_list_item.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
 import 'package:traffic/core/widgets/generic_terms_screen.dart';
 import 'package:traffic/core/widgets/generic_document_upload_screen.dart';
-import 'package:traffic/features/vehicle_license/data/repositories/vehicle_license_repository.dart';
 import 'package:traffic/features/vehicle_license/presentation/cubits/vehicle_license_cubit.dart';
 import 'package:traffic/features/vehicle_license/presentation/cubits/vehicle_license_state.dart';
 import 'package:traffic/features/vehicle_license/presentation/screens/vehicle_insurance_screen.dart';
-import 'package:traffic/features/profile/data/repositories/profile_repository.dart';
 import 'package:traffic/injection_container.dart';
 
 import 'package:traffic/features/vehicle_license/replacement_license/presentation/screens/vehicle_lost_license_selection_screen.dart';
@@ -21,7 +19,8 @@ import 'package:traffic/features/vehicle_license/violations_inquiry/presentation
 import 'package:traffic/features/vehicle_license/data/models/vehicle_type_model.dart';
 
 class VehicleLicenseScreen extends StatefulWidget {
-  const VehicleLicenseScreen({super.key});
+  final bool startWithRenewal;
+  const VehicleLicenseScreen({super.key, this.startWithRenewal = false});
 
   @override
   State<VehicleLicenseScreen> createState() => _VehicleLicenseScreenState();
@@ -29,6 +28,39 @@ class VehicleLicenseScreen extends StatefulWidget {
 
 class _VehicleLicenseScreenState extends State<VehicleLicenseScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.startWithRenewal) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _openRenewalFlow();
+      });
+    }
+  }
+
+  void _openRenewalFlow() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => GenericTermsScreen(
+          appBarTitle: 'تجديد رخصة مركبة',
+          subtitle:
+              'يرجى قراءة الشروط بعناية قبل متابعة التجديد.',
+          disclaimer:
+              'قبل المتابعة، يرجى التأكد أن المركبة تستوفي جميع الشروط المطلوبة. في حال عدم استيفاء أي شرط، لن تتمكن من إتمام التجديد إلكترونيًا.',
+          termsData: _termsData,
+          onNextPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  const RenewalVehicleSelectionScreen(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   static const List<TermsSection> _termsData = [
     TermsSection(
@@ -220,13 +252,13 @@ class _VehicleLicenseScreenState extends State<VehicleLicenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      endDrawer: const AppDrawer(),
+      backgroundColor: AppColors.background,
+      drawer: const AppDrawer(),
       body: Column(
         children: [
           ServiceScreenAppBar(
             title: 'رخصة المركبة',
-            onMenuPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+            onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
           ),
           SizedBox(height: 5.h),
           Expanded(
@@ -256,26 +288,7 @@ class _VehicleLicenseScreenState extends State<VehicleLicenseScreen> {
                   ServiceListItem(
                     title: 'تجديد رخصة مركبة',
                     icon: 'assets/loding.svg',
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => GenericTermsScreen(
-                          appBarTitle: 'تجديد رخصة مركبة',
-                          subtitle:
-                              'يرجى قراءة الشروط بعناية قبل متابعة التجديد.',
-                          disclaimer:
-                              'قبل المتابعة، يرجى التأكد أن المركبة تستوفي جميع الشروط المطلوبة. في حال عدم استيفاء أي شرط، لن تتمكن من إتمام التجديد إلكترونيًا.',
-                          termsData: _termsData,
-                          onNextPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const RenewalVehicleSelectionScreen(),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    onTap: _openRenewalFlow,
                   ),
                   SizedBox(height: 24.h),
                   ServiceListItem(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/features/violations_inquiry/data/models/violation_model.dart';
 import 'package:traffic/features/violations_inquiry/presentation/widgets/violation_detail_row.dart';
@@ -17,7 +18,7 @@ class ViolationDetailsCard extends StatelessWidget {
 
   Widget _divider() => Padding(
     padding: EdgeInsets.symmetric(vertical: 12.h),
-    child: const Divider(color: Color(0xFFDADADA), height: 1),
+    child: Divider(color: AppColors.greyBorder, height: 1),
   );
 
   @override
@@ -27,9 +28,9 @@ class ViolationDetailsCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+          color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
-        border: Border.all(color: const Color(0xFFDADADA)),
+        border: Border.all(color: AppColors.greyBorder),
       ),
       child: Padding(
         padding: EdgeInsets.all(14.w),
@@ -49,7 +50,7 @@ class ViolationDetailsCard extends StatelessWidget {
                       fontFamily: 'Cairo',
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),

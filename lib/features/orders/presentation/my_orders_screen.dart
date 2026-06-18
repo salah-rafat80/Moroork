@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -26,7 +27,7 @@ class _MyOrdersScreenView extends StatelessWidget {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       body: Column(
         children: [
           const ProfileHeader(title: 'طلباتي'),

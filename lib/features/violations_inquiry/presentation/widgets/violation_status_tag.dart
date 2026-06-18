@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A small pill-shaped tag that shows the payment status of a violation.
@@ -11,10 +12,10 @@ class ViolationStatusTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isPaid ? const Color(0xFFE8F5E9) : const Color(0xFFFFE9E8);
+    final bgColor = isPaid ? AppColors.successLight : AppColors.warningRedSoft;
     final textColor = isPaid
-        ? const Color(0xFF27AE60)
-        : const Color(0xFFE53935);
+        ? AppColors.primary
+        : AppColors.alertRed;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),

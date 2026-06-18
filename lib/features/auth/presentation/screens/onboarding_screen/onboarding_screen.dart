@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -48,10 +49,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         : double.infinity;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
         elevation: 0,
         titleSpacing: 0,
         title: Padding(
@@ -59,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Spacer(),
+              const Spacer(),
               SizedBox(
                 width: logoHeight * 2,
                 height: logoHeight,
@@ -114,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               ? 25.sp
                               : (context.isTablet ? 22.sp : 20.sp),
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                          color: AppColors.charcoal,
                           height: 1.4,
                         ),
                         textAlign: TextAlign.center,
@@ -131,7 +132,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       count: _onboardingData.length,
                       effect: ExpandingDotsEffect(
                         activeDotColor: Theme.of(context).colorScheme.primary,
-                        dotColor: const Color(0xFFD1D5DB),
+                        dotColor: AppColors.lightGreyBorder,
                         dotHeight: context.isTablet ? 8.r : 6.r,
                         dotWidth: context.isTablet ? 8.r : 6.r,
                         spacing: context.isTablet ? 6.w : 5.w,
@@ -211,7 +212,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           'لديك حساب بالفعل ؟',
                           style: TextStyle(
                             fontSize: context.isTablet ? 17.sp : 15.sp,
-                            color: Colors.black87,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ],

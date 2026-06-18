@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../domain/entities/order_model.dart';
 import 'timeline_step_item.dart';
@@ -15,55 +16,80 @@ class OrderStatusTimeline extends StatelessWidget {
     final String step = order.stepCode ?? '';
     final String label = order.statusLabel;
 
-    // Check failed states
+    // Check failed states independently
     final bool isMedicalFailed =
         step == 'MEDICAL_EXAM_FAILED' ||
-        label.contains('عدم اجتياز') ||
-        label.contains('راسب') ||
-        label.contains('لم يجتز') ||
-        label.contains('failed') ||
-        label.contains('Failed');
+        (label.contains('راسب') && (label.contains('الكشف') || label.contains('طبي')));
 
-    // Check steps and status
+    final bool isTechnicalFailed =
+        step == 'TECHNICAL_INSPECTION_FAILED' ||
+        (label.contains('راسب') && (label.contains('الفحص') || label.contains('فني')));
+
+    final bool isSchoolOrTestFailed =
+        step == 'DRIVING_TEST_FAILED' ||
+        step == 'PRACTICAL_TEST_FAILED' ||
+        (label.contains('راسب') && (label.contains('اختبار') || label.contains('قيادة')));
+
+    final bool isAnyFailed = isMedicalFailed ||
+        isTechnicalFailed ||
+        isSchoolOrTestFailed ||
+        order.status == OrderStatus.failed ||
+        label.contains('عدم اجتياز') ||
+        label.contains('لم يجتز') ||
+        label.toLowerCase().contains('failed');
+
     final bool isMedicalActive =
-        !isMedicalFailed &&
         (step == 'MEDICAL_EXAM' ||
             step == 'MEDICAL_EXAM_BOOKING_WAITING' ||
             step == 'MEDICAL_EXAM_RESULT_WAITING' ||
             label.contains('الكشف الطبي') ||
-            label.contains('طبي'));
+            label.contains('طبي')) &&
+        !isMedicalFailed;
+
+    final bool isTechnicalActive =
+        (step == 'TECHNICAL_INSPECTION' ||
+            step == 'TECHNICAL_INSPECTION_BOOKING_WAITING' ||
+            step == 'TECHNICAL_INSPECTION_RESULT_WAITING' ||
+            label.contains('الفحص الفني') ||
+            label.contains('الفحص')) &&
+        !isTechnicalFailed;
+
+    final bool isMedicalOrTechActive = isMedicalActive || isTechnicalActive;
+    final bool isMedicalOrTechFailed = isMedicalFailed || isTechnicalFailed;
+
     final bool isSchoolOrTestActive =
-        !isMedicalFailed &&
         (step == 'DRIVING_SCHOOL' ||
             step == 'DRIVING_TEST' ||
             step == 'DRIVING_SCHOOL_BOOKING_WAITING' ||
             step == 'DRIVING_TEST_BOOKING_WAITING' ||
             step == 'PRACTICAL_TEST_BOOKING_WAITING' ||
             label.contains('مدرسة') ||
-            label.contains('اختبار'));
+            label.contains('اختبار')) &&
+        !isSchoolOrTestFailed;
+
     final bool isPaymentActive =
-        !isMedicalFailed &&
         (step == 'PAYMENT' ||
             order.status == OrderStatus.needsData ||
             label.contains('دفع') ||
             label.contains('رسوم') ||
             label.contains('استكمال'));
-    final bool isCompleted =
-        !isMedicalFailed && order.status == OrderStatus.completed;
+
+    final bool isCompleted = order.status == OrderStatus.completed;
 
     // Determine completion of previous stages
-    final bool isSubmittedDone = true;
+    const bool isSubmittedDone = true;
+
     final bool isMedicalDone =
-        !isMedicalFailed &&
+        !isMedicalOrTechFailed &&
         (isCompleted ||
-            (!isMedicalActive &&
-                step != 'MEDICAL_EXAM' &&
+            (!isMedicalOrTechActive &&
                 (isSchoolOrTestActive || isPaymentActive)));
+
     final bool isSchoolTestDone =
-        !isMedicalFailed &&
-        (isCompleted ||
-            (!isMedicalActive && !isSchoolOrTestActive && isPaymentActive));
-    final bool isPaymentDone = !isMedicalFailed && isCompleted;
+        !isSchoolOrTestFailed &&
+        (isCompleted || (!isSchoolOrTestActive && isPaymentActive));
+
+    final bool isPaymentDone = isCompleted;
 
     return [
       _StepData(
@@ -73,38 +99,43 @@ class OrderStatusTimeline extends StatelessWidget {
             'تم استلام طلب استخراج الرخصة بنجاح والتحقق من المستندات الأولية.',
         isCompleted: isSubmittedDone,
         isCurrent:
-            !isMedicalActive &&
+            !isMedicalOrTechActive &&
             !isSchoolOrTestActive &&
             !isPaymentActive &&
             !isCompleted &&
-            !isMedicalFailed,
+            !isAnyFailed,
       ),
       _StepData(
         title: 'الفحص والكشف الطبي',
-        dateSubtitle: (isMedicalActive || isMedicalFailed) ? requestDate : '',
-        descSubtitle: isMedicalFailed
+        dateSubtitle: (isMedicalOrTechActive || isMedicalOrTechFailed) ? requestDate : '',
+        descSubtitle: isMedicalOrTechFailed
             ? (label.isNotEmpty
                   ? label
-                  : 'لا يمكنك استكمال الطلب لعدم اجتياز الكشف الطبي.')
-            : (isMedicalActive
-                  ? 'بانتظار إجراء الكشف الطبي المعتمد لإرفاقه بالطلب.'
+                  : 'لا يمكنك استكمال الطلب لعدم اجتياز الفحص/الكشف الطبي.')
+            : (isMedicalOrTechActive
+                  ? 'بانتظار إجراء الكشف الطبي أو الفحص الفني المعتمد لإرفاقه بالطلب.'
                   : (isMedicalDone
                         ? 'تم اجتياز الفحص والكشف الطبي بنجاح.'
                         : 'مرحلة الفحص الطبي المعتمد.')),
         isCompleted: isMedicalDone,
-        isCurrent: isMedicalActive,
-        isFailed: isMedicalFailed,
+        isCurrent: isMedicalOrTechActive,
+        isFailed: isMedicalOrTechFailed,
       ),
       _StepData(
         title: 'التدريب والاختبارات',
-        dateSubtitle: isSchoolOrTestActive ? requestDate : '',
-        descSubtitle: isSchoolOrTestActive
-            ? 'جاري جدولة وحضور محاضرات مدرسة القيادة والاختبارين النظري والعملي.'
-            : (isSchoolTestDone
-                  ? 'تم اجتياز التدريب والاختبارات بنجاح.'
-                  : 'مرحلة التدريب والاختبارات الميدانية.'),
+        dateSubtitle: (isSchoolOrTestActive || isSchoolOrTestFailed) ? requestDate : '',
+        descSubtitle: isSchoolOrTestFailed
+            ? (label.isNotEmpty
+                  ? label
+                  : 'لا يمكنك استكمال الطلب لعدم اجتياز اختبار القيادة.')
+            : (isSchoolOrTestActive
+                  ? 'جاري جدولة وحضور محاضرات مدرسة القيادة والاختبارين النظري والعملي.'
+                  : (isSchoolTestDone
+                        ? 'تم اجتياز التدريب والاختبارات بنجاح.'
+                        : 'مرحلة التدريب والاختبارات الميدانية.')),
         isCompleted: isSchoolTestDone,
         isCurrent: isSchoolOrTestActive,
+        isFailed: isSchoolOrTestFailed,
       ),
       _StepData(
         title: 'دفع الرسوم وإصدار الرخصة',
@@ -134,36 +165,51 @@ class OrderStatusTimeline extends StatelessWidget {
     final steps = _buildSteps();
     final String step = order.stepCode ?? '';
     final String label = order.statusLabel;
+
     final bool isMedicalFailed =
         step == 'MEDICAL_EXAM_FAILED' ||
+        (label.contains('راسب') && (label.contains('الكشف') || label.contains('طبي')));
+
+    final bool isTechnicalFailed =
+        step == 'TECHNICAL_INSPECTION_FAILED' ||
+        (label.contains('راسب') && (label.contains('الفحص') || label.contains('فني')));
+
+    final bool isSchoolOrTestFailed =
+        step == 'DRIVING_TEST_FAILED' ||
+        step == 'PRACTICAL_TEST_FAILED' ||
+        (label.contains('راسب') && (label.contains('اختبار') || label.contains('قيادة')));
+
+    final bool isAnyFailed = isMedicalFailed ||
+        isTechnicalFailed ||
+        isSchoolOrTestFailed ||
+        order.status == OrderStatus.failed ||
         label.contains('عدم اجتياز') ||
-        label.contains('راسب') ||
         label.contains('لم يجتز') ||
-        label.contains('failed') ||
-        label.contains('Failed');
+        label.toLowerCase().contains('failed');
+
     final bool isCompleted = order.status == OrderStatus.completed;
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
       decoration: ShapeDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: isMedicalFailed
-                ? const Color(0xFFE02424)
+            color: isAnyFailed
+                ? AppColors.darkRed
                 : isCompleted
-                ? const Color(0xFF27AE60)
-                : const Color(0xFFE0E0E0),
+                ? AppColors.primary
+                : AppColors.dividerGrey,
             width: 1.w,
           ),
           borderRadius: BorderRadius.circular(5.r),
         ),
-        shadows: const [
+        shadows: [
           BoxShadow(
-            color: Color(0x3F000000),
+            color: AppColors.shadowColor,
             blurRadius: 4,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -177,7 +223,7 @@ class OrderStatusTimeline extends StatelessWidget {
                 'سجل الحالة',
                 textAlign: TextAlign.right,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.charcoal,
                   fontSize: 16.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w700,

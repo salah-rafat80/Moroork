@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/features/checkout/edit_applicant_details_screen.dart';
 import 'package:traffic/core/features/checkout/models/applicant_details.dart';
@@ -131,7 +132,7 @@ class _GenericOrderReviewScreenState extends State<GenericOrderReviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -144,7 +145,7 @@ class _GenericOrderReviewScreenState extends State<GenericOrderReviewScreen> {
           // ── Scrollable body ─────────────────────────────────────────
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 24.h),
+              padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -156,7 +157,7 @@ class _GenericOrderReviewScreenState extends State<GenericOrderReviewScreen> {
                       fontFamily: 'Tajawal',
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   SizedBox(height: 16.h),
@@ -176,12 +177,19 @@ class _GenericOrderReviewScreenState extends State<GenericOrderReviewScreen> {
 
                   // Fees details card
                   FeesDetailsCard(fees: widget.feesDetails),
-                  SizedBox(height: 32.h),
-
-                  // Submit button
-                  PrimaryButton(label: 'التالي', onPressed: _handleSubmit),
+                  SizedBox(height: 16.h),
                 ],
               ),
+            ),
+          ),
+
+          // ── Fixed Bottom Button (Fitts's Law: Sticky zone) ──────────────────
+          Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 24.h),
+            child: PrimaryButton(
+              label: 'التالي',
+              onPressed: _handleSubmit,
+              height: 48.h,
             ),
           ),
         ],
@@ -189,3 +197,4 @@ class _GenericOrderReviewScreenState extends State<GenericOrderReviewScreen> {
     );
   }
 }
+

@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,6 @@ import '../widgets/examiner_drawer.dart';
 import 'applicant_test_details_screen.dart';
 import 'package:traffic/injection_container.dart';
 import 'package:traffic/features/auth/data/repositories/auth_repository.dart';
-import '../../data/models/staff_appointment_model.dart';
 
 class DailyTestsScreen extends StatefulWidget {
   const DailyTestsScreen({super.key});
@@ -61,10 +61,10 @@ class _DailyTestsScreenState extends State<DailyTestsScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Color(0xFFF5F5F5),
+      return Scaffold(
+        backgroundColor: AppColors.lightGreyBg,
         body: Center(
-          child: CustomLoadingIndicator(color: Color(0xFF27AE60)),
+          child: CustomLoadingIndicator(color: AppColors.primary),
         ),
       );
     }
@@ -74,7 +74,7 @@ class _DailyTestsScreenState extends State<DailyTestsScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: const ExaminerDrawer(),
-        backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: AppColors.lightGreyBg,
         body: SafeArea(
           child: Column(
             children: [
@@ -98,7 +98,7 @@ class _DailyTestsScreenState extends State<DailyTestsScreen> {
                             Text(
                               _config.listTitle,
                               style: TextStyle(
-                                color: const Color(0xFF222222),
+                                color: AppColors.textPrimary,
                                 fontSize: 17.sp,
                                 fontFamily: 'Tajawal',
                                 fontWeight: FontWeight.w700,
@@ -107,7 +107,7 @@ class _DailyTestsScreenState extends State<DailyTestsScreen> {
                             Text(
                               '', // Removed hardcoded date
                               style: TextStyle(
-                                color: const Color(0xFF707070),
+                                color: AppColors.mediumGrey,
                                 fontSize: 12.sp,
                                 fontFamily: 'Cairo',
                                 fontWeight: FontWeight.w500,
@@ -126,7 +126,7 @@ class _DailyTestsScreenState extends State<DailyTestsScreen> {
                           },
                           prefixIcon: Icon(
                             Icons.search,
-                            color: const Color(0xFFAEAEAE),
+                            color: AppColors.greyIcon,
                             size: 24.r,
                           ),
                           suffixIcon: _searchQuery.isNotEmpty

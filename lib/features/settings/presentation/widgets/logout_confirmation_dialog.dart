@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/features/auth/presentation/screens/login_screen/login_screen.dart';
 import 'package:traffic/features/auth/data/repositories/auth_repository.dart';
@@ -17,15 +18,15 @@ class LogoutConfirmationDialog extends StatelessWidget {
         width: 343.w,
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
         decoration: ShapeDecoration(
-          color: const Color(0xFFF8F9F9),
+          color: AppColors.cardBg,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24.r),
           ),
-          shadows: const [
+          shadows: [
             BoxShadow(
-              color: Color(0x19000000),
+              color: AppColors.shadowOverlay,
               blurRadius: 10,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -36,7 +37,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
               'هل انت متأكد من رغبتك في تسجيل الخروج ؟',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: const Color(0xFF222222),
+                color: AppColors.textPrimary,
                 fontSize: 17.sp,
                 fontFamily: 'Tajawal',
                 fontWeight: FontWeight.bold,
@@ -62,7 +63,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
                 height: 48.h,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE53935),
+                  color: AppColors.alertRed,
                   borderRadius: BorderRadius.circular(5.r),
                 ),
                 child: FittedBox(
@@ -88,10 +89,10 @@ class LogoutConfirmationDialog extends StatelessWidget {
                 height: 48.h,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF8F9F9),
+                  color: AppColors.cardBg,
                   borderRadius: BorderRadius.circular(5.r),
                   border: Border.all(
-                    color: const Color(0xFF27AE60),
+                    color: AppColors.primary,
                     width: 1.w,
                   ),
                 ),
@@ -100,7 +101,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
                   child: Text(
                     'الغاء',
                     style: TextStyle(
-                      color: const Color(0xFF27AE60),
+                      color: AppColors.primary,
                       fontSize: 18.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w600,

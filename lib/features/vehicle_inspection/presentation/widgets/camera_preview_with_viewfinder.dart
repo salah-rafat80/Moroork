@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,7 +62,7 @@ class CameraPreviewWithViewfinder extends StatelessWidget {
   Widget _buildPreviewContent() {
     if (errorMessage != null) {
       return Container(
-        color: const Color(0xFFF5F5F5),
+        color: AppColors.lightGreyBg,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -69,7 +70,7 @@ class CameraPreviewWithViewfinder extends StatelessWidget {
               Icon(
                 Icons.camera_alt_outlined,
                 size: 50.w,
-                color: const Color(0xFF9E9E9E),
+                color: AppColors.chatBgDark,
               ),
               SizedBox(height: 12.h),
               Padding(
@@ -81,7 +82,7 @@ class CameraPreviewWithViewfinder extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Tajawal',
                     fontSize: 14.sp,
-                    color: const Color(0xFF999999),
+                    color: AppColors.inputHint,
                   ),
                 ),
               ),
@@ -93,7 +94,7 @@ class CameraPreviewWithViewfinder extends StatelessWidget {
 
     if (!isCameraInitialized || cameraController == null) {
       return Container(
-        color: const Color(0xFFF5F5F5),
+        color: AppColors.lightGreyBg,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -102,7 +103,7 @@ class CameraPreviewWithViewfinder extends StatelessWidget {
                 width: 40.w,
                 height: 40.w,
                 child: CustomLoadingIndicator(
-                  color: Color(0xFF27AE60),
+                  color: AppColors.primary,
                   strokeWidth: 3,
                 ),
               ),
@@ -113,7 +114,7 @@ class CameraPreviewWithViewfinder extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Tajawal',
                   fontSize: 14.sp,
-                  color: const Color(0xFF999999),
+                  color: AppColors.inputHint,
                 ),
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
@@ -70,7 +71,7 @@ class _ReplacementTypeSelectionScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -95,7 +96,7 @@ class _ReplacementTypeSelectionScreenState
                       fontFamily: 'Tajawal',
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                     ),
                   ),
 
@@ -111,8 +112,8 @@ class _ReplacementTypeSelectionScreenState
                       'assets/file.svg',
                       width: 24.w,
                       height: 24.w,
-                      colorFilter: const ColorFilter.mode(
-                        Color(0xFF27AE60),
+                      colorFilter: ColorFilter.mode(
+                        AppColors.primary,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -130,8 +131,8 @@ class _ReplacementTypeSelectionScreenState
                       'assets/file.svg',
                       width: 24.w,
                       height: 24.w,
-                      colorFilter: const ColorFilter.mode(
-                        Color(0xFF27AE60),
+                      colorFilter: ColorFilter.mode(
+                        AppColors.primary,
                         BlendMode.srcIn,
                       ),
                     ),

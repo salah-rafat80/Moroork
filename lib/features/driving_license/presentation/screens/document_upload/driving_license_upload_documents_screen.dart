@@ -1,12 +1,10 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../../../core/api/api_client.dart';
 import '../../../../../../core/widgets/generic_document_upload_screen.dart';
-import '../../../data/repositories/driving_license_repository.dart';
 import 'package:traffic/features/orders/presentation/cubits/my_orders_cubit.dart';
-import 'package:traffic/features/profile/data/repositories/profile_repository.dart';
 import '../../cubits/driving_license_cubit.dart';
 import '../../cubits/driving_license_state.dart';
 import '../medical_check/medical_check_screen.dart';
@@ -179,12 +177,12 @@ class _UploadContentState extends State<_UploadContent> {
     Navigator.of(ctx).popUntil((route) => route.isFirst);
     if (ctx.mounted) {
       ScaffoldMessenger.of(ctx).showSnackBar(
-        const SnackBar(
-          content: Text(
+        SnackBar(
+          content: const Text(
             'تم تقديم طلبك بنجاح! يمكنك متابعة حالته من قسم "طلباتي".',
             textDirection: TextDirection.rtl,
           ),
-          backgroundColor: Color(0xFF27AE60),
+          backgroundColor: AppColors.primary,
         ),
       );
     }
@@ -247,7 +245,7 @@ class _UploadContentState extends State<_UploadContent> {
             if (state is DrivingLicenseLoading || _isBookingLoading)
               Container(
                 color: Colors.black.withValues(alpha: 0.3),
-                child: Center(child: CustomLoadingIndicator()),
+                child: const Center(child: CustomLoadingIndicator()),
               ),
           ],
         );

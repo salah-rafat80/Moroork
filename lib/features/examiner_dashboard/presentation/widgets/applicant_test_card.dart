@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ApplicantTestCard extends StatelessWidget {
@@ -24,12 +25,12 @@ class ApplicantTestCard extends StatelessWidget {
     return Container(
       padding: EdgeInsetsDirectional.all(16.r),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
-        border: Border.all(color: const Color(0xFF27AE60), width: 1.w),
+        border: Border.all(color: AppColors.primary, width: 1.w),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x3F000000),
+            color: AppColors.shadowColor,
             blurRadius: 4.r,
             offset: const Offset(0, 1),
           ),
@@ -44,17 +45,16 @@ class ApplicantTestCard extends StatelessWidget {
           SizedBox(height: 10.h),
           _buildInfoRow('الوقت', time),
           SizedBox(height: 10.h),
-          const Divider(color: Color(0xFFDADADA)),
+          Divider(color: AppColors.greyBorder),
           SizedBox(height: 5.h),
           GestureDetector(
             onTap: onViewDetails,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   buttonText,
                   style: TextStyle(
-                    color: const Color(0xFF27AE60),
+                    color: AppColors.primary,
                     fontSize: 14.sp,
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w600,
@@ -75,7 +75,7 @@ class ApplicantTestCard extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            color: const Color(0xFF222222),
+            color: AppColors.textPrimary,
             fontSize: 15.sp,
             fontFamily: 'Cairo',
             fontWeight: FontWeight.w600,
@@ -85,7 +85,7 @@ class ApplicantTestCard extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: const Color(0xFF707070),
+            color: AppColors.mediumGrey,
             fontSize: 12.sp,
             fontFamily: 'Cairo',
             fontWeight: FontWeight.w500,

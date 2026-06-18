@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,10 +14,8 @@ import '../widgets/selection_option_card.dart';
 import '../../data/models/vehicle_license_model.dart';
 import 'vehicle_replacement_type_selection_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../data/repositories/vehicle_license_repository.dart';
 import '../../../presentation/cubits/vehicle_replacement_cubit.dart';
 import '../../../presentation/cubits/vehicle_replacement_state.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:traffic/injection_container.dart';
 import 'package:traffic/core/api/order_payment_cache.dart';
 
@@ -156,7 +155,7 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
       textDirection: TextDirection.rtl,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: AppColors.lightGreyBg,
         drawer: const AppDrawer(),
         body: Column(
           children: [
@@ -179,7 +178,7 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
                           fontFamily: 'Tajawal',
                           fontSize: 17.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       SizedBox(height: 16.h),
@@ -194,8 +193,8 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
                           'assets/tabler_building-bank.svg',
                           width: 24.w,
                           height: 24.w,
-                          colorFilter: const ColorFilter.mode(
-                            Color(0xFF27AE60),
+                          colorFilter: ColorFilter.mode(
+                            AppColors.primary,
                             BlendMode.srcIn,
                           ),
                         ),
@@ -212,8 +211,8 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
                           'assets/home2.svg',
                           width: 24.w,
                           height: 24.w,
-                          colorFilter: const ColorFilter.mode(
-                            Color(0xFF27AE60),
+                          colorFilter: ColorFilter.mode(
+                            AppColors.primary,
                             BlendMode.srcIn,
                           ),
                         ),
@@ -277,7 +276,7 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
                     state.message,
                     textDirection: TextDirection.rtl,
                   ),
-                  backgroundColor: const Color(0xFFE74C3C),
+                  backgroundColor: AppColors.redError,
                 ),
               );
             }
@@ -296,13 +295,13 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
         bloc: _replacementCubit,
         builder: (ctx, state) {
           if (state is VehicleReplacementLoading) {
-            return Center(child: CustomLoadingIndicator());
+            return const Center(child: CustomLoadingIndicator());
           }
           return PrimaryButton(
             label: 'التالي',
             onPressed: _isButtonEnabled ? _onNextPressed : null,
             height: 48.h,
-            backgroundColor: const Color(0xFF27AE60),
+            backgroundColor: AppColors.primary,
             fontSize: 18.sp,
           );
         },
@@ -313,7 +312,7 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
       label: 'التالي',
       onPressed: _isButtonEnabled ? _onNextPressed : null,
       height: 48.h,
-      backgroundColor: const Color(0xFF27AE60),
+      backgroundColor: AppColors.primary,
       fontSize: 18.sp,
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
@@ -44,7 +45,7 @@ class _LostLicenseDetailsScreenState extends State<LostLicenseDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -69,7 +70,7 @@ class _LostLicenseDetailsScreenState extends State<LostLicenseDetailsScreen> {
                       fontFamily: 'Tajawal',
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                     ),
                   ),
 
@@ -79,19 +80,18 @@ class _LostLicenseDetailsScreenState extends State<LostLicenseDetailsScreen> {
                   // Green-bordered container replicates the "selected" visual
                   // state to confirm the user's choice.
                   _ConfirmedLicenseCard(data: widget.license),
-
-                  SizedBox(height: 24.h),
-
-                  // ── Primary action button ─────────────────────────────────
-                  PrimaryButton(
-                    label: 'التالي',
-                    onPressed: () => _onNextPressed(context),
-                    height: 48.h,
-                  ),
-
-                  SizedBox(height: 24.h),
                 ],
               ),
+            ),
+          ),
+
+          // ── Primary action button at the very bottom ──────────────────────
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+            child: PrimaryButton(
+              label: 'التالي',
+              onPressed: () => _onNextPressed(context),
+              height: 48.h,
             ),
           ),
         ],
@@ -114,6 +114,7 @@ class _ConfirmedLicenseCard extends StatelessWidget {
     return LicenseInfoCard(
       data: data,
       isSelected: true,
+      showRadioDot: false,
     );
   }
 }

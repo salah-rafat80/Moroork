@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/widgets/primary_button.dart';
@@ -23,7 +24,7 @@ class SupportOptionCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border.all(color: const Color(0xFF27AE60), width: 1.w),
+        border: Border.all(color: AppColors.primary, width: 1.w),
         borderRadius: BorderRadius.circular(5.r),
       ),
       padding: EdgeInsets.all(8.r),
@@ -37,7 +38,7 @@ class SupportOptionCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                   fontSize: 13.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w600,
@@ -48,7 +49,7 @@ class SupportOptionCard extends StatelessWidget {
                 Text(
                   subtitle!,
                   style: TextStyle(
-                    color: const Color(0xFF333333),
+                    color: AppColors.darkGrey,
                     fontSize: 13.sp,
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w700,
@@ -63,7 +64,7 @@ class SupportOptionCard extends StatelessWidget {
           PrimaryButton(
             label: buttonText,
             onPressed: onActionPressed,
-            backgroundColor: const Color(0xFF27AE60),
+            backgroundColor: AppColors.primary,
             height: 40.h,
             fontSize: 16.sp,
           ),

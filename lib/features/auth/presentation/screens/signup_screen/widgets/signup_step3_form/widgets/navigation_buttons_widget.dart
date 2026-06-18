@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -58,9 +59,8 @@ class _NavigationButtonsWidgetState extends State<NavigationButtonsWidget> {
         children: [
           Positioned.fill(
             child: AbsorbPointer(
-              absorbing: true,
               child: Container(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
               ),
             ),
           ),
@@ -95,14 +95,14 @@ class _NavigationButtonsWidgetState extends State<NavigationButtonsWidget> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.r),
                 color: isClickable
-                    ? const Color(0xFF27AE60)
-                    : const Color(0xFFBDBDBD),
+                    ? AppColors.primary
+                    : AppColors.mutedGrey,
               ),
               child: Center(
                 child: Text(
                   'التالي',
                   style: TextStyle(
-                    color: widget.isLoading ? Colors.white.withOpacity(0.5) : Colors.white,
+                    color: widget.isLoading ? Colors.white.withValues(alpha: 0.5) : Colors.white,
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Tajawal',
@@ -120,8 +120,8 @@ class _NavigationButtonsWidgetState extends State<NavigationButtonsWidget> {
             child: OutlinedButton(
               onPressed: widget.isLoading ? null : widget.onPreviousPressed,
               style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF27AE60),
-                side: const BorderSide(color: Color(0xFF27AE60)),
+                foregroundColor: AppColors.primary,
+                side: BorderSide(color: AppColors.primary),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),
                 ),

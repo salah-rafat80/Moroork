@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traffic/core/widgets/signup_app_bar.dart';
-import 'package:traffic/core/api/api_client.dart';
-import 'package:traffic/features/auth/data/repositories/auth_repository.dart';
 import 'package:traffic/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:traffic/features/auth/presentation/cubits/auth_state.dart';
 import 'package:traffic/features/auth/presentation/screens/otp_screen/otp_screen.dart';
@@ -265,12 +264,12 @@ class _SignupScreenState extends State<SignupScreen> {
             );
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(
+                content: const Text(
                   'تم إنشاء الحساب بنجاح',
                   textAlign: TextAlign.right,
                   style: TextStyle(fontFamily: 'Cairo'),
                 ),
-                backgroundColor: const Color(0xFF27AE60),
+                backgroundColor: AppColors.primary,
               ),
             );
           } else if (state is AuthFailure) {
@@ -279,15 +278,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 content: Text(
                   state.message,
                   textAlign: TextAlign.right,
-                  style: TextStyle(fontFamily: 'Cairo'),
+                  style: const TextStyle(fontFamily: 'Cairo'),
                 ),
-                backgroundColor: const Color(0xFFD32F2F),
+                backgroundColor: AppColors.error,
               ),
             );
           }
         },
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.background,
           appBar: SignupAppBar(
             step: _stepText,
             nextStepText: _nextStepText,

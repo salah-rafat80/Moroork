@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -33,13 +34,13 @@ class CompletionWarningDialog extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
           decoration: BoxDecoration(
-            color: const Color(0xFFF8F9F9),
+            color: AppColors.cardBg,
             borderRadius: BorderRadius.circular(24.r),
             boxShadow: [
-              const BoxShadow(
-                color: Color(0x19000000),
+              BoxShadow(
+                color: AppColors.shadowOverlay,
                 blurRadius: 10,
-                offset: Offset(0, 4),
+                offset: const Offset(0, 4),
               ),
             ],
           ),
@@ -59,7 +60,7 @@ class CompletionWarningDialog extends StatelessWidget {
                 'لن تتمكن من استكمال إصدار الرخصة إلا بعد اجتياز اختبار الإشارات النظري، واختبار القيادة العملي',
                 textAlign: TextAlign.right,
                 style: TextStyle(
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                   fontSize: 17.sp,
                   fontFamily: 'Tajawal',
                   fontWeight: FontWeight.w700,
@@ -81,10 +82,10 @@ class CompletionWarningDialog extends StatelessWidget {
                   width: double.infinity,
                   height: 40.h,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF8F9F9),
+                    color: AppColors.cardBg,
                     border: Border.all(
                       width: 1.w,
-                      color: const Color(0xFF27AE60),
+                      color: AppColors.primary,
                     ),
                     borderRadius: BorderRadius.circular(4.r),
                   ),
@@ -92,7 +93,7 @@ class CompletionWarningDialog extends StatelessWidget {
                   child: Text(
                     'العودة للشاشة الرئيسية',
                     style: TextStyle(
-                      color: const Color(0xFF27AE60),
+                      color: AppColors.primary,
                       fontSize: 16.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w600,

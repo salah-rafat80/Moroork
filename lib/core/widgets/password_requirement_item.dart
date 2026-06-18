@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PasswordRequirementItem extends StatelessWidget {
@@ -23,7 +24,7 @@ class PasswordRequirementItem extends StatelessWidget {
           Icon(
             isMet ? Icons.check_circle : Icons.circle_outlined,
             size: 20.r,
-            color: isMet ? const Color(0xFF27AE60) : const Color(0xFFBDBDBD),
+            color: isMet ? AppColors.primary : AppColors.mutedGrey,
           ),
           SizedBox(width: 8.w),
           Expanded(
@@ -33,7 +34,7 @@ class PasswordRequirementItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
-                color: isMet ? Colors.black : const Color(0xFF666666),
+                color: isMet ? AppColors.textPrimary : AppColors.softGrey,
                 fontFamily: 'Tajawal',
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/radio_dot.dart';
 import '../../data/models/renewal_vehicle_license_model.dart';
@@ -10,12 +11,14 @@ class RenewalVehicleLicenseCard extends StatelessWidget {
   final RenewalVehicleLicenseModel vehicle;
   final bool isSelected;
   final VoidCallback? onTap;
+  final VoidCallback? onShowViolations;
 
   const RenewalVehicleLicenseCard({
     super.key,
     required this.vehicle,
     this.isSelected = false,
     this.onTap,
+    this.onShowViolations,
   });
 
   bool get _isRestricted =>
@@ -35,12 +38,12 @@ class RenewalVehicleLicenseCard extends StatelessWidget {
           child: Container(
             padding: EdgeInsetsDirectional.all(16.w),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8F9F9),
+              color: AppColors.cardBg,
               borderRadius: BorderRadius.circular(8.r),
               border: Border.all(
                 color: isSelected
-                    ? const Color(0xFF27AE60)
-                    : const Color(0xFFDADADA),
+                    ? AppColors.primary
+                    : AppColors.greyBorder,
                 width: isSelected ? 2.w : 1.w,
               ),
             ),
@@ -58,13 +61,13 @@ class RenewalVehicleLicenseCard extends StatelessWidget {
                         fontFamily: 'Cairo',
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF222222),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const Spacer(),
                     RenewalBadge(
                       text: vehicle.plateNumber,
-                      color: const Color(0xFF27AE60),
+                      color: AppColors.primary,
                     ),
                   ],
                 ),
@@ -87,25 +90,25 @@ class RenewalVehicleLicenseCard extends StatelessWidget {
                   SizedBox(height: 10.h),
                   RenewalWarningBanner(
                     message:
-                        'توجد مخالفات غير مدفوعة علي هذه الرخصة تمنع التجديد',
+                        'يوجد مخالفات غير مدفوعة على هذه الرخصة تمنع استكمال تجديد الرخصة.',
                     linkText: 'عرض المخالفات',
-                    onLinkTap: () {},
+                    onLinkTap: onShowViolations ?? () {},
                   ),
                 ],
                 if (vehicle.needsTechnicalInspection) ...[
                   SizedBox(height: 10.h),
-                  const RenewalInfoBanner(
+                  RenewalInfoBanner(
                     message: 'يجب إجراء فحص فني للمركبة قبل التجديد',
-                    color: Color(0xFFFFF3E0),
-                    textColor: Color(0xFFE65100),
+                    color: AppColors.lightOrangeBg,
+                    textColor: AppColors.orangeText,
                   ),
                 ],
                 if (vehicle.needsInsuranceRenewal) ...[
                   SizedBox(height: 10.h),
-                  const RenewalInfoBanner(
+                  RenewalInfoBanner(
                     message: 'اكتمل ملف التأمين، يرجى التأكد قبل الاستمرار',
-                    color: Color(0xFFFFF3E0),
-                    textColor: Color(0xFFE65100),
+                    color: AppColors.lightOrangeBg,
+                    textColor: AppColors.orangeText,
                   ),
                 ],
                 if (vehicle.status == RenewalLicenseStatus.valid) ...[
@@ -117,7 +120,7 @@ class RenewalVehicleLicenseCard extends StatelessWidget {
                       fontFamily: 'Cairo',
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFFE53935),
+                      color: AppColors.alertRed,
                     ),
                   ),
                 ],
@@ -130,7 +133,7 @@ class RenewalVehicleLicenseCard extends StatelessWidget {
                       fontFamily: 'Cairo',
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFFE53935),
+                      color: AppColors.alertRed,
                     ),
                   ),
                 ],

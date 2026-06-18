@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/features/payment/models/payment_intent.dart';
 import 'package:traffic/core/widgets/info_row_item.dart';
@@ -15,22 +16,22 @@ class PaymentSummaryCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
-        border: Border.all(color: const Color(0xFFDADADA)),
-        boxShadow: const [
+        border: Border.all(color: AppColors.greyBorder),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x3F000000),
+            color: AppColors.shadowColor,
             blurRadius: 4,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        textDirection: TextDirection.rtl,
+        // mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
 
+        // textDirection: TextDirection.rtl,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
@@ -40,11 +41,11 @@ class PaymentSummaryCard extends StatelessWidget {
                 fontFamily: 'Cairo',
                 fontSize: 15.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF222222),
+                color: AppColors.textPrimary,
               ),
             ),
           ),
-          Divider(height: 1.h, thickness: 1.h, color: const Color(0xFFDADADA)),
+          Divider(height: 1.h, thickness: 1.h, color: AppColors.greyBorder),
           InfoRowItem(
             label: 'اجمالي السداد',
             value: paymentIntent.formattedTotal,

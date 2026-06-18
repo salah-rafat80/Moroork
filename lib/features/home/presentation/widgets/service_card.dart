@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -24,16 +25,16 @@ class ServiceCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(14.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
+              color: AppColors.shadowLight,
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
           ],
-          border: Border.all(color: const Color(0xFFF0F0F0)),
+          border: Border.all(color: AppColors.borderLight),
         ),
         child: isAssistant
             ? _AssistantContent(icon: icon, title: title)
@@ -50,27 +51,32 @@ class _ServiceContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SvgPicture.asset(icon, width: 38.w, height: 38.w),
-        SizedBox(height: 12.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4.w),
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.rtl,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontFamily: 'Cairo', 
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF222222),
+    return Center(
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(icon, width: 38.w, height: 38.w),
+            SizedBox(height: 12.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4.w),
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.rtl,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontFamily: 'Cairo', 
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                ),
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -98,7 +104,7 @@ class _AssistantContent extends StatelessWidget {
             style: TextStyle(fontFamily: 'Cairo', 
               fontSize: 14.sp,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF222222),
+              color: AppColors.textPrimary,
             ),
           ),
         ),

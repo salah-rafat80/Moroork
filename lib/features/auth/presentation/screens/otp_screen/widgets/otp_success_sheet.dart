@@ -24,7 +24,7 @@ class OtpSuccessSheet extends StatelessWidget {
           Container(
             width: OtpStyles.successCircleSize,
             height: OtpStyles.successCircleSize,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: OtpStyles.primaryGreen,
               shape: BoxShape.circle,
             ),

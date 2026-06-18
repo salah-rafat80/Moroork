@@ -1,8 +1,8 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/constants/colors.dart';
 import '../../../core/widgets/primary_button.dart';
 import 'cubits/change_password_cubit.dart';
 import 'cubits/change_password_state.dart';
@@ -59,9 +59,9 @@ class _ConfirmPasswordResetScreenState extends State<ConfirmPasswordResetScreen>
       listener: (context, state) {
         if (state is ChangePasswordSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم تغيير كلمة المرور بنجاح'),
-              backgroundColor: Color(0xFF27AE60),
+            SnackBar(
+              content: const Text('تم تغيير كلمة المرور بنجاح'),
+              backgroundColor: AppColors.primary,
             ),
           );
           // Pop back to the profile screen (2 pops: OTP screen + change password screen)
@@ -75,7 +75,7 @@ class _ConfirmPasswordResetScreenState extends State<ConfirmPasswordResetScreen>
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: const Color(0xFFF8F9F9),
+          backgroundColor: AppColors.cardBg,
           body: Column(
             children: [
               const ProfileHeader(title: 'تأكيد التغيير'),
@@ -87,7 +87,7 @@ class _ConfirmPasswordResetScreenState extends State<ConfirmPasswordResetScreen>
                       Text(
                         'أدخل رمز التحقق',
                         style: TextStyle(
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                           fontSize: 20.sp,
                           fontFamily: 'Tajawal',
                           fontWeight: FontWeight.w700,
@@ -98,7 +98,7 @@ class _ConfirmPasswordResetScreenState extends State<ConfirmPasswordResetScreen>
                         'تم إرسال رمز التحقق إلى بريدك الإلكتروني\n${widget.email}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: const Color(0xFF666666),
+                          color: AppColors.softGrey,
                           fontSize: 14.sp,
                           fontFamily: 'Cairo',
                         ),
@@ -147,9 +147,9 @@ class _ConfirmPasswordResetScreenState extends State<ConfirmPasswordResetScreen>
       width: 45.w,
       height: 55.h,
       decoration: BoxDecoration(
-        color: Colors.white,
+          color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFDADADA)),
+        border: Border.all(color: AppColors.greyBorder),
       ),
       child: TextField(
         controller: _controllers[index],

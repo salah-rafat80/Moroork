@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/custom_appbar.dart';
 
@@ -22,7 +23,7 @@ class SignupAppBar extends StatelessWidget implements PreferredSizeWidget {
     return SafeArea(
       bottom: false,
       child: Container(
-        color: Colors.white,
+        color: AppColors.background,
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
@@ -46,7 +47,7 @@ class SignupAppBar extends StatelessWidget implements PreferredSizeWidget {
                     style: TextStyle(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF666666),
+                      color: AppColors.softGrey,
                       fontFamily: 'Tajawal',
                     ),
                   ),
@@ -58,7 +59,7 @@ class SignupAppBar extends StatelessWidget implements PreferredSizeWidget {
                         style: TextStyle(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF999999),
+                          color: AppColors.inputHint,
                           fontFamily: 'Tajawal',
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -86,7 +87,7 @@ class SignupAppBar extends StatelessWidget implements PreferredSizeWidget {
           height: 4.h,
           margin: EdgeInsets.only(left: index == 2 ? 0 : 3.w),
           decoration: BoxDecoration(
-            color: isActive ? const Color(0xFF27AE60) : const Color(0xFFE0E0E0),
+            color: isActive ? AppColors.primary : AppColors.dividerGrey,
             borderRadius: BorderRadius.circular(2.r),
           ),
         ),

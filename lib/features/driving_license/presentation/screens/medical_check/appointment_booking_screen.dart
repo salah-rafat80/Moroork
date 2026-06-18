@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
@@ -162,7 +163,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -187,7 +188,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 17.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w700,
@@ -218,7 +219,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 16.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w700,
@@ -294,9 +295,9 @@ class _StyledCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: ShapeDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.w, color: const Color(0xFFDADADA)),
+          side: BorderSide(width: 1.w, color: AppColors.greyBorder),
           borderRadius: BorderRadius.circular(8.r),
         ),
       ),
@@ -306,7 +307,7 @@ class _StyledCalendar extends StatelessWidget {
           Container(
             height: 52.h,
             decoration: BoxDecoration(
-              color: const Color(0xFF27AE60),
+              color: AppColors.primary,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8.r),
                 topRight: Radius.circular(8.r),
@@ -378,7 +379,7 @@ class _StyledCalendar extends StatelessWidget {
 
               // ── Week-day row style ────────────────────────────────────────
               weekdayTextStyle: TextStyle(
-                color: const Color(0xFF222222),
+                color: AppColors.textPrimary,
                 fontSize: 13.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w400,
@@ -388,25 +389,25 @@ class _StyledCalendar extends StatelessWidget {
               // ── Day text styles ──────────────────────────────────────────
               // Current month days
               daysTextStyle: TextStyle(
-                color: const Color(0xFF222222),
+                color: AppColors.textPrimary,
                 fontSize: 13.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w400,
               ),
               // Previous/next month days (dim them)
               prevDaysTextStyle: TextStyle(
-                color: const Color(0xFFAEAEAE),
+                color: AppColors.greyIcon,
                 fontSize: 13.sp,
                 fontFamily: 'Inter',
               ),
               nextDaysTextStyle: TextStyle(
-                color: const Color(0xFFAEAEAE),
+                color: AppColors.greyIcon,
                 fontSize: 13.sp,
                 fontFamily: 'Inter',
               ),
               // Weekend text same colour as weekdays
               weekendTextStyle: TextStyle(
-                color: const Color(0xFF222222),
+                color: AppColors.textPrimary,
                 fontSize: 13.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w400,
@@ -419,18 +420,18 @@ class _StyledCalendar extends StatelessWidget {
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w400,
               ),
-              selectedDayBorderColor: const Color(0xFF27AE60),
-              selectedDayButtonColor: const Color(0xFF27AE60),
+              selectedDayBorderColor: AppColors.primary,
+              selectedDayButtonColor: AppColors.primary,
 
               // ── Today ────────────────────────────────────────────────────
               todayTextStyle: TextStyle(
-                color: const Color(0xFF27AE60),
+                color: AppColors.primary,
                 fontSize: 13.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w700,
               ),
               todayButtonColor: Colors.transparent,
-              todayBorderColor: const Color(0xFF27AE60),
+              todayBorderColor: AppColors.primary,
 
               // ── Grid borders ─────────────────────────────────────────────
               daysHaveCircularBorder: true,
@@ -463,7 +464,7 @@ class _ConfirmButton extends StatelessWidget {
         height: 48.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.r),
-          color: enabled ? const Color(0xFF27AE60) : const Color(0xFFBDBDBD),
+          color: enabled ? AppColors.primary : AppColors.mutedGrey,
         ),
         alignment: Alignment.center,
         child: Text(

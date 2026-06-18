@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
@@ -69,7 +70,7 @@ class _SelectLicenseScreenState extends State<SelectLicenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -96,7 +97,7 @@ class _SelectLicenseScreenState extends State<SelectLicenseScreen> {
                         fontFamily: 'Tajawal',
                         fontSize: 17.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1A1A1A),
+                        color: AppColors.charcoal,
                       ),
                     ),
                   ),
@@ -116,7 +117,7 @@ class _SelectLicenseScreenState extends State<SelectLicenseScreen> {
                                 ? Icons.wifi_off_rounded
                                 : Icons.error_outline_rounded,
                             size: 64.r,
-                            color: const Color(0xFFE74C3C),
+                            color: AppColors.redError,
                           ),
                           SizedBox(height: 16.h),
                           Text(
@@ -126,7 +127,7 @@ class _SelectLicenseScreenState extends State<SelectLicenseScreen> {
                               fontFamily: 'Tajawal',
                               fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF555555),
+                              color: AppColors.bodyGrey,
                             ),
                           ),
                           SizedBox(height: 20.h),
@@ -143,7 +144,7 @@ class _SelectLicenseScreenState extends State<SelectLicenseScreen> {
                               ),
                             ),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF27AE60),
+                              backgroundColor: AppColors.primary,
                               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.r),

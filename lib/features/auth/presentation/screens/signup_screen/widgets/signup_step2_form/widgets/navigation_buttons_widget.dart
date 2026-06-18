@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NavigationButtonsWidget extends StatelessWidget {
@@ -28,8 +29,8 @@ class NavigationButtonsWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.r),
                 color: isValid
-                    ? const Color(0xFF27AE60)
-                    : const Color(0xFFBDBDBD),
+                    ? AppColors.primary
+                    : AppColors.mutedGrey,
               ),
               child: Center(
                 child: Text(
@@ -53,8 +54,8 @@ class NavigationButtonsWidget extends StatelessWidget {
             child: OutlinedButton(
               onPressed: onPreviousPressed,
               style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF27AE60),
-                side: const BorderSide(color: Color(0xFF27AE60)),
+                foregroundColor: AppColors.primary,
+                side: BorderSide(color: AppColors.primary),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),
                 ),

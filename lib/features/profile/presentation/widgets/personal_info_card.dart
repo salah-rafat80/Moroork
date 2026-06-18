@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'profile_info_row.dart';
 
@@ -18,9 +19,9 @@ class PersonalInfoCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
-        border: Border.all(color: const Color(0xFFDADADA), width: 1.r),
+        border: Border.all(color: AppColors.greyBorder, width: 1.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -36,7 +37,7 @@ class PersonalInfoCard extends StatelessWidget {
             value: fullName,
             icon: Icons.person_outline,
           ),
-          Divider(color: const Color(0xFFDADADA), thickness: 1.r),
+          Divider(color: AppColors.greyBorder, thickness: 1.r),
           ProfileInfoRow(
             label: 'الرقم القومي',
             value: nationalId,
@@ -44,13 +45,13 @@ class PersonalInfoCard extends StatelessWidget {
             trailing: Container(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
               decoration: BoxDecoration(
-                color: const Color(0xFFEBEBEB),
+                color: AppColors.borderMedium,
                 borderRadius: BorderRadius.circular(5.r),
               ),
               child: Text(
                 'غير قابل للتعديل',
                 style: TextStyle(
-                  color: const Color(0xFF707070),
+                  color: AppColors.mediumGrey,
                   fontSize: 9.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w500,

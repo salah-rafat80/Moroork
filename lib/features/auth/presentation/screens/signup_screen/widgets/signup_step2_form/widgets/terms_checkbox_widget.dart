@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TermsCheckboxWidget extends StatelessWidget {
@@ -22,7 +23,7 @@ class TermsCheckboxWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w400,
-              color: Colors.black,
+              color: AppColors.charcoal,
               fontFamily: 'Tajawal',
             ),
           ),
@@ -34,7 +35,12 @@ class TermsCheckboxWidget extends StatelessWidget {
           child: Checkbox(
             value: acceptedTerms,
             onChanged: onChanged,
-            activeColor: const Color(0xFF27AE60),
+            activeColor: AppColors.primary,
+            checkColor: Colors.white,
+            side: BorderSide(
+              color: AppColors.charcoal,
+              width: 1.5.r,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.r),
             ),

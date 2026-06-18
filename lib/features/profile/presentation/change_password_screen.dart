@@ -1,8 +1,8 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/constants/colors.dart';
 import '../../../core/widgets/password_text_field.dart';
 import '../../../core/widgets/primary_button.dart';
 import 'cubits/change_password_cubit.dart';
@@ -71,16 +71,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         listener: (context, state) {
           if (state is ChangePasswordOTPSent) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('تم إرسال رمز التحقق إلى بريدك الإلكتروني'),
-                backgroundColor: Color(0xFF27AE60),
+              SnackBar(
+                content: const Text('تم إرسال رمز التحقق إلى بريدك الإلكتروني'),
+                backgroundColor: AppColors.primary,
               ),
             );
           } else if (state is ChangePasswordSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('تم تغيير كلمة المرور بنجاح'),
-                backgroundColor: Color(0xFF27AE60),
+              SnackBar(
+                content: const Text('تم تغيير كلمة المرور بنجاح'),
+                backgroundColor: AppColors.primary,
               ),
             );
             Navigator.pop(context);
@@ -96,7 +96,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               state is ChangePasswordFailure;
 
           return Scaffold(
-            backgroundColor: const Color(0xFFF8F9F9),
+            backgroundColor: AppColors.cardBg,
             body: Column(
               children: [
                 const ProfileHeader(title: 'تغيير كلمة المرور'),
@@ -119,13 +119,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   ) {
     // Show loading while sending OTP
     if (state is ChangePasswordLoading && !otpSent) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomLoadingIndicator(color: AppColors.primary),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'جاري إرسال رمز التحقق...',
               style: TextStyle(fontFamily: 'Cairo', fontSize: 14),
             ),
@@ -146,7 +146,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             Text(
               'رمز التحقق',
               style: TextStyle(
-                color: const Color(0xFF222222),
+                color: AppColors.textPrimary,
                 fontSize: 17.sp,
                 fontFamily: 'Tajawal',
                 fontWeight: FontWeight.w500,
@@ -157,7 +157,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               'تم إرسال رمز التحقق إلى بريدك الإلكتروني\n${widget.email}',
               textAlign: TextAlign.right,
               style: TextStyle(
-                color: const Color(0xFF666666),
+                color: AppColors.softGrey,
                 fontSize: 13.sp,
                 fontFamily: 'Cairo',
               ),
@@ -254,7 +254,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.r),
                 ),
-                backgroundColor: const Color(0xFFF8F9F9),
+                backgroundColor: AppColors.cardBg,
               ),
               child: Text(
                 'الغاء',
@@ -277,9 +277,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       width: 45.w,
       height: 55.h,
       decoration: BoxDecoration(
-        color: Colors.white,
+          color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFDADADA)),
+        border: Border.all(color: AppColors.greyBorder),
       ),
       child: TextField(
         controller: _otpControllers[index],

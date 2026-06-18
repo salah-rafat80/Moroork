@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/Radio_dot.dart';
 
@@ -9,9 +10,9 @@ import 'package:traffic/core/widgets/Radio_dot.dart';
 /// - an [icon] container on the trailing side.
 /// - [title] and [subtitle] text in the center.
 ///
-/// When [isSelected] is `true` the card border turns green [Color(0xFF27AE60)]
+/// When [isSelected] is `true` the card border turns green [AppColors.primary]
 /// and the [RadioDot] shows a filled green inner circle.
-/// When `false` the border is grey [Color(0xFFDADADA)] and the dot is empty.
+/// When `false` the border is grey [AppColors.greyBorder] and the dot is empty.
 class SelectionOptionCard extends StatelessWidget {
   /// Primary label, e.g. "بدل فاقد"
   final String title;
@@ -38,10 +39,10 @@ class SelectionOptionCard extends StatelessWidget {
   });
 
   // ── Colours ──────────────────────────────────────────────────────────────
-  static const Color _selectedBorder = Color(0xFF27AE60);
-  static const Color _unselectedBorder = Color(0xFFDADADA);
-  static const Color _cardBackground = Color(0xFFF8F9F9);
-  static const Color _iconBackground = Color(0xFFEFEFEF);
+  static final Color _selectedBorder = AppColors.primary;
+  static final Color _unselectedBorder = AppColors.greyBorder;
+  static final Color _cardBackground = AppColors.cardBg;
+  static final Color _iconBackground = AppColors.extraLightGrey;
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +62,11 @@ class SelectionOptionCard extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(5.r),
             ),
-            shadows: const [
+            shadows: [
               BoxShadow(
-                color: Color(0x3F000000),
+                color: AppColors.shadowColor,
                 blurRadius: 4,
-                offset: Offset(0, 1),
+                offset: const Offset(0, 1),
               ),
             ],
           ),
@@ -103,7 +104,7 @@ class SelectionOptionCard extends StatelessWidget {
                           fontFamily: 'Cairo',
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       SizedBox(height: 2.h),
@@ -116,7 +117,7 @@ class SelectionOptionCard extends StatelessWidget {
                           fontFamily: 'Cairo',
                           fontSize: 10.sp,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF707070),
+                          color: AppColors.mediumGrey,
                         ),
                       ),
                     ],

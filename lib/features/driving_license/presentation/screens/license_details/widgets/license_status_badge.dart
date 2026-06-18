@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
 
@@ -28,7 +29,7 @@ class LicenseStatusBadge extends StatelessWidget {
           fontFamily: 'Cairo',
           fontSize: 13.sp,
           fontWeight: FontWeight.w600,
-          color: const Color(0xFFF8F9F9),
+          color: AppColors.cardBg,
         ),
       ),
     );
@@ -37,11 +38,13 @@ class LicenseStatusBadge extends StatelessWidget {
   Color get _badgeColor {
     switch (status) {
       case LicenseStatus.valid:
-        return const Color(0xFF27AE60);
+        return AppColors.primary;
       case LicenseStatus.expired:
-        return const Color(0xFFE53935);
+        return AppColors.alertRed;
       case LicenseStatus.withdrawn:
-        return const Color(0xFFEA9555);
+        return AppColors.warningOrange;
+      case LicenseStatus.suspended:
+        return AppColors.warningOrange;
     }
   }
 
@@ -53,6 +56,8 @@ class LicenseStatusBadge extends StatelessWidget {
         return 'منتهية';
       case LicenseStatus.withdrawn:
         return 'مسحوبة';
+      case LicenseStatus.suspended:
+        return 'موقوفة';
     }
   }
 }

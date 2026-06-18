@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
@@ -16,7 +17,7 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       key: _scaffoldKey,
       drawer: const AppDrawer(),
       body: Column(
@@ -38,7 +39,7 @@ class _AboutAppScreenState extends State<AboutAppScreen> {
                   textAlign: TextAlign.start,
                   textDirection: TextDirection.rtl,
                   style: TextStyle(
-                    color: const Color(0xFF333333),
+                    color: AppColors.darkGrey,
                     fontSize: 13.sp,
                     fontFamily: 'Tajawal',
                     fontWeight: FontWeight.w500,

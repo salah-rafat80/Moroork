@@ -1,9 +1,9 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../../../core/constants/colors.dart';
 import '../../../../../core/features/checkout/generic_order_review_screen.dart';
 import '../../../../../core/features/checkout/models/applicant_details.dart';
 import '../../../../../core/features/checkout/models/fees_details.dart';
@@ -181,7 +181,7 @@ class _FinalizeDrivingLicenseScreenState
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: BlocConsumer<DrivingLicenseCubit, DrivingLicenseState>(
         listener: (context, state) {
@@ -223,7 +223,7 @@ class _FinalizeDrivingLicenseScreenState
                             fontFamily: 'Tajawal',
                             fontSize: 17.sp,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF222222),
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         SizedBox(height: 16.h),
@@ -237,8 +237,8 @@ class _FinalizeDrivingLicenseScreenState
                             'assets/tabler_building-bank.svg',
                             width: 24.w,
                             height: 24.w,
-                            colorFilter: const ColorFilter.mode(
-                              Color(0xFF27AE60),
+                            colorFilter: ColorFilter.mode(
+                              AppColors.primary,
                               BlendMode.srcIn,
                             ),
                           ),
@@ -254,8 +254,8 @@ class _FinalizeDrivingLicenseScreenState
                             'assets/home2.svg',
                             width: 24.w,
                             height: 24.w,
-                            colorFilter: const ColorFilter.mode(
-                              Color(0xFF27AE60),
+                            colorFilter: ColorFilter.mode(
+                              AppColors.primary,
                               BlendMode.srcIn,
                             ),
                           ),
@@ -306,7 +306,7 @@ class _FinalizeDrivingLicenseScreenState
               Padding(
                 padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 24.h),
                 child: isLoading
-                    ? Center(child: CustomLoadingIndicator())
+                    ? const Center(child: CustomLoadingIndicator())
                     : PrimaryButton(
                         label: 'إنهاء وإصدار الرخصة',
                         onPressed: isButtonEnabled

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../data/models/renewal_vehicle_license_model.dart';
 
@@ -27,7 +28,7 @@ class RenewalInfoRow extends StatelessWidget {
             fontFamily: 'Cairo',
             fontSize: 13.sp,
             fontWeight: FontWeight.w500,
-            color: const Color(0xFF222222),
+            color: AppColors.textPrimary,
           ),
         ),
         const Spacer(),
@@ -41,7 +42,7 @@ class RenewalInfoRow extends StatelessWidget {
               fontFamily: 'Cairo',
               fontSize: 15.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF222222),
+              color: AppColors.textPrimary,
             ),
           ),
       ],
@@ -94,19 +95,19 @@ class RenewalStatusBadge extends StatelessWidget {
     switch (status) {
       case RenewalLicenseStatus.valid:
         text = 'سارية';
-        color = const Color(0xFF27AE60);
+        color = AppColors.primary;
         break;
       case RenewalLicenseStatus.expired:
         text = 'منتهية';
-        color = const Color(0xFFE53935);
+        color = AppColors.alertRed;
         break;
       case RenewalLicenseStatus.suspended:
         text = 'موقوفة';
-        color = const Color(0xFFEA9555);
+        color = AppColors.warningOrange;
         break;
       case RenewalLicenseStatus.withdrawn:
         text = 'مسحوبة';
-        color = const Color(0xFFEA9555);
+        color = AppColors.warningOrange;
         break;
     }
 
@@ -123,7 +124,7 @@ class RenewalDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.symmetric(vertical: 8.h),
-      child: Container(height: 1, color: const Color(0xFFDADADA)),
+      child: Container(height: 1, color: AppColors.greyBorder),
     );
   }
 }
@@ -147,7 +148,7 @@ class RenewalWarningBanner extends StatelessWidget {
     return Container(
       padding: EdgeInsetsDirectional.all(12.w),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFE9E9),
+        color: AppColors.alertRedLight,
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
@@ -161,7 +162,7 @@ class RenewalWarningBanner extends StatelessWidget {
                 fontFamily: 'Cairo',
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFFE53935),
+                color: AppColors.alertRed,
               ),
             ),
           ),
@@ -175,7 +176,7 @@ class RenewalWarningBanner extends StatelessWidget {
                 fontFamily: 'Cairo',
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFFE53935),
+                color: AppColors.alertRed,
                 decoration: TextDecoration.underline,
               ),
             ),

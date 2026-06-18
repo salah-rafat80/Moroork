@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -27,14 +28,14 @@ class ServiceScreenAppBar extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(top: 5.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBg,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20.r),
             bottomRight: Radius.circular(20.r),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 6,
               offset: const Offset(0, 5),
             ),
@@ -49,7 +50,7 @@ class ServiceScreenAppBar extends StatelessWidget {
                 child: Icon(
                   Icons.menu,
                   size: 24.w,
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                 ),
               ),
               // ── Title (Center) ──
@@ -61,7 +62,7 @@ class ServiceScreenAppBar extends StatelessWidget {
                     fontFamily: 'Tajawal',
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1A1A1A),
+                    color: AppColors.charcoal,
                   ),
                 ),
               ),
@@ -73,6 +74,10 @@ class ServiceScreenAppBar extends StatelessWidget {
                     'assets/weui_arrow-filled.svg',
                     width: 24.w,
                     height: 24.w,
+                    colorFilter: ColorFilter.mode(
+                      AppColors.textPrimary,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 )
               else

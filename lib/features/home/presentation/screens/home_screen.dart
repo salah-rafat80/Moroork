@@ -1,5 +1,6 @@
 // path: lib/features/home/presentation/screens/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/features/home/presentation/widgets/home_header.dart';
 import 'package:traffic/features/home/presentation/widgets/popular_services_section.dart';
@@ -11,7 +12,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: AppColors.background,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

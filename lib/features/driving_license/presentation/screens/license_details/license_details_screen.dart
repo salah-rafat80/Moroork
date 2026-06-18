@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
@@ -7,8 +8,8 @@ import 'package:traffic/features/auth/presentation/screens/signup_screen/widgets
 import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
 import 'package:traffic/features/driving_license/data/models/driving_license_model.dart';
 import 'package:traffic/features/violations_inquiry/presentation/screens/violations_list_screen.dart';
+import 'package:traffic/features/violations_inquiry/data/repositories/violations_repository.dart';
 import 'package:traffic/features/driving_license/data/repositories/driving_license_repository.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'license_details_confirmation_screen.dart';
 import 'widgets/license_info_card.dart';
 import 'widgets/warning_banner.dart';
@@ -63,8 +64,23 @@ class _LicenseDetailsScreenState extends State<LicenseDetailsScreen> {
       final result = await repository.getMyLicenses();
 
       if (result.isSuccess && result.data != null) {
+        final licenses = result.data!;
+        final violationsRepo = getIt<ViolationsRepository>();
+        final List<DrivingLicenseModel> updatedLicenses = [];
+
+        for (var license in licenses) {
+          final violationsResult = await violationsRepo.getDrivingLicenseViolations(
+            licenseNumber: license.drivingLicenseNumber,
+          );
+          if (violationsResult.isSuccess && violationsResult.data != null) {
+            final unpaidCount = violationsResult.data!.unpaidCount;
+            license = license.copyWith(hasUnpaidViolations: unpaidCount > 0);
+          }
+          updatedLicenses.add(license);
+        }
+
         setState(() {
-          _licenses = result.data!;
+          _licenses = updatedLicenses;
           _isLoading = false;
           if (_licenses.length == 1) {
             _selectedIndex = 0;
@@ -148,7 +164,7 @@ class _LicenseDetailsScreenState extends State<LicenseDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Stack(
         children: [
@@ -163,7 +179,7 @@ class _LicenseDetailsScreenState extends State<LicenseDetailsScreen> {
               // ── Scrollable licence list ───────────────────────────────────────
               Expanded(
                 child: _isLoading
-                    ? Center(child: CustomLoadingIndicator())
+                    ? const Center(child: CustomLoadingIndicator())
                     : _licenses.isEmpty
                     ? Center(
                         child: Text(
@@ -175,68 +191,79 @@ class _LicenseDetailsScreenState extends State<LicenseDetailsScreen> {
                           ),
                         ),
                       )
-                    : SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 16.h,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            // ── Section header ────────────────────────────────────────
-                            Text(
-                              'تفاصيل رخصة القيادة',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                fontFamily: 'Tajawal',
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.w700,
-                                color: const Color(0xFF222222),
+                    : Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 16.h,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  // ── Section header ────────────────────────────────────────
+                                  Text(
+                                    'تفاصيل رخصة القيادة',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontFamily: 'Tajawal',
+                                      fontSize: 17.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.textPrimary,
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 12.h),
+
+                                  // ── Licence cards ─────────────────────────────────────────
+                                  ..._licenses.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final lic = entry.value;
+                                    final bool isWithdrawn =
+                                        lic.status == LicenseStatus.withdrawn;
+                                    final bool isSelected = _selectedIndex == index;
+
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: 12.h),
+                                      child: _SelectableLicenseCard(
+                                        data: lic,
+                                        isSelected: isSelected,
+                                        isDisabled: isWithdrawn,
+                                        onTap: () => _onCardTap(index),
+                                        onViewViolationsTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => ViolationsListScreen(license: lic),
+                                            ),
+                                          ).then((_) => _loadLicenses());
+                                        },
+                                      ),
+                                    );
+                                  }),
+                                ],
                               ),
                             ),
-
-                            SizedBox(height: 12.h),
-
-                            // ── Licence cards ─────────────────────────────────────────
-                            ..._licenses.asMap().entries.map((entry) {
-                              final index = entry.key;
-                              final lic = entry.value;
-                              final bool isWithdrawn =
-                                  lic.status == LicenseStatus.withdrawn;
-                              final bool isSelected = _selectedIndex == index;
-
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 12.h),
-                                child: _SelectableLicenseCard(
-                                  data: lic,
-                                  isSelected: isSelected,
-                                  isDisabled: isWithdrawn,
-                                  onTap: () => _onCardTap(index),
-                                ),
-                              );
-                            }),
-
-                            SizedBox(height: 12.h),
-
-                            // ── Primary action button ─────────────────────────────────
-                            NextButtonWidget(
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 24.h),
+                            child: NextButtonWidget(
                               onPressed: () => _onNextPressed(),
                               isValid: _canProceed && !_isSubmitting,
                               height: 48.h,
                             ),
-
-                            SizedBox(height: 24.h),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
               ),
             ],
           ),
           if (_isSubmitting)
-            const Positioned.fill(
+            Positioned.fill(
               child: ColoredBox(
-                color: Color(0x66000000),
-                child: Center(child: CustomLoadingIndicator()),
+                color: AppColors.blackOverlay,
+                child: const Center(child: CustomLoadingIndicator()),
               ),
             ),
         ],
@@ -257,12 +284,14 @@ class _SelectableLicenseCard extends StatelessWidget {
   final bool isSelected;
   final bool isDisabled;
   final VoidCallback onTap;
+  final VoidCallback? onViewViolationsTap;
 
   const _SelectableLicenseCard({
     required this.data,
     required this.isSelected,
     required this.isDisabled,
     required this.onTap,
+    this.onViewViolationsTap,
   });
 
   @override
@@ -282,14 +311,7 @@ class _SelectableLicenseCard extends StatelessWidget {
               SizedBox(height: 12.h),
               WarningBanner(
                 license: data,
-                onViewViolationsTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ViolationsListScreen(license: data),
-                    ),
-                  );
-                },
+                onViewViolationsTap: onViewViolationsTap,
               ),
             ],
           ],

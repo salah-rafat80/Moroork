@@ -17,6 +17,7 @@ import 'package:traffic/core/features/payment/data/repositories/payment_reposito
     as _i535;
 import 'package:traffic/core/features/payment/presentation/cubits/payment_cubit.dart'
     as _i478;
+import 'package:traffic/core/theme/theme_cubit.dart' as _i487;
 import 'package:traffic/features/auth/data/repositories/auth_repository.dart'
     as _i192;
 import 'package:traffic/features/auth/presentation/cubits/auth_cubit.dart'
@@ -52,6 +53,14 @@ import 'package:traffic/features/profile/presentation/cubits/change_password_cub
     as _i590;
 import 'package:traffic/features/profile/presentation/cubits/profile_cubit.dart'
     as _i313;
+import 'package:traffic/features/smart_assistant/bloc/smart_assistant_chat_bloc.dart'
+    as _i751;
+import 'package:traffic/features/smart_assistant/data/datasources/smart_assistant_remote_data_source.dart'
+    as _i460;
+import 'package:traffic/features/smart_assistant/data/repositories/smart_assistant_repository_impl.dart'
+    as _i45;
+import 'package:traffic/features/smart_assistant/domain/repositories/smart_assistant_repository.dart'
+    as _i25;
 import 'package:traffic/features/vehicle_license/data/repositories/vehicle_license_repository.dart'
     as _i281;
 import 'package:traffic/features/vehicle_license/presentation/cubits/vehicle_license_cubit.dart'
@@ -75,6 +84,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.lazySingleton<_i649.TokenStorage>(() => _i649.TokenStorage());
+    gh.lazySingleton<_i487.ThemeCubit>(() => _i487.ThemeCubit());
     gh.lazySingleton<_i862.HomeSearchService>(() => _i862.HomeSearchService());
     gh.lazySingleton<_i827.ApiClient>(
       () => _i827.ApiClient(gh<_i649.TokenStorage>()),
@@ -160,6 +170,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i478.PaymentCubit>(
       () => _i478.PaymentCubit(gh<_i535.PaymentRepository>()),
     );
+    gh.lazySingleton<_i460.SmartAssistantRemoteDataSource>(
+      () => _i460.SmartAssistantRemoteDataSourceImpl(gh<_i827.ApiClient>()),
+    );
     gh.factory<_i93.DrivingRenewalCubit>(
       () => _i93.DrivingRenewalCubit(
         dataHandler: gh<_i977.DrivingLicenseRenewalDataHandler>(),
@@ -174,8 +187,19 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i977.DrivingLicenseRenewalDataHandler>(),
       ),
     );
+    gh.factory<_i25.SmartAssistantRepository>(
+      () => _i45.SmartAssistantRepositoryImpl(
+        gh<_i460.SmartAssistantRemoteDataSource>(),
+      ),
+    );
     gh.factory<_i1040.OrderDetailsCubit>(
-      () => _i1040.OrderDetailsCubit(gh<_i840.FirstLicenseBookingHelper>()),
+      () => _i1040.OrderDetailsCubit(
+        gh<_i840.FirstLicenseBookingHelper>(),
+        gh<_i1034.ServiceRequestsRepository>(),
+      ),
+    );
+    gh.factory<_i751.SmartAssistantChatBloc>(
+      () => _i751.SmartAssistantChatBloc(gh<_i25.SmartAssistantRepository>()),
     );
     return this;
   }

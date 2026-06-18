@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:traffic/core/widgets/custom_appbar.dart';
 import 'package:traffic/features/auth/presentation/screens/login_screen/login_screen.dart';
@@ -8,11 +9,8 @@ import 'package:traffic/features/auth/presentation/screens/otp_screen/widgets/ot
 import 'package:traffic/features/auth/presentation/screens/otp_screen/widgets/otp_inputs_row.dart';
 import 'package:traffic/features/auth/presentation/screens/otp_screen/widgets/otp_timer_resend.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:traffic/core/api/api_client.dart';
-import 'package:traffic/features/auth/data/repositories/auth_repository.dart';
 import 'package:traffic/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:traffic/features/auth/presentation/cubits/auth_state.dart';
-import 'package:traffic/features/driving_license/data/repositories/driving_license_repository.dart';
 import 'package:traffic/injection_container.dart';
 
 /// OTP verification screen with three states: initial, error, and success.
@@ -69,13 +67,13 @@ class _OtpScreenState extends State<OtpScreen> {
                 listener: (context, state) {
                   if (state is AuthVerifyOtpSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
+                      SnackBar(
+                        content: const Text(
                           'تم تفعيل الحساب بنجاح. يرجى تسجيل الدخول.',
                           textAlign: TextAlign.right,
                         ),
-                        backgroundColor: Color(0xFF27AE60),
-                        duration: Duration(seconds: 3),
+                        backgroundColor: AppColors.primary,
+                        duration: const Duration(seconds: 3),
                       ),
                     );
                     Navigator.pushAndRemoveUntil(
@@ -93,7 +91,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           state.message,
                           textAlign: TextAlign.right,
                         ),
-                        backgroundColor: const Color(0xFFD32F2F),
+                        backgroundColor: AppColors.error,
                       ),
                     );
                   }
@@ -151,7 +149,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       builder: (context, state) {
                         if (state is AuthLoading) {
                           return Container(
-                            color: Colors.black26,
+                            color: AppColors.textMuted,
                             child: const Center(
                               child: CustomLoadingIndicator(),
                             ),

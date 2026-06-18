@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +40,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: const Color(0xFFF5F5F5),
+            backgroundColor: AppColors.lightGreyBg,
             body: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +54,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                     child: Text(
                       config.applicantDetailsLabel,
                       style: TextStyle(
-                        color: const Color(0xFF222222),
+                        color: AppColors.textPrimary,
                         fontSize: 17.sp,
                         fontFamily: 'Tajawal',
                         fontWeight: FontWeight.w700,
@@ -70,15 +71,15 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                           Container(
                             padding: EdgeInsetsDirectional.all(16.r),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF8F9F9),
+                              color: AppColors.cardBg,
                               borderRadius: BorderRadius.circular(5.r),
                               border: Border.all(
-                                color: const Color(0xFFAEAEAE),
+                                color: AppColors.greyIcon,
                                 width: 1.w,
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0x3F000000),
+                                  color: AppColors.shadowColor,
                                   blurRadius: 4.r,
                                   offset: const Offset(0, 1),
                                 ),
@@ -152,7 +153,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 24.h),
                           if (state is ExaminerSubmitLoading)
-                            Center(child: CustomLoadingIndicator())
+                            const Center(child: CustomLoadingIndicator())
                           else if (appointment.status == 'محجوز')
                             TestResultButtons(
                               passLabel: config.passButtonText,
@@ -207,7 +208,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
               value,
               textAlign: TextAlign.start,
               style: TextStyle(
-                color: const Color(0xFF222222),
+                color: AppColors.textPrimary,
                 fontSize: 15.sp,
                 fontFamily: 'Cairo',
                 fontWeight: FontWeight.w600,
@@ -218,7 +219,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
           label,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: const Color(0xFF707070),
+            color: AppColors.mediumGrey,
             fontSize: 12.sp,
             fontFamily: 'Cairo',
             fontWeight: FontWeight.w500,
@@ -252,7 +253,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                       fontFamily: 'Cairo',
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   SizedBox(height: 16.h),
@@ -264,8 +265,8 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color:
                           (isPass
-                                  ? const Color(0xFF27AE60)
-                                  : const Color(0xFFE53935))
+                                  ? AppColors.primary
+                                  : AppColors.alertRed)
                               .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10.r),
                     ),
@@ -273,8 +274,8 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                       isPass ? config.passButtonText : config.failButtonText,
                       style: TextStyle(
                         color: isPass
-                            ? const Color(0xFF27AE60)
-                            : const Color(0xFFE53935),
+                            ? AppColors.primary
+                            : AppColors.alertRed,
                         fontFamily: 'Cairo',
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
@@ -291,7 +292,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF27AE60),
+                      backgroundColor: AppColors.primary,
                       minimumSize: Size(double.infinity, 48.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
@@ -312,7 +313,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
                       minimumSize: Size(double.infinity, 48.h),
-                      side: const BorderSide(color: Color(0xFF27AE60)),
+                      side: BorderSide(color: AppColors.primary),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
@@ -323,7 +324,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                         fontFamily: 'Cairo',
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF27AE60),
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
@@ -358,7 +359,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF222222),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 SizedBox(height: 16.h),
@@ -370,8 +371,8 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color:
                         (isPass
-                                ? const Color(0xFF27AE60)
-                                : const Color(0xFFE53935))
+                                ? AppColors.primary
+                                : AppColors.alertRed)
                             .withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10.r),
                   ),
@@ -379,8 +380,8 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                     isPass ? config.passButtonText : config.failButtonText,
                     style: TextStyle(
                       color: isPass
-                          ? const Color(0xFF27AE60)
-                          : const Color(0xFFE53935),
+                          ? AppColors.primary
+                          : AppColors.alertRed,
                       fontFamily: 'Cairo',
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
@@ -394,7 +395,7 @@ class ApplicantTestDetailsScreen extends StatelessWidget {
                     Navigator.pop(context); // Back to list
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF27AE60),
+                    backgroundColor: AppColors.primary,
                     minimumSize: Size(double.infinity, 48.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.r),

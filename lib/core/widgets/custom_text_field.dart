@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -45,7 +46,7 @@ class CustomTextField extends StatelessWidget {
       style: TextStyle(
         fontSize: 16.sp,
         fontWeight: FontWeight.w400,
-        color: Colors.black,
+        color: AppColors.charcoal,
         fontFamily: 'Tajawal',
       ),
       decoration: InputDecoration(
@@ -53,7 +54,7 @@ class CustomTextField extends StatelessWidget {
         hintStyle: TextStyle(
           fontSize: 16.sp,
           fontWeight: FontWeight.w400,
-          color: const Color(0xFF999999),
+          color: AppColors.inputHint,
           fontFamily: 'Tajawal',
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -61,34 +62,34 @@ class CustomTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
           borderSide: BorderSide(
-            color: hasError ? const Color(0xFFD32F2F) : const Color(0xFF27AE60),
+            color: hasError ? AppColors.error : AppColors.primary,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
           borderSide: BorderSide(
-            color: hasError ? const Color(0xFFD32F2F) : const Color(0xFF27AE60),
+            color: hasError ? AppColors.error : AppColors.primary,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
           borderSide: BorderSide(
-            color: hasError ? const Color(0xFFD32F2F) : const Color(0xFF27AE60),
+            color: hasError ? AppColors.error : AppColors.primary,
             width: 1.5,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: Color(0xFFD32F2F)),
+          borderSide: BorderSide(color: AppColors.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: Color(0xFFD32F2F), width: 1.5),
+          borderSide: BorderSide(color: AppColors.error, width: 1.5),
         ),
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.inputFieldBg,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -27,11 +28,11 @@ class CameraCaptureButton extends StatelessWidget {
         width: 70.w,
         height: 70.w,
         decoration: BoxDecoration(
-          color: const Color(0xFF27AE60),
+          color: AppColors.primary,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF27AE60).withValues(alpha: 0.3),
+              color: AppColors.primary.withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -40,7 +41,7 @@ class CameraCaptureButton extends StatelessWidget {
         child: isCapturing
             ? Padding(
                 padding: EdgeInsets.all(18.w),
-                child: CustomLoadingIndicator(
+                child: const CustomLoadingIndicator(
                   color: Colors.white,
                   strokeWidth: 2.5,
                 ),

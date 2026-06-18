@@ -1,5 +1,6 @@
 // path: lib/features/home/presentation/widgets/home_search_field.dart
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/features/home/bloc/home_search_bloc.dart';
@@ -80,12 +81,12 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                 child: Container(
                   constraints: BoxConstraints(maxHeight: 280.h),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(color: const Color(0xFFF3F4F6), width: 1.5),
+                    border: Border.all(color: AppColors.inputFieldBg, width: 1.5),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.08),
+                        color: AppColors.shadowLight,
                         blurRadius: 24,
                         offset: const Offset(0, 8),
                       ),
@@ -97,11 +98,11 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                       bloc: BlocProvider.of<HomeSearchBloc>(context),
                       builder: (blocContext, state) {
                         if (state is HomeSearchLoading) {
-                          return const Center(
+                          return Center(
                             child: Padding(
-                              padding: EdgeInsets.all(24.0),
+                              padding: const EdgeInsets.all(24.0),
                               child: CircularProgressIndicator(
-                                color: Color(0xFF27AE60),
+                                color: AppColors.primary,
                               ),
                             ),
                           );
@@ -120,7 +121,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                                     fontFamily: 'Tajawal',
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF9CA3AF),
+                                    color: AppColors.slateGrey,
                                   ),
                                 ),
                               ),
@@ -175,11 +176,11 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
       child: Container(
         height: 48.h,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: AppColors.shadowLight,
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -193,7 +194,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
           style: TextStyle(
             fontFamily: 'Tajawal',
             fontSize: 14.sp,
-            color: const Color(0xFF1A1A1A),
+            color: AppColors.charcoal,
             fontWeight: FontWeight.w400,
           ),
           decoration: InputDecoration(
@@ -202,7 +203,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
             hintStyle: TextStyle(
               fontFamily: 'Tajawal',
               fontSize: 14.sp,
-              color: const Color(0xFFAAAAAA),
+              color: AppColors.textMuted,
               fontWeight: FontWeight.w400,
             ),
             border: InputBorder.none,
@@ -211,7 +212,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
               padding: EdgeInsets.only(left: 12.w),
               child: Icon(
                 Icons.search,
-                color: const Color(0xFF9CA3AF),
+                color: AppColors.slateGrey,
                 size: 22.sp,
               ),
             ),
@@ -219,7 +220,7 @@ class _HomeSearchFieldState extends State<HomeSearchField> {
                 ? IconButton(
                     icon: Icon(
                       Icons.cancel_rounded,
-                      color: const Color(0xFF9CA3AF),
+                      color: AppColors.slateGrey,
                       size: 20.sp,
                     ),
                     onPressed: () {

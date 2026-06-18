@@ -1,7 +1,7 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
@@ -67,7 +67,7 @@ class _SelectVehicleViolationScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -90,14 +90,14 @@ class _SelectVehicleViolationScreenState
                         fontFamily: 'Tajawal',
                         fontSize: 17.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1A1A1A),
+                        color: AppColors.charcoal,
                       ),
                     ),
                   ),
                   SizedBox(height: 20.h),
 
                   if (_isLoading)
-                    Center(child: CustomLoadingIndicator())
+                    const Center(child: CustomLoadingIndicator())
                   else if (_vehicles.isEmpty)
                     const EmptyStateWidget(
                       message: 'لا توجد رخص مركبات مسجلة حالياً',

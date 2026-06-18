@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
@@ -53,7 +54,7 @@ class _LicenseDetailsConfirmationScreenState extends State<LicenseDetailsConfirm
       textDirection: TextDirection.rtl,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: AppColors.lightGreyBg,
         drawer: const AppDrawer(),
         body: Column(
           children: [
@@ -81,7 +82,7 @@ class _LicenseDetailsConfirmationScreenState extends State<LicenseDetailsConfirm
                         fontFamily: 'Tajawal',
                         fontSize: 17.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF222222),
+                        color: AppColors.textPrimary,
                       ),
                     ),
 
@@ -91,19 +92,18 @@ class _LicenseDetailsConfirmationScreenState extends State<LicenseDetailsConfirm
                     // Wrapped in a green-bordered container to match the
                     // "selected" state shown in the design.
                     _ConfirmedLicenseCard(data: widget.license),
-
-                    SizedBox(height: 24.h),
-
-                    // ── Primary action button ─────────────────────────────────
-                    NextButtonWidget(
-                      onPressed: () => _onNextPressed(context),
-                      isValid: true,
-                      height: 48.h,
-                    ),
-
-                    SizedBox(height: 24.h),
                   ],
                 ),
+              ),
+            ),
+
+            // ── Primary action button at the very bottom ──────────────────────
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+              child: NextButtonWidget(
+                onPressed: () => _onNextPressed(context),
+                isValid: true,
+                height: 48.h,
               ),
             ),
           ],
@@ -127,6 +127,7 @@ class _ConfirmedLicenseCard extends StatelessWidget {
     return LicenseInfoCard(
       data: data,
       isSelected: true,
+      showRadioDot: false,
     );
   }
 }

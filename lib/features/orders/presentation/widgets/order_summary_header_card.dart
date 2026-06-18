@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../domain/entities/order_model.dart';
@@ -14,16 +15,16 @@ class OrderSummaryHeaderCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
       decoration: ShapeDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Color(0xFF27AE60)),
+          side: BorderSide(color: AppColors.primary),
           borderRadius: BorderRadius.circular(5.r),
         ),
-        shadows: const [
+        shadows: [
           BoxShadow(
-            color: Color(0x3F000000),
+            color: AppColors.shadowColor,
             blurRadius: 4,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -39,7 +40,7 @@ class OrderSummaryHeaderCard extends StatelessWidget {
                   order.title,
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: AppColors.charcoal,
                     fontSize: 16.sp,
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w700,
@@ -51,14 +52,15 @@ class OrderSummaryHeaderCard extends StatelessWidget {
           SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
             children: [
-              _OrderStatusBadge(order: order),
+              Flexible(
+                child: _OrderStatusBadge(order: order),
+              ),
               SizedBox(width: 8.w),
               Text(
                 ": الحالة ",
                 style: TextStyle(
-                  color: const Color(0xFF707070),
+                  color: AppColors.mediumGrey,
                   fontSize: 12.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w500,
@@ -70,19 +72,25 @@ class OrderSummaryHeaderCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                order.id,
-                style: TextStyle(
-                  color: const Color(0xFF222222),
-                  fontSize: 15.sp,
-                  fontFamily: 'Cairo',
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  order.id,
+                  textAlign: TextAlign.left,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 15.sp,
+                    fontFamily: 'Cairo',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
+              SizedBox(width: 8.w),
               Text(
                 'رقم الطلب',
                 style: TextStyle(
-                  color: const Color(0xFF707070),
+                  color: AppColors.mediumGrey,
                   fontSize: 12.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w500,
@@ -94,19 +102,25 @@ class OrderSummaryHeaderCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                order.date,
-                style: TextStyle(
-                  color: const Color(0xFF222222),
-                  fontSize: 15.sp,
-                  fontFamily: 'Cairo',
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  order.date,
+                  textAlign: TextAlign.left,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 15.sp,
+                    fontFamily: 'Cairo',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
+              SizedBox(width: 8.w),
               Text(
                 'تاريخ التقديم',
                 style: TextStyle(
-                  color: const Color(0xFF707070),
+                  color: AppColors.mediumGrey,
                   fontSize: 12.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w500,
@@ -135,33 +149,33 @@ class _OrderStatusBadge extends StatelessWidget {
 
     switch (order.status) {
       case OrderStatus.pending:
-        bgColor = const Color(0xFFA5D4FF);
-        textColor = const Color(0xFF3B82F6);
+        bgColor = AppColors.skyBlueLight;
+        textColor = AppColors.primaryBlue;
         if (order.statusLabel.isEmpty) text = 'قيد التنفيذ';
         break;
       case OrderStatus.completed:
-        bgColor = const Color(0xFFD4ECDE);
-        textColor = const Color(0xFF27AE60);
+        bgColor = AppColors.lightGreenBg;
+        textColor = AppColors.primary;
         if (order.statusLabel.isEmpty) text = 'مكتمل';
         break;
       case OrderStatus.needsData:
-        bgColor = const Color(0xFFFFDAB9);
-        textColor = const Color(0xFFE67E22);
+        bgColor = AppColors.warningOrangeLightBg;
+        textColor = AppColors.warningOrangeText;
         if (order.statusLabel.isEmpty) text = 'بحاجة لبيانات';
         break;
       case OrderStatus.awaitingService:
-        bgColor = const Color(0xFFA5D4FF);
-        textColor = const Color(0xFF3B82F6);
+        bgColor = AppColors.skyBlueLight;
+        textColor = AppColors.primaryBlue;
         if (order.statusLabel.isEmpty) text = 'بانتظار الموعد';
         break;
       case OrderStatus.passed:
-        bgColor = const Color(0xFFD4ECDE);
-        textColor = const Color(0xFF27AE60);
+        bgColor = AppColors.lightGreenBg;
+        textColor = AppColors.primary;
         if (order.statusLabel.isEmpty) text = 'ناجح';
         break;
       case OrderStatus.failed:
-        bgColor = const Color(0xFFFFCDD2);
-        textColor = const Color(0xFFF44336);
+        bgColor = AppColors.errorRedLightBg;
+        textColor = AppColors.errorRedText;
         if (order.statusLabel.isEmpty) text = 'راسب';
         break;
     }

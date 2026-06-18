@@ -8,4 +8,7 @@ enum LicenseStatus {
 
   /// الرخصة مسحوبة — licence has been withdrawn.
   withdrawn,
+
+  /// الرخصة موقوفة — licence is suspended.
+  suspended,
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/radio_dot.dart';
 import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
@@ -29,12 +30,12 @@ class VehicleViolationCard extends StatelessWidget {
           margin: EdgeInsets.only(bottom: 12.h),
           padding: EdgeInsetsDirectional.all(16.w),
           decoration: BoxDecoration(
-            color: const Color(0xFFF8F9F9),
+            color: AppColors.cardBg,
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
               color: isSelected
-                  ? const Color(0xFF27AE60)
-                  : const Color(0xFFDADADA),
+                  ? AppColors.primary
+                  : AppColors.greyBorder,
               width: isSelected ? 2.w : 1.w,
             ),
           ),
@@ -55,13 +56,13 @@ class VehicleViolationCard extends StatelessWidget {
                       fontFamily: 'Cairo',
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const Spacer(),
                   _Badge(
                     text: vehicle.plateNumber,
-                    color: const Color(0xFF27AE60),
+                    color: AppColors.primary,
                   ),
                 ],
               ),
@@ -125,15 +126,19 @@ class _StatusBadge extends StatelessWidget {
     switch (status) {
       case LicenseStatus.valid:
         text = 'سارية';
-        color = const Color(0xFF27AE60);
+        color = AppColors.primary;
         break;
       case LicenseStatus.expired:
         text = 'منتهية';
-        color = const Color(0xFFE53935);
+        color = AppColors.alertRed;
         break;
       case LicenseStatus.withdrawn:
         text = 'مسحوبة';
-        color = const Color(0xFFEA9555);
+        color = AppColors.warningOrange;
+        break;
+      case LicenseStatus.suspended:
+        text = 'موقوفة';
+        color = AppColors.warningOrange;
         break;
     }
     return _Badge(text: text, color: color);
@@ -159,7 +164,7 @@ class _InfoRow extends StatelessWidget {
             fontFamily: 'Cairo',
             fontSize: 13.sp,
             fontWeight: FontWeight.w500,
-            color: const Color(0xFF222222),
+            color: AppColors.textPrimary,
           ),
         ),
         const Spacer(),
@@ -173,7 +178,7 @@ class _InfoRow extends StatelessWidget {
               fontFamily: 'Cairo',
               fontSize: 15.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF222222),
+              color: AppColors.textPrimary,
             ),
           ),
       ],
@@ -190,7 +195,7 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.symmetric(vertical: 8.h),
-      child: Container(height: 1, color: const Color(0xFFDADADA)),
+      child: Container(height: 1, color: AppColors.greyBorder),
     );
   }
 }

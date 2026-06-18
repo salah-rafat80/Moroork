@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/appointment_details_card.dart';
@@ -178,12 +179,13 @@ class _GenericBookingScreenState extends State<GenericBookingScreen> {
 
   Future<void> _showGovernorateSheet() async {
     final List<BookingSelectionOption> options = await _resolveGovernorates();
+    if (!mounted) return;
     showModalBottomSheet<void>(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       isScrollControlled: true,
       builder: (_) => GenericListBottomSheet(
         title: 'اختر محافظتك',
@@ -217,12 +219,13 @@ class _GenericBookingScreenState extends State<GenericBookingScreen> {
 
     final List<BookingSelectionOption> options =
         await _resolveSecondaryOptions();
+    if (!mounted) return;
     showModalBottomSheet<void>(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       isScrollControlled: true,
       builder: (_) => GenericListBottomSheet(
         title: widget.secondaryDropdown.sheetTitle,
@@ -445,7 +448,7 @@ class _GenericBookingScreenState extends State<GenericBookingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Stack(
         children: [
@@ -471,7 +474,7 @@ class _GenericBookingScreenState extends State<GenericBookingScreen> {
                         widget.headerTitle,
                         textAlign: TextAlign.right,
                         style: TextStyle(
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                           fontSize: 17.sp,
                           fontFamily: 'Tajawal',
                           fontWeight: FontWeight.w700,
@@ -575,9 +578,9 @@ class _BookingCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: ShapeDecoration(
-        color: Colors.white,
+        color: AppColors.cardBg,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.w, color: const Color(0xFF27AE60)),
+          side: BorderSide(width: 1.w, color: AppColors.primary),
           borderRadius: BorderRadius.circular(5.r),
         ),
       ),
@@ -589,7 +592,7 @@ class _BookingCard extends StatelessWidget {
             title,
             textAlign: TextAlign.right,
             style: TextStyle(
-              color: const Color(0xFF222222),
+              color: AppColors.textPrimary,
               fontSize: 15.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w700,
@@ -603,14 +606,14 @@ class _BookingCard extends StatelessWidget {
             Container(
               height: 40.h,
               decoration: BoxDecoration(
-                color: const Color(0xFF27AE60),
+                color: AppColors.primary,
                 borderRadius: BorderRadius.circular(4.r),
               ),
               alignment: Alignment.center,
               child: Text(
                 'تم الحجز',
                 style: TextStyle(
-                  color: const Color(0xFFF5F5F5),
+                  color: AppColors.lightGreyBg,
                   fontSize: 16.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w600,
@@ -625,7 +628,7 @@ class _BookingCard extends StatelessWidget {
               child: Container(
                 height: 40.h,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF27AE60),
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 alignment: Alignment.center,
@@ -634,7 +637,7 @@ class _BookingCard extends StatelessWidget {
                   child: Text(
                     'حجز الموعد',
                     style: TextStyle(
-                      color: const Color(0xFFF5F5F5),
+                      color: AppColors.lightGreyBg,
                       fontSize: 16.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w600,

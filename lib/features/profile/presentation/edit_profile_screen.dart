@@ -1,12 +1,11 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/api/api_client.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../lost_license/presentation/widgets/custom_text_form_field.dart';
 import '../../profile/data/models/profile_model.dart';
-import '../../profile/data/repositories/profile_repository.dart';
 import 'confirm_email_change_screen.dart';
 import 'cubits/profile_cubit.dart';
 import 'cubits/profile_state.dart';
@@ -75,7 +74,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         builder: (context, state) {
           final isLoading = state is ProfileLoading;
           return Scaffold(
-            backgroundColor: const Color(0xFFF5F5F5),
+            backgroundColor: AppColors.lightGreyBg,
             body: Column(
               children: [
                 const ProfileHeader(title: 'حسابي'),
@@ -101,7 +100,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SecurityCard(email: widget.profile.email),
                           SizedBox(height: 32.h),
                           if (isLoading)
-                            Center(child: CustomLoadingIndicator())
+                            const Center(child: CustomLoadingIndicator())
                           else
                             PrimaryButton(
                               label: 'حفظ التغيرات',
@@ -120,7 +119,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   }
                                 }
                               },
-                              backgroundColor: const Color(0xFF27AE60),
+                              backgroundColor: AppColors.primary,
                             ),
                           SizedBox(height: 16.h),
                           _buildCancelButton(),
@@ -142,7 +141,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Text(
       title,
       style: TextStyle(
-        color: const Color(0xFF222222),
+        color: AppColors.textPrimary,
         fontSize: 17.sp,
         fontFamily: 'Tajawal',
         fontWeight: FontWeight.w500,
@@ -155,9 +154,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
-        border: Border.all(color: const Color(0xFFDADADA), width: 1.r),
+        border: Border.all(color: AppColors.greyBorder, width: 1.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -174,7 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             icon: Icons.person_outline,
             trailing: _buildReadOnlyBadge(),
           ),
-          Divider(color: const Color(0xFFDADADA), thickness: 1.r),
+          Divider(color: AppColors.greyBorder, thickness: 1.r),
           ProfileInfoRow(
             label: 'الرقم القومي',
             value: widget.profile.nationalId,
@@ -190,13 +189,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFEBEBEB),
+        color: AppColors.borderMedium,
         borderRadius: BorderRadius.circular(5.r),
       ),
       child: Text(
         'غير قابل للتعديل',
         style: TextStyle(
-          color: const Color(0xFF707070),
+          color: AppColors.mediumGrey,
           fontSize: 9.sp,
           fontFamily: 'Cairo',
           fontWeight: FontWeight.w500,
@@ -210,9 +209,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
-        border: Border.all(color: const Color(0xFFDADADA), width: 1.r),
+        border: Border.all(color: AppColors.greyBorder, width: 1.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -245,7 +244,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: Text(
               'سيتم إرسال رمز تحقق عند تغيير البريد الالكتروني',
               style: TextStyle(
-                color: const Color(0xFFE53935),
+                color: AppColors.alertRed,
                 fontSize: 10.sp,
                 fontFamily: 'Cairo',
                 fontWeight: FontWeight.w700,
@@ -253,7 +252,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
           ),
           SizedBox(height: 24.h),
-          Divider(color: const Color(0xFFDADADA), thickness: 1.r),
+          Divider(color: AppColors.greyBorder, thickness: 1.r),
           SizedBox(height: 16.h),
           ProfileInfoRow(
             label: 'رقم الهاتف',
@@ -274,15 +273,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         width: double.infinity,
         height: 48.h,
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F9F9),
+          color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(5.r),
-          border: Border.all(color: const Color(0xFF27AE60), width: 1.r),
+          border: Border.all(color: AppColors.primary, width: 1.r),
         ),
         child: Center(
           child: Text(
             'الغاء',
             style: TextStyle(
-              color: const Color(0xFF27AE60),
+              color: AppColors.primary,
               fontSize: 18.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w600,

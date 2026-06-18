@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:traffic/core/utils/date_time_formatter.dart';
 
 enum AppointmentType {
   medical('Medical'),
@@ -52,22 +53,24 @@ class AppointmentSlotModel {
 
   factory AppointmentSlotModel.fromJson(Map<String, Object?> json) {
     final String startTime =
-        (json['startTime'] ?? json['time'] ?? json['from'] ?? '').toString();
-    final String endTime = (json['endTime'] ?? json['to'] ?? '').toString();
-    final bool isAvailable = json['isAvailable'] is bool ? json['isAvailable']! as bool : true;
+        (json['startTime'] ?? json['time'] ?? json['from'] ?? '').toString().trim();
+    final String endTime = (json['endTime'] ?? json['to'] ?? '').toString().trim();
+    final bool isAvailableRaw = json['isAvailable'] is bool ? json['isAvailable']! as bool : true;
+    final String status = (json['status'] ?? '').toString().trim();
+    final bool isAvailable = isAvailableRaw && status != 'ممتلئ' && status != 'غير متاح';
 
     return AppointmentSlotModel(
       startTime: startTime,
-      endTime: endTime.isEmpty ? null : endTime,
+      endTime: (endTime.isEmpty || endTime == '00:00') ? null : endTime,
       isAvailable: isAvailable,
     );
   }
 
   String get displayLabel {
     if (endTime == null || endTime!.isEmpty) {
-      return startTime;
+      return DateTimeFormatter.formatTimeSlot(startTime);
     }
-    return '$startTime-$endTime';
+    return DateTimeFormatter.formatTimeSlot('$startTime-$endTime');
   }
 }
 

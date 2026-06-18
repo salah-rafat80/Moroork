@@ -1,5 +1,6 @@
 // path: lib/features/settings/presentation/screens/faq_screen.dart
 import 'package:flutter/gestures.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
@@ -93,7 +94,7 @@ class _FaqScreenState extends State<FaqScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       key: _scaffoldKey,
       drawer: const AppDrawer(),
       body: Column(
@@ -140,8 +141,8 @@ class _FaqItemCardState extends State<_FaqItemCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
-        border: Border.all(color: const Color(0xFFDADADA), width: 1.w),
+        color: AppColors.cardBg,
+        border: Border.all(color: AppColors.greyBorder, width: 1.w),
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
@@ -158,22 +159,22 @@ class _FaqItemCardState extends State<_FaqItemCard> {
           child: ExpansionTile(
             leading: Icon(
               Icons.help_outline_rounded,
-              color: const Color(0xFF27AE60),
+              color: AppColors.primary,
               size: 22.r,
             ),
             title: Text(
               widget.faq.question,
               style: TextStyle(
                 color: _isExpanded
-                    ? const Color(0xFF27AE60)
-                    : const Color(0xFF222222),
+                    ? AppColors.primary
+                    : AppColors.textPrimary,
                 fontSize: 14.sp,
                 fontFamily: 'Cairo',
                 fontWeight: FontWeight.w600,
               ),
             ),
-            iconColor: const Color(0xFF27AE60),
-            collapsedIconColor: const Color(0xFF27AE60),
+            iconColor: AppColors.primary,
+            collapsedIconColor: AppColors.primary,
             onExpansionChanged: (expanded) {
               setState(() {
                 _isExpanded = expanded;
@@ -184,7 +185,7 @@ class _FaqItemCardState extends State<_FaqItemCard> {
                   ? Icons.keyboard_arrow_up_rounded
                   : Icons.keyboard_arrow_down_rounded,
               color: _isExpanded
-                  ? const Color(0xFF27AE60)
+                  ? AppColors.primary
                   : const Color(0xFF888888),
               size: 24.r,
             ),
@@ -250,7 +251,7 @@ class _FaqAnswerTextState extends State<FaqAnswerText> {
           TextSpan(
             text: widget.preText,
             style: TextStyle(
-              color: const Color(0xFF707070),
+              color: AppColors.mediumGrey,
               fontSize: 13.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w600,
@@ -261,7 +262,7 @@ class _FaqAnswerTextState extends State<FaqAnswerText> {
             text: widget.underlinedText,
             recognizer: _tapGestureRecognizer,
             style: TextStyle(
-              color: const Color(0xFF27AE60),
+              color: AppColors.primary,
               fontSize: 13.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w700,
@@ -272,7 +273,7 @@ class _FaqAnswerTextState extends State<FaqAnswerText> {
           TextSpan(
             text: widget.postText,
             style: TextStyle(
-              color: const Color(0xFF707070),
+              color: AppColors.mediumGrey,
               fontSize: 13.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w600,

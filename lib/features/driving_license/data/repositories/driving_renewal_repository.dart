@@ -5,6 +5,7 @@ import '../../../../core/api/api_error_handler.dart';
 import '../../../../core/api/api_result.dart';
 import '../models/driving_renewal_model.dart';
 import '../../../../core/api/request_id_manager.dart';
+import '../../../../core/utils/date_time_formatter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
@@ -402,8 +403,8 @@ class DrivingRenewalRepository {
             isAvailable: true,
           ),
         );
-      } else if (row is Map<String, Object?>) {
-        mapped.add(AppointmentSlotModel.fromJson(row));
+      } else if (row is Map) {
+        mapped.add(AppointmentSlotModel.fromJson(Map<String, Object?>.from(row)));
       }
     }
 
@@ -442,6 +443,12 @@ class DrivingRenewalRepository {
           rawData['details'] ?? rawData['data'] ?? rawData['items'] ?? rawData['result'];
       if (directData is List<Object?>) {
         return directData;
+      }
+      if (directData is Map<String, Object?>) {
+        final Object? nestedData = directData['data'] ?? directData['slots'] ?? directData['items'];
+        if (nestedData is List<Object?>) {
+          return nestedData;
+        }
       }
     }
 
@@ -637,27 +644,7 @@ class DrivingLicenseRenewalDataHandler {
   }
 
   String _extractStartTime(String selectedSlot) {
-    final String firstPart = selectedSlot.split('-').first.trim();
-    final String normalized = firstPart.toLowerCase().replaceAll('.', '');
-
-    if (normalized.endsWith('am') || normalized.endsWith('pm')) {
-      final bool isPm = normalized.endsWith('pm');
-      final String time = normalized.replaceAll('am', '').replaceAll('pm', '').trim();
-      final List<String> pieces = time.split(':');
-      if (pieces.length == 2) {
-        final int rawHour = int.tryParse(pieces[0]) ?? 0;
-        final int minute = int.tryParse(pieces[1]) ?? 0;
-        final int hour24;
-        if (isPm) {
-          hour24 = rawHour == 12 ? 12 : rawHour + 12;
-        } else {
-          hour24 = rawHour == 12 ? 0 : rawHour;
-        }
-        return '${hour24.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-      }
-    }
-
-    return firstPart;
+    return DateTimeFormatter.extractRawStartTime(selectedSlot);
   }
 }
 

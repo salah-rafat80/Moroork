@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
@@ -49,7 +50,7 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -74,7 +75,7 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 17.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w700,
@@ -89,7 +90,7 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF333333),
+                      color: AppColors.darkGrey,
                       fontSize: 14.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w500,

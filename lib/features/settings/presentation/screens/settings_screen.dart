@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/features/profile/presentation/widgets/profile_header.dart';
 import 'package:traffic/features/settings/presentation/screens/about_app_screen.dart';
@@ -7,6 +8,7 @@ import 'package:traffic/features/settings/presentation/screens/terms_of_use_scre
 import 'package:traffic/features/settings/presentation/widgets/logout_confirmation_dialog.dart';
 import 'package:traffic/features/smart_assistant/presentation/screens/smart_assistant_chat_screen.dart';
 
+import '../widgets/theme_selection_card.dart';
 import '../widgets/logout_button.dart';
 import '../widgets/settings_menu_item.dart';
 import 'faq_screen.dart';
@@ -18,7 +20,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
 
       body: Column(
         children: [
@@ -33,7 +35,7 @@ class SettingsScreen extends StatelessWidget {
                   Text(
                     'المساعدة والدعم',
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 17.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w700,
@@ -42,15 +44,15 @@ class SettingsScreen extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF8F9F9),
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(5.r),
                       border: Border.all(
-                        color: const Color(0xFFDADADA),
+                        color: AppColors.greyBorder,
                         width: 1.w,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0x3F000000),
+                          color: AppColors.shadowColor,
                           blurRadius: 4.r,
                           offset: Offset(0, 1.h),
                         ),
@@ -101,10 +103,12 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 24.h),
+                  const ThemeSelectionCard(),
+                  SizedBox(height: 24.h),
                   Text(
                     'عن التطبيق',
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 17.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w700,
@@ -113,15 +117,15 @@ class SettingsScreen extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF8F9F9),
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(5.r),
                       border: Border.all(
-                        color: const Color(0xFFDADADA),
+                        color: AppColors.greyBorder,
                         width: 1.w,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0x3F000000),
+                          color: AppColors.shadowColor,
                           blurRadius: 4.r,
                           offset: Offset(0, 1.h),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InsuranceCompanyCard extends StatelessWidget {
@@ -25,12 +26,12 @@ class InsuranceCompanyCard extends StatelessWidget {
         width: double.infinity,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(5.r),
           border: Border.all(
             color: isSelected
-                ? const Color(0xFF27AE60)
-                : const Color(0xFFDADADA),
+                ? AppColors.primary
+                : AppColors.greyBorder,
             width: 1.w,
           ),
         ),
@@ -48,7 +49,7 @@ class InsuranceCompanyCard extends StatelessWidget {
                 errorBuilder: (context, error, stackTrace) {
                   // Fallback if image not found
                   return Container(
-                    color: const Color(0xFFF8F9F9),
+                    color: AppColors.cardBg,
                     alignment: Alignment.center,
                     child: Image.asset("assets/الشركة المصرية للتأمين .png"),
                   );
@@ -73,7 +74,7 @@ class InsuranceCompanyCard extends StatelessWidget {
                           companyName,
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
-                            color: const Color(0xFF222222),
+                            color: AppColors.textPrimary,
                             fontSize: 14.sp,
                             fontFamily: 'Cairo',
                             fontWeight: FontWeight.w700,
@@ -84,7 +85,7 @@ class InsuranceCompanyCard extends StatelessWidget {
                           details,
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
-                            color: const Color(0xFF444444),
+                            color: AppColors.deepGrey,
                             fontSize: 10.sp,
                             fontFamily: 'Cairo',
                             fontWeight: FontWeight.w600,
@@ -103,13 +104,13 @@ class InsuranceCompanyCard extends StatelessWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? const Color(0xFFD4ECDE)
-                          : const Color(0xFFF8F9F9),
+                          ? AppColors.lightGreenBg
+                          : AppColors.cardBg,
                       shape: BoxShape.circle,
                       border: isSelected
                           ? null
                           : Border.all(
-                              color: const Color(0xFFDADADA),
+                              color: AppColors.greyBorder,
                               width: 1.w,
                             ),
                     ),
@@ -117,8 +118,8 @@ class InsuranceCompanyCard extends StatelessWidget {
                         ? Container(
                             width: 10.w,
                             height: 10.w,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF27AE60),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
                               shape: BoxShape.circle,
                             ),
                           )

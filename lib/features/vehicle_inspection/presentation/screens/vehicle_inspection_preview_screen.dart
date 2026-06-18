@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
@@ -28,7 +29,7 @@ class _VehicleInspectionPreviewScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -54,13 +55,13 @@ class _VehicleInspectionPreviewScreenState
                   InspectionAnalyzeButton(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
+                        SnackBar(
+                          content: const Text(
                             'جاري تحليل المركبة...',
                             textDirection: TextDirection.rtl,
                             style: TextStyle(fontFamily: 'Tajawal'),
                           ),
-                          backgroundColor: Color(0xFF27AE60),
+                          backgroundColor: AppColors.primary,
                         ),
                       );
                     },

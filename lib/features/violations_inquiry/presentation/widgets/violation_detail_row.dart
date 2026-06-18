@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -35,13 +36,13 @@ class ViolationDetailRow extends StatelessWidget {
           height: 35.w,
           padding: EdgeInsets.all(6.w),
           decoration: BoxDecoration(
-            color: const Color(0xFFD4ECDE),
+            color: AppColors.lightGreenBg,
             borderRadius: BorderRadius.circular(5.r),
           ),
           child: SvgPicture.asset(
             iconAsset,
-            colorFilter: const ColorFilter.mode(
-              Color(0xFF27AE60),
+            colorFilter: ColorFilter.mode(
+              AppColors.primary,
               BlendMode.srcIn,
             ),
           ),
@@ -60,7 +61,7 @@ class ViolationDetailRow extends StatelessWidget {
                   fontFamily: 'Cairo',
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF707070),
+                  color: AppColors.mediumGrey,
                 ),
               ),
               SizedBox(height: 2.h),
@@ -71,7 +72,7 @@ class ViolationDetailRow extends StatelessWidget {
                   fontFamily: 'Cairo',
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],

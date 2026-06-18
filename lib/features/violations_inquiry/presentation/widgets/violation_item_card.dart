@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -32,10 +33,10 @@ class ViolationItemCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
         border: Border.all(
-          color: const Color(0xFFDADADA),
+          color: AppColors.greyBorder,
         ),
       ),
       child: Row(
@@ -46,7 +47,7 @@ class ViolationItemCard extends StatelessWidget {
             width: 40.w,
             height: 40.h,
             decoration: BoxDecoration(
-              color: const Color(0xFFD4ECDE),
+              color: AppColors.lightGreenBg,
               borderRadius: BorderRadius.circular(5.r),
             ),
             child: Center(
@@ -59,7 +60,7 @@ class ViolationItemCard extends StatelessWidget {
                   : Icon(
                       Icons.warning_amber_rounded,
                       size: 24.w,
-                      color: const Color(0xFF27AE60),
+                      color: AppColors.primary,
                     ),
             ),
           ),
@@ -80,7 +81,7 @@ class ViolationItemCard extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF222222),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 SizedBox(height: 4.h),
@@ -93,7 +94,7 @@ class ViolationItemCard extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF707070),
+                    color: AppColors.mediumGrey,
                   ),
                 ),
               ],
@@ -109,7 +110,7 @@ class ViolationItemCard extends StatelessWidget {
               fontFamily: 'Cairo',
               fontSize: 14.sp,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF27AE60),
+              color: AppColors.primary,
             ),
           ),
         ],

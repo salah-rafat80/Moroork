@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/custom_text_field.dart';
 
@@ -34,8 +35,8 @@ class PhoneFieldWidget extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               color: error != null
-                  ? const Color(0xFFD32F2F)
-                  : const Color(0xFF27AE60),
+                  ? AppColors.error
+                  : AppColors.primary,
             ),
             borderRadius: BorderRadius.circular(8.r),
           ),
@@ -44,7 +45,7 @@ class PhoneFieldWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w400,
-              color: Colors.black,
+              color: AppColors.charcoal,
               fontFamily: 'Tajawal',
             ),
           ),

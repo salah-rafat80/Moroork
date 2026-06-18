@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A read-only card that renders the full Terms & Conditions text.
@@ -13,7 +14,7 @@ class TermsContentCard extends StatelessWidget {
   TextSpan _heading(String text) => TextSpan(
     text: text,
     style: TextStyle(
-      color: const Color(0xFF222222),
+      color: AppColors.textPrimary,
       fontSize: 13.sp,
       fontFamily: 'Tajawal',
       fontWeight: FontWeight.w700,
@@ -24,7 +25,7 @@ class TermsContentCard extends StatelessWidget {
   TextSpan _body(String text) => TextSpan(
     text: text,
     style: TextStyle(
-      color: const Color(0xFF333333),
+      color: AppColors.darkGrey,
       fontSize: 13.sp,
       fontFamily: 'Tajawal',
       fontWeight: FontWeight.w500,
@@ -39,9 +40,9 @@ class TermsContentCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: ShapeDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.w, color: const Color(0xFFDADADA)),
+          side: BorderSide(width: 1.w, color: AppColors.greyBorder),
           borderRadius: BorderRadius.circular(5.r),
         ),
       ),

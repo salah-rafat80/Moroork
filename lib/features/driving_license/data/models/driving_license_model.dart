@@ -8,7 +8,12 @@ part 'driving_license_model.freezed.dart';
 part 'driving_license_model.g.dart';
 
 LicenseStatus _statusFromJson(dynamic status) {
-  if (status is int) return LicenseStatus.values[status];
+  if (status is int) {
+    if (status >= 0 && status < LicenseStatus.values.length) {
+      return LicenseStatus.values[status];
+    }
+    return LicenseStatus.valid;
+  }
   final statusStr = (status?.toString() ?? '').toLowerCase();
   if (statusStr.contains('expire') || statusStr.contains('منتهية')) {
     return LicenseStatus.expired;
@@ -67,7 +72,6 @@ class DrivingLicenseModel with _$DrivingLicenseModel {
           category: 'خاصة',
           governorate: 'الشرقية',
           licensingUnit: 'وحدة مرور العاشر',
-          status: LicenseStatus.valid,
           issueDate: '12/3/2020',
           expiryDate: '12/3/2026',
           citizenName: 'أحمد محمود حسن',

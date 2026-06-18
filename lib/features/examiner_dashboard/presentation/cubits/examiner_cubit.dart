@@ -10,14 +10,11 @@ class ExaminerCubit extends Cubit<ExaminerState> {
   ExaminerCubit(this._repository) : super(ExaminerInitial());
 
   Future<void> getAppointments() async {
-    print('🚀 ExaminerCubit: Fetching appointments...');
     emit(ExaminerLoading());
     final result = await _repository.getAppointments();
     if (result.isSuccess) {
-      print('✅ ExaminerCubit: Loaded ${result.data?.length} appointments');
       emit(ExaminerAppointmentsLoaded(result.data ?? []));
     } else {
-      print('❌ ExaminerCubit: Error - ${result.error}');
       emit(ExaminerFailure(result.error ?? 'حدث خطأ غير متوقع.'));
     }
   }

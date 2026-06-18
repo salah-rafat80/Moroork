@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
@@ -11,7 +12,6 @@ import 'package:traffic/features/driving_license/presentation/screens/license_de
 import 'package:traffic/features/driving_license/data/models/driving_license_model.dart';
 import 'package:traffic/features/violations_inquiry/presentation/screens/violations_list_screen.dart';
 import 'package:traffic/features/driving_license/data/repositories/driving_license_repository.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'lost_license_details_screen.dart';
 import 'package:traffic/injection_container.dart';
 
@@ -121,7 +121,7 @@ class _LostLicenseSelectionScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -134,64 +134,67 @@ class _LostLicenseSelectionScreenState
           // ── Scrollable licence list ───────────────────────────────────────
           Expanded(
             child: _isLoading
-                ? Center(child: CustomLoadingIndicator())
+                ? const Center(child: CustomLoadingIndicator())
                 : _licenses.isEmpty
                 ? const EmptyStateWidget(
                     message: 'لا توجد رخص قيادة مسجلة حالياً',
                   )
-                : SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 16.h,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // ── Section header ────────────────────────────────────────
-                        Text(
-                          'تفاصيل رخصة القيادة',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontFamily: 'Tajawal',
-                            fontSize: 17.sp,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF222222),
+                : Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 16.h,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              // ── Section header ────────────────────────────────────────
+                              Text(
+                                'تفاصيل رخصة القيادة',
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontFamily: 'Tajawal',
+                                  fontSize: 17.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+
+                              SizedBox(height: 12.h),
+
+                              // ── Licence cards ─────────────────────────────────────────
+                              ..._licenses.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final lic = entry.value;
+                                final bool isWithdrawn =
+                                    lic.status == LicenseStatus.withdrawn;
+                                final bool isSelected = _selectedIndex == index;
+
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 12.h),
+                                  child: _SelectableLicenseCard(
+                                    data: lic,
+                                    isSelected: isSelected,
+                                    isDisabled: isWithdrawn,
+                                    onTap: () => _onCardTap(index),
+                                  ),
+                                );
+                              }),
+                            ],
                           ),
                         ),
-
-                        SizedBox(height: 12.h),
-
-                        // ── Licence cards ─────────────────────────────────────────
-                        ..._licenses.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final lic = entry.value;
-                          final bool isWithdrawn =
-                              lic.status == LicenseStatus.withdrawn;
-                          final bool isSelected = _selectedIndex == index;
-
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 12.h),
-                            child: _SelectableLicenseCard(
-                              data: lic,
-                              isSelected: isSelected,
-                              isDisabled: isWithdrawn,
-                              onTap: () => _onCardTap(index),
-                            ),
-                          );
-                        }),
-
-                        SizedBox(height: 12.h),
-
-                        // ── Primary action button ─────────────────────────────────
-                        NextButtonWidget(
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 24.h),
+                        child: NextButtonWidget(
                           onPressed: _onNextPressed,
                           isValid: _canProceed,
                           height: 48.h,
                         ),
-
-                        SizedBox(height: 24.h),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
           ),
         ],

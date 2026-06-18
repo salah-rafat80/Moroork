@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/radio_dot.dart';
 import '../../data/models/vehicle_license_model.dart';
@@ -6,13 +7,17 @@ import '../../data/models/vehicle_license_model.dart';
 class VehicleLicenseCard extends StatelessWidget {
   final VehicleLicenseModel vehicle;
   final bool isSelected;
+  final bool showRadioDot;
   final VoidCallback? onTap;
+  final VoidCallback? onShowViolations;
 
   const VehicleLicenseCard({
     super.key,
     required this.vehicle,
     this.isSelected = false,
+    this.showRadioDot = true,
     this.onTap,
+    this.onShowViolations,
   });
 
   bool get _isRestricted =>
@@ -30,19 +35,19 @@ class VehicleLicenseCard extends StatelessWidget {
           child: Container(
             padding: EdgeInsetsDirectional.all(16.w),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8F9F9),
+              color: AppColors.cardBg,
               borderRadius: BorderRadius.circular(8.r),
               border: Border.all(
                 color: isSelected
-                    ? const Color(0xFF27AE60)
-                    : const Color(0xFFDADADA),
+                    ? AppColors.primary
+                    : AppColors.greyBorder,
                 width: isSelected ? 2.w : 1.w,
               ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (!_isRestricted) ...[RadioDot(isSelected: isSelected)],
+                if (!_isRestricted && showRadioDot) ...[RadioDot(isSelected: isSelected)],
                 // ── Top Row (Radio & Plate Number) ──────────────────────────
                 SizedBox(height: 10.h),
                 Row(
@@ -54,13 +59,13 @@ class VehicleLicenseCard extends StatelessWidget {
                         fontFamily: 'Cairo',
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xFF222222),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const Spacer(),
                     _Badge(
                       text: vehicle.plateNumber,
-                      color: const Color(0xFF27AE60),
+                      color: AppColors.primary,
                     ),
                   ],
                 ),
@@ -79,7 +84,7 @@ class VehicleLicenseCard extends StatelessWidget {
                 // ── Violations Warning ──────────────────────────────────────
                 if (vehicle.hasUnpaidViolations) ...[
                   SizedBox(height: 12.h),
-                  _ViolationsWarning(),
+                  _ViolationsWarning(onShowViolations: onShowViolations),
                 ],
 
                 // ── Restricted Label ────────────────────────────────────────
@@ -92,7 +97,7 @@ class VehicleLicenseCard extends StatelessWidget {
                       fontFamily: 'Cairo',
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFFE53935),
+                      color: AppColors.alertRed,
                     ),
                   ),
                 ],
@@ -123,7 +128,7 @@ class _InfoRow extends StatelessWidget {
             fontFamily: 'Cairo',
             fontSize: 13.sp,
             fontWeight: FontWeight.w500,
-            color: const Color(0xFF222222),
+            color: AppColors.textPrimary,
           ),
         ),
         const Spacer(),
@@ -137,7 +142,7 @@ class _InfoRow extends StatelessWidget {
               fontFamily: 'Cairo',
               fontSize: 15.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF222222),
+              color: AppColors.textPrimary,
             ),
           ),
       ],
@@ -186,19 +191,19 @@ class _StatusBadge extends StatelessWidget {
     switch (status) {
       case VehicleLicenseStatus.valid:
         text = 'سارية';
-        color = const Color(0xFF27AE60);
+        color = AppColors.primary;
         break;
       case VehicleLicenseStatus.expired:
         text = 'منتهية';
-        color = const Color(0xFFE53935);
+        color = AppColors.alertRed;
         break;
       case VehicleLicenseStatus.suspended:
         text = 'موقوفة';
-        color = const Color(0xFFEA9555);
+        color = AppColors.warningOrange;
         break;
       case VehicleLicenseStatus.withdrawn:
         text = 'مسحوبة';
-        color = const Color(0xFFEA9555);
+        color = AppColors.warningOrange;
         break;
     }
 
@@ -213,18 +218,22 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.symmetric(vertical: 8.h),
-      child: Container(height: 1, color: const Color(0xFFDADADA)),
+      child: Container(height: 1, color: AppColors.greyBorder),
     );
   }
 }
 
 class _ViolationsWarning extends StatelessWidget {
+  final VoidCallback? onShowViolations;
+
+  const _ViolationsWarning({this.onShowViolations});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsetsDirectional.all(12.w),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFE9E9),
+        color: AppColors.alertRedLight,
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
@@ -238,15 +247,13 @@ class _ViolationsWarning extends StatelessWidget {
                 fontFamily: 'Cairo',
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFFE53935),
+                color: AppColors.alertRed,
               ),
             ),
           ),
           const Spacer(),
           GestureDetector(
-            onTap: () {
-              // TODO: Navigate to violations inquiry
-            },
+            onTap: onShowViolations,
             child: Text(
               'عرض المخالفات',
               textAlign: TextAlign.right,
@@ -254,7 +261,7 @@ class _ViolationsWarning extends StatelessWidget {
                 fontFamily: 'Cairo',
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFFE53935),
+                color: AppColors.alertRed,
                 decoration: TextDecoration.underline,
               ),
             ),

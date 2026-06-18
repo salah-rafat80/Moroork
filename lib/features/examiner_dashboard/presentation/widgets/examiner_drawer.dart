@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:traffic/features/auth/data/repositories/auth_repository.dart';
 import 'package:traffic/features/auth/presentation/screens/login_screen/login_screen.dart';
 import 'package:traffic/injection_container.dart';
@@ -11,20 +11,19 @@ class ExaminerDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       width: 260.w,
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ── Logo ──────────────────────────────────────────────────────────
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 60.h),
               child: Center(
                 child: Image.asset('assets/logo.png', height: 80.h),
               ),
             ),
-            const Divider(color: Color(0xFFE0E0E0), thickness: 1, height: 1),
+            Divider(color: AppColors.dividerGrey, thickness: 1, height: 1),
             const Spacer(),
             // ── Logout Button ────────────────────────────────────────────────
             Padding(
@@ -43,7 +42,7 @@ class ExaminerDrawer extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE53935),
+                  backgroundColor: AppColors.alertRed,
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   shape: RoundedRectangleBorder(

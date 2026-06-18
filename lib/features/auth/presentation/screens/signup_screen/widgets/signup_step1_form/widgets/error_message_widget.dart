@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ErrorMessageWidget extends StatelessWidget {
@@ -17,7 +18,7 @@ class ErrorMessageWidget extends StatelessWidget {
         style: TextStyle(
           fontSize: 12.sp,
           fontWeight: FontWeight.w400,
-          color: const Color(0xFFE53935),
+          color: AppColors.alertRed,
           fontFamily: 'Tajawal',
         ),
       ),

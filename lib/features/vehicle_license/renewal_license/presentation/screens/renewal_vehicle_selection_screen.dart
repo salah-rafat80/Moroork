@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
@@ -7,6 +8,10 @@ import 'package:traffic/core/widgets/service_screen_appbar.dart';
 import 'package:traffic/core/widgets/empty_state_widget.dart';
 import 'package:traffic/features/vehicle_license/data/models/vehicle_license_model.dart';
 import 'package:traffic/features/vehicle_license/data/repositories/vehicle_license_repository.dart';
+import 'package:traffic/features/violations_inquiry/data/repositories/violations_repository.dart';
+import 'package:traffic/features/vehicle_license/violations_inquiry/data/models/vehicle_license_violation_model.dart';
+import 'package:traffic/features/vehicle_license/violations_inquiry/presentation/screens/vehicle_violations_list_screen.dart';
+import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
 import '../../data/models/renewal_vehicle_license_model.dart';
 import '../widgets/renewal_vehicle_license_card.dart';
 import 'vehicle_technical_inspection_screen.dart';
@@ -43,13 +48,32 @@ class _RenewalVehicleSelectionScreenState
     setState(() => _isLoading = true);
     try {
       final repository = getIt<VehicleLicenseRepository>();
+      final violationsRepo = getIt<ViolationsRepository>();
 
       // Fetch fresh from API directly
       final result = await repository.getMyLicenses();
       if (result.isSuccess && result.data != null) {
+        final List<VehicleLicenseModel> licenses = result.data!;
+        final List<VehicleLicenseModel> updatedLicenses = [];
+
+        for (final license in licenses) {
+          bool hasUnpaid = license.hasUnpaidViolations;
+          try {
+            final violationsResult = await violationsRepo.getVehicleLicenseViolations(
+              licenseNumber: license.vehicleLicenseNumber,
+            );
+            if (violationsResult.isSuccess && violationsResult.data != null) {
+              hasUnpaid = violationsResult.data!.violations.any((v) => !v.isPaid);
+            }
+          } catch (_) {
+            // fallback to model status if fetch fails
+          }
+          updatedLicenses.add(license.copyWith(hasUnpaidViolations: hasUnpaid));
+        }
+
         if (mounted) {
           setState(() {
-            _vehicles = result.data!;
+            _vehicles = updatedLicenses;
             _isLoading = false;
             if (_vehicles.length == 1) {
               final firstModel = _toRenewalModel(_vehicles[0]);
@@ -100,12 +124,15 @@ class _RenewalVehicleSelectionScreenState
   /// Maps VehicleLicenseModel status to RenewalLicenseStatus for the card widget.
   RenewalVehicleLicenseModel _toRenewalModel(VehicleLicenseModel v) {
     RenewalLicenseStatus renewalStatus;
-    switch (v.status.name) {
-      case 'expired':
+    switch (v.status) {
+      case LicenseStatus.expired:
         renewalStatus = RenewalLicenseStatus.expired;
         break;
-      case 'withdrawn':
+      case LicenseStatus.withdrawn:
         renewalStatus = RenewalLicenseStatus.withdrawn;
+        break;
+      case LicenseStatus.suspended:
+        renewalStatus = RenewalLicenseStatus.suspended;
         break;
       default:
         renewalStatus = RenewalLicenseStatus.valid;
@@ -168,69 +195,127 @@ class _RenewalVehicleSelectionScreenState
                 isLoading: state is VehicleRenewalLoading,
                 child: Scaffold(
                   key: _scaffoldKey,
-                  backgroundColor: const Color(0xFFF5F5F5),
-                  endDrawer: const AppDrawer(),
+                  backgroundColor: AppColors.lightGreyBg,
+                  drawer: const AppDrawer(),
                   body: Column(
                     children: [
                       ServiceScreenAppBar(
                         title: 'تجديد رخصة مركبة',
                         onMenuPressed: () =>
-                            _scaffoldKey.currentState?.openEndDrawer(),
+                            _scaffoldKey.currentState?.openDrawer(),
                       ),
                       Expanded(
-                        child: SingleChildScrollView(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16.w, vertical: 16.h),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'تفاصيل رخصة المركبة',
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                  fontFamily: 'Tajawal',
-                                  fontSize: 17.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF222222),
-                                ),
-                              ),
-                              SizedBox(height: 12.h),
-                              if (_isLoading)
-                                const Center(
-                                    child: CustomLoadingIndicator())
-                              else if (_vehicles.isEmpty)
-                                const EmptyStateWidget(
-                                  message: 'لا توجد رخص مركبات مسجلة حالياً',
-                                )
-                              else
-                                ..._vehicles.asMap().entries.map((entry) {
-                                  final index = entry.key;
-                                  final model = _toRenewalModel(entry.value);
-                                  return Padding(
-                                    padding: EdgeInsets.only(bottom: 12.h),
-                                    child: RenewalVehicleLicenseCard(
-                                      vehicle: model,
-                                      isSelected: _selectedIndex == index,
-                                      onTap: model.canRenew
-                                          ? () => setState(
-                                              () => _selectedIndex = index)
-                                          : null,
-                                    ),
-                                  );
-                                }),
-                              SizedBox(height: 12.h),
-                              PrimaryButton(
-                                label: 'التالي',
-                                onPressed: _canProceed
-                                    ? () => _onNextPressed(context)
-                                    : null,
-                                height: 48.h,
-                                backgroundColor: const Color(0xFF27AE60),
-                              ),
-                              SizedBox(height: 24.h),
-                            ],
-                          ),
-                        ),
+                        child: _isLoading
+                            ? const Center(child: CustomLoadingIndicator())
+                            : _vehicles.isEmpty
+                                ? const EmptyStateWidget(
+                                    message: 'لا توجد رخص مركبات مسجلة حالياً',
+                                  )
+                                : Column(
+                                    children: [
+                                      Expanded(
+                                        child: SingleChildScrollView(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16.w, vertical: 16.h),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Text(
+                                                'تفاصيل رخصة المركبة',
+                                                textAlign: TextAlign.right,
+                                                style: TextStyle(
+                                                  fontFamily: 'Tajawal',
+                                                  fontSize: 17.sp,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: AppColors.textPrimary,
+                                                ),
+                                              ),
+                                              SizedBox(height: 12.h),
+                                              ..._vehicles
+                                                  .asMap()
+                                                  .entries
+                                                  .map((entry) {
+                                                final index = entry.key;
+                                                final model =
+                                                    _toRenewalModel(
+                                                        entry.value);
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      bottom: 12.h),
+                                                  child:
+                                                      RenewalVehicleLicenseCard(
+                                                    vehicle: model,
+                                                    isSelected:
+                                                        _selectedIndex == index,
+                                                    onTap: model.canRenew
+                                                        ? () => setState(() =>
+                                                            _selectedIndex =
+                                                                index)
+                                                        : null,
+                                                    onShowViolations: () {
+                                                      final license =
+                                                          entry.value;
+                                                      final violationModel =
+                                                          VehicleLicenseViolationModel(
+                                                        id: license.id,
+                                                        vehicleLicenseNumber:
+                                                            license
+                                                                .vehicleLicenseNumber,
+                                                        plateNumber: license
+                                                                .plateNumber ??
+                                                            license
+                                                                .vehicleLicenseNumber,
+                                                        vehicleType:
+                                                            _formatVehicleType(
+                                                                license
+                                                                    .category,
+                                                                license.brand,
+                                                                license.model),
+                                                        brand: license.brand,
+                                                        model: license.model,
+                                                        status: license.status,
+                                                        issueDate:
+                                                            license.issueDate,
+                                                        expiryDate:
+                                                            license.expiryDate,
+                                                        hasUnpaidViolations:
+                                                            license
+                                                                .hasUnpaidViolations,
+                                                      );
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              VehicleViolationsListScreen(
+                                                            vehicle:
+                                                                violationModel,
+                                                          ),
+                                                        ),
+                                                      ).then((_) =>
+                                                          _loadVehicles());
+                                                    },
+                                                  ),
+                                                );
+                                              }),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            16.w, 8.h, 16.w, 24.h),
+                                        child: PrimaryButton(
+                                          label: 'التالي',
+                                          onPressed: _canProceed
+                                              ? () => _onNextPressed(context)
+                                              : null,
+                                          height: 48.h,
+                                          backgroundColor: AppColors.primary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                       ),
                     ],
                   ),

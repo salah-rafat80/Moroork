@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TimelineStepItem extends StatelessWidget {
@@ -35,19 +36,17 @@ class TimelineStepItem extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: isFailed ? const Color(0xFFE02424) : Colors.black,
+                    color: isFailed ? AppColors.darkRed : AppColors.charcoal,
                     fontSize: 14.sp,
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 4.h),
+                // SizedBox(height: 2.h),
                 Text(
                   dateSubtitle,
                   style: TextStyle(
-                    color: isFailed
-                        ? const Color(0xFFE02424)
-                        : const Color(0xFF707070),
+                    color: isFailed ? AppColors.darkRed : AppColors.mediumGrey,
                     fontSize: 12.sp,
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w500,
@@ -61,8 +60,8 @@ class TimelineStepItem extends StatelessWidget {
                       descSubtitle,
                       style: TextStyle(
                         color: isFailed
-                            ? const Color(0xFF9B1C1C)
-                            : const Color(0xFF707070),
+                            ? AppColors.alertRedBg
+                            : AppColors.mediumGrey,
                         fontSize: 12.sp,
                         fontFamily: 'Cairo',
                         fontWeight: FontWeight.w500,
@@ -82,36 +81,32 @@ class TimelineStepItem extends StatelessWidget {
                 height: 20.w,
                 decoration: ShapeDecoration(
                   color: isFailed
-                      ? const Color(0xFFFDE8E8)
+                      ? AppColors.errorLightBg
                       : isCompleted
-                      ? const Color(0xFFD4ECDE)
+                      ? AppColors.lightGreenBg
                       : isCurrent
-                      ? const Color(0xFFA5D4FF)
-                      : const Color(0xFFE0E0E0),
+                      ? AppColors.skyBlueLight
+                      : AppColors.dividerGrey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
                 child: Center(
                   child: isFailed
-                      ? Icon(
-                          Icons.cancel,
-                          color: const Color(0xFFE02424),
-                          size: 16.r,
-                        )
+                      ? Icon(Icons.cancel, color: AppColors.darkRed, size: 16.r)
                       : isCompleted
                       ? Icon(
                           Icons.check_circle,
-                          color: const Color(0xFF27AE60),
+                          color: AppColors.primary,
                           size: 16.r,
                         )
                       : isCurrent
                       ? Container(
                           width: 14.w,
                           height: 14.w,
-                          decoration: const ShapeDecoration(
-                            color: Color(0xFF3B82F6),
-                            shape: OvalBorder(),
+                          decoration: ShapeDecoration(
+                            color: AppColors.primaryBlue,
+                            shape: const OvalBorder(),
                           ),
                         )
                       : const SizedBox.shrink(),
@@ -122,10 +117,12 @@ class TimelineStepItem extends StatelessWidget {
                   child: Container(
                     width: 2.w,
                     color: isCompleted
-                        ? const Color(0xFFD4ECDE) // completed line color
+                        ? AppColors
+                              .lightGreenBg // completed line color
                         : isFailed
-                        ? const Color(0xFFFDE8E8) // failed line color
-                        : const Color(0xFFE0E0E0), // inactive line color
+                        ? AppColors
+                              .errorLightBg // failed line color
+                        : AppColors.dividerGrey, // inactive line color
                   ),
                 ),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// The "سداد المخالفات" (Pay Violations) primary action button.
@@ -31,7 +32,7 @@ class ViolationPayButton extends StatelessWidget {
               width: double.infinity,
               height: 48.h,
               decoration: BoxDecoration(
-                color: const Color(0xFF27AE60),
+                color: AppColors.primary,
                 borderRadius: BorderRadius.circular(5.r),
               ),
               alignment: Alignment.center,
@@ -42,7 +43,7 @@ class ViolationPayButton extends StatelessWidget {
                   style: TextStyle(fontFamily: 'Cairo', 
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFFF8F9F9),
+                    color: AppColors.cardBg,
                   ),
                 ),
               ),

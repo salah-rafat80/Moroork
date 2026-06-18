@@ -1,5 +1,6 @@
 // path: lib/features/home/presentation/widgets/popular_service_item.dart
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -24,17 +25,25 @@ class PopularServiceItem extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.lerp(Colors.white, const Color(0xFF3FB678), 0.20)!,
-              Color.lerp(Colors.white, const Color(0xFFD3FFE9), 0.15)!,
+              Color.lerp(
+                AppColors.surface,
+                AppColors.lightGreenBrand,
+                AppColors.isDarkMode ? 0.08 : 0.20,
+              )!,
+              Color.lerp(
+                AppColors.surface,
+                AppColors.lightGreenOpacity,
+                AppColors.isDarkMode ? 0.08 : 0.15,
+              )!,
             ],
-            stops: const [0.0, 1.0],
+            stops: const [0.0, 1.5],
           ),
           borderRadius: BorderRadius.circular(7.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.shadowLight,
+              blurRadius: 2,
+              offset: const Offset(0, 1),
             ),
           ],
         ),
@@ -49,11 +58,7 @@ class PopularServiceItem extends StatelessWidget {
                   height: 45.h,
                   width: 45.h,
                   // padding: EdgeInsets.all(10.w),
-                  child: SvgPicture.asset(
-                    icon,
-                    width: 24.w,
-                    height: 24.w,
-                  ),
+                  child: SvgPicture.asset(icon, width: 24.w, height: 24.w),
                 ),
               ],
             ),
@@ -65,10 +70,11 @@ class PopularServiceItem extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontFamily: 'Cairo', 
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 11.sp,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                   height: 1.3,
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Toggle tabs to filter violations by paid/unpaid status.
@@ -19,7 +20,7 @@ class ViolationFilterTabs extends StatelessWidget {
       width: double.infinity,
       height: 48.h,
       decoration: BoxDecoration(
-        color: const Color(0xffD9D9D9),
+        color: AppColors.filterBorderGrey,
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Row(
@@ -63,13 +64,13 @@ class _TabButton extends StatelessWidget {
 
     // Active colors based on tab type
     final Color activeBg = isUnpaid
-        ? const Color(0xFFFDE8E8) // Light red bg for unpaid
-        : const Color(0xff34A853); // Green bg for paid
+        ? AppColors.errorLightBg // Light red bg for unpaid
+        : AppColors.successGreenAlt; // Green bg for paid
     final Color activeBorder = isUnpaid
-        ? const Color(0xFFE53935) // Red border for unpaid
-        : const Color(0xff34A853); // Green border for paid
+        ? AppColors.alertRed // Red border for unpaid
+        : AppColors.successGreenAlt; // Green border for paid
     final Color activeText = isUnpaid
-        ? const Color(0xFFE53935) // Red text for unpaid
+        ? AppColors.alertRed // Red text for unpaid
         : Colors.white; // White text for paid
 
     return GestureDetector(
@@ -81,7 +82,7 @@ class _TabButton extends StatelessWidget {
           width: 172.w,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isActive ? activeBg : const Color(0xffD9D9D9),
+            color: isActive ? activeBg : AppColors.filterBorderGrey,
             borderRadius: BorderRadius.circular(10.r),
             border: isActive
                 ? Border.all(color: activeBorder, width: 1.5)

@@ -1,14 +1,13 @@
 // path: lib/features/home/presentation/screens/main_navigation_screen.dart
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:traffic/features/home/presentation/screens/home_screen.dart';
 import 'package:traffic/features/profile/presentation/profile_screen.dart';
 import 'package:traffic/features/orders/presentation/my_orders_screen.dart';
 import 'package:traffic/features/orders/presentation/cubits/my_orders_cubit.dart';
-import 'package:traffic/features/orders/data/repositories/service_requests_repository.dart';
 import 'package:traffic/features/settings/presentation/screens/settings_screen.dart';
 import 'package:traffic/injection_container.dart';
 
@@ -55,7 +54,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: _BottomNav(
         currentIndex: _currentIndex,
@@ -80,14 +79,14 @@ class _BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: AppColors.shadowLight,
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
@@ -102,9 +101,9 @@ class _BottomNav extends StatelessWidget {
           currentIndex: currentIndex,
           onTap: onTap,
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: const Color(0xFF27AE60),
-          unselectedItemColor: const Color(0xFF9CA3AF),
+          backgroundColor: AppColors.surface,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: AppColors.slateGrey,
           elevation: 0,
           selectedLabelStyle: TextStyle(
             fontFamily: 'Tajawal',

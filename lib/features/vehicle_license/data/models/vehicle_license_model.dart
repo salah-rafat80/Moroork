@@ -8,12 +8,19 @@ part 'vehicle_license_model.freezed.dart';
 part 'vehicle_license_model.g.dart';
 
 LicenseStatus _statusFromJson(dynamic status) {
-  if (status is int) return LicenseStatus.values[status];
+  if (status is int) {
+    if (status >= 0 && status < LicenseStatus.values.length) {
+      return LicenseStatus.values[status];
+    }
+    return LicenseStatus.valid;
+  }
   final statusStr = (status?.toString() ?? '').toLowerCase();
   if (statusStr.contains('expire') || statusStr.contains('منتهية')) {
     return LicenseStatus.expired;
   } else if (statusStr.contains('withdraw') || statusStr.contains('مسحوبة')) {
     return LicenseStatus.withdrawn;
+  } else if (statusStr.contains('suspend') || statusStr.contains('موقوفة')) {
+    return LicenseStatus.suspended;
   }
   return LicenseStatus.valid;
 }
@@ -59,7 +66,6 @@ class VehicleLicenseModel with _$VehicleLicenseModel {
           model: 'كورولا',
           governorate: 'القاهرة',
           licensingUnit: 'وحدة مرور مدينة نصر',
-          status: LicenseStatus.valid,
           issueDate: '2024-01-01',
           expiryDate: '2027-01-01',
           citizenName: 'أحمد محمود حسن',

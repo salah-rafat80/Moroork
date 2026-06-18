@@ -17,7 +17,7 @@ class ExaminerRepository {
           ? response.data as Map<String, dynamic>
           : null;
       
-      print('🔍 RAW STAFF RESPONSE: $data');
+
       
       if (data != null && data['isSuccess'] == true) {
         final List list = data['details'] is List ? data['details'] as List : [];

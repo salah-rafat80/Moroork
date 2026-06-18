@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/Radio_dot.dart';
 import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
@@ -27,12 +28,12 @@ class LicenseDetailsCard extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 16.h),
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: isSelected
-                ? const Color(0xFF27AE60)
-                : const Color(0xFFE8E8E8),
+                ? AppColors.primary
+                : AppColors.borderLight,
             width: 1.5,
           ),
           boxShadow: [
@@ -108,7 +109,7 @@ class _LicenseNumberChip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: const Color(0xFF27AE60),
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: Center(
@@ -145,6 +146,9 @@ class _StatusChip extends StatelessWidget {
       case LicenseStatus.expired:
         statusText = 'منتهية';
         break;
+      case LicenseStatus.suspended:
+        statusText = 'موقوفة';
+        break;
     }
 
     final isActive = status == LicenseStatus.valid;
@@ -152,11 +156,11 @@ class _StatusChip extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: isActive
-            ? const Color(0xFF27AE60).withValues(alpha: 0.1)
-            : const Color(0xFFD32F2F).withValues(alpha: 0.1),
+            ? AppColors.primary.withValues(alpha: 0.1)
+            : AppColors.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6.r),
         border: Border.all(
-          color: isActive ? const Color(0xFF27AE60) : const Color(0xFFD32F2F),
+          color: isActive ? AppColors.primary : AppColors.error,
         ),
       ),
       child: Text(
@@ -165,7 +169,7 @@ class _StatusChip extends StatelessWidget {
           fontFamily: 'Tajawal',
           fontSize: 13.sp,
           fontWeight: FontWeight.w600,
-          color: isActive ? const Color(0xFF27AE60) : const Color(0xFFD32F2F),
+          color: isActive ? AppColors.primary : AppColors.error,
         ),
       ),
     );
@@ -196,7 +200,7 @@ class _DetailRow extends StatelessWidget {
           style: TextStyle(fontFamily: 'Cairo', 
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF333333),
+            color: AppColors.darkGrey,
           ),
         ),
         customValue ??
@@ -206,7 +210,7 @@ class _DetailRow extends StatelessWidget {
                 fontFamily: 'Tajawal',
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF555555),
+                color: AppColors.bodyGrey,
               ),
             ),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TermInfoCard extends StatelessWidget {
@@ -13,16 +14,16 @@ class TermInfoCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
       decoration: ShapeDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1.w, color: const Color(0xFFDADADA)),
+          side: BorderSide(width: 1.w, color: AppColors.greyBorder),
           borderRadius: BorderRadius.circular(5.r),
         ),
-        shadows: const [
+        shadows: [
           BoxShadow(
-            color: Color(0x3F000000),
+            color: AppColors.shadowColor,
             blurRadius: 4,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -34,7 +35,7 @@ class TermInfoCard extends StatelessWidget {
             title,
             textDirection: TextDirection.rtl,
             style: TextStyle(
-              color: const Color(0xFF222222),
+              color: AppColors.textPrimary,
               fontSize: 15.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w600,
@@ -45,7 +46,7 @@ class TermInfoCard extends StatelessWidget {
             content,
             textDirection: TextDirection.rtl,
             style: TextStyle(
-              color: const Color(0xFF707070),
+              color: AppColors.mediumGrey,
               fontSize: 10.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w600,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
@@ -34,7 +35,7 @@ class _VehicleLicenseDetailsScreenState extends State<VehicleLicenseDetailsScree
       textDirection: TextDirection.rtl,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: AppColors.lightGreyBg,
         drawer: const AppDrawer(),
         body: Column(
           children: [
@@ -55,24 +56,26 @@ class _VehicleLicenseDetailsScreenState extends State<VehicleLicenseDetailsScree
                         fontFamily: 'Tajawal',
                         fontSize: 17.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF222222),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 12.h),
                     VehicleLicenseCard(
                       vehicle: widget.vehicle,
                       isSelected: true,
+                      showRadioDot: false,
                     ),
-                    SizedBox(height: 24.h),
-                    PrimaryButton(
-                      label: 'التالي',
-                      onPressed: () => _onNextPressed(context),
-                      height: 48.h,
-                      backgroundColor: const Color(0xFF27AE60),
-                    ),
-                    SizedBox(height: 24.h),
                   ],
                 ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 24.h),
+              child: PrimaryButton(
+                label: 'التالي',
+                onPressed: () => _onNextPressed(context),
+                height: 48.h,
+                backgroundColor: AppColors.primary,
               ),
             ),
           ],

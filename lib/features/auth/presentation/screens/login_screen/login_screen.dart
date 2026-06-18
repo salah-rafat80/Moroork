@@ -1,4 +1,4 @@
-import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,12 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traffic/core/widgets/custom_appbar.dart';
 import 'package:traffic/features/auth/presentation/screens/signup_screen/signup_screen.dart';
 import 'package:traffic/features/home/presentation/screens/main_navigation_screen.dart';
-import 'package:traffic/core/api/api_client.dart';
-import 'package:traffic/features/auth/data/repositories/auth_repository.dart';
 import 'package:traffic/injection_container.dart';
 import 'package:traffic/features/auth/presentation/cubits/auth_cubit.dart';
 import 'package:traffic/features/auth/presentation/cubits/auth_state.dart';
-import 'package:traffic/features/driving_license/data/repositories/driving_license_repository.dart';
 import 'package:traffic/features/examiner_dashboard/presentation/screens/daily_tests_screen.dart';
 
 /// Pixel-perfect Login Screen with real-time validation.
@@ -41,13 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _loadingRole; // 'CITIZEN' or 'STAFF'
 
   // --- Colors ---
-  static const Color _green = Color(0xFF27AE60);
-  static const Color _errorRed = Color(0xFFD32F2F);
-  static const Color _textPrimary = Color(0xFF222222);
-  static const Color _textSecondary = Color(0xFF6B7280);
-  static const Color _borderGrey = Color(0xFFE5E7EB);
-  static const Color _white = Color(0xFFFFFFFF);
-  static const Color _hintColor = Color(0xFFAEAEAE);
+  static final Color _green = AppColors.primary;
+  static final Color _errorRed = AppColors.error;
+  static final Color _textPrimary = AppColors.textPrimary;
+  static final Color _textSecondary = AppColors.textSecondary;
+  static final Color _borderGrey = AppColors.border;
+  static final Color _white = AppColors.background;
+  static final Color _hintColor = AppColors.greyIcon;
 
   @override
   void initState() {
@@ -189,8 +186,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             return _buildLoginButtons(context, isLoading);
                           },
                         ),
-                        SizedBox(height: 24.h),
-                        // _buildOrDivider(),
                         SizedBox(height: 24.h),
 
                         // _buildSocialButtons(),
@@ -489,28 +484,6 @@ class _LoginScreenState extends State<LoginScreen> {
   */
   }
 
-  // --- Or Divider ---
-  Widget _buildOrDivider() {
-    return Row(
-      children: [
-        const Expanded(child: Divider(color: _borderGrey, thickness: 1)),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Text(
-            'أو',
-            style: TextStyle(
-              fontFamily: 'Cairo',
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w400,
-              color: _textSecondary,
-            ),
-          ),
-        ),
-        const Expanded(child: Divider(color: _borderGrey, thickness: 1)),
-      ],
-    );
-  }
-
   // // --- Social Buttons ---
   // Widget _buildSocialButtons() {
   //   return Row(
@@ -543,7 +516,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //               style: TextStyle(fontFamily: 'Cairo',
   //                 fontSize: 24.sp,
   //                 fontWeight: FontWeight.w700,
-  //                 color: const Color(0xFF4285F4),
+  //                 color: AppColors.googleBlue,
   //               ),
   //             ),
   //           ),
@@ -555,8 +528,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // --- Footer ---
   Widget _buildFooter() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 4.w,
       children: [
         Text(
           'ليس لديك حساب ؟',
@@ -567,7 +542,6 @@ class _LoginScreenState extends State<LoginScreen> {
             color: _textSecondary,
           ),
         ),
-        SizedBox(width: 4.w),
         GestureDetector(
           onTap: () {
             Navigator.push(
@@ -588,29 +562,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  // --- Bypass Button (Dev Only) ---
-  Widget _buildBypassButton(BuildContext context) {
-    return Center(
-      child: TextButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const DailyTestsScreen()),
-          );
-        },
-        child: Text(
-          '[دخول المُمتحن - تجريبي]',
-          style: TextStyle(
-            fontFamily: 'Cairo',
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-            color: _textSecondary,
-          ),
-        ),
-      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A single labelled row used inside info cards (e.g. licence details card).
@@ -52,7 +53,7 @@ class InfoRowItem extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF222222),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -71,7 +72,7 @@ class InfoRowItem extends StatelessWidget {
                         fontFamily: 'Cairo',
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF222222),
+                        color: AppColors.textPrimary,
                       ),
                     ),
               ),
@@ -82,7 +83,7 @@ class InfoRowItem extends StatelessWidget {
           Divider(
             height: 1.h,
             thickness: 1.h,
-            color: const Color(0xFFDADADA),
+            color: AppColors.greyBorder,
             indent: 16.w,
             endIndent: 16.w,
           ),

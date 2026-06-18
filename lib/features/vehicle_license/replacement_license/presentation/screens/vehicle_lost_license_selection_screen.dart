@@ -1,7 +1,7 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
@@ -9,6 +9,10 @@ import 'package:traffic/core/widgets/empty_state_widget.dart';
 import 'package:traffic/features/vehicle_license/data/repositories/vehicle_license_repository.dart';
 import 'package:traffic/features/vehicle_license/data/models/vehicle_license_model.dart'
     as main_model;
+import 'package:traffic/features/violations_inquiry/data/repositories/violations_repository.dart';
+import 'package:traffic/features/vehicle_license/violations_inquiry/data/models/vehicle_license_violation_model.dart';
+import 'package:traffic/features/vehicle_license/violations_inquiry/presentation/screens/vehicle_violations_list_screen.dart';
+import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
 import '../../data/models/vehicle_license_model.dart';
 import '../widgets/vehicle_license_card.dart';
 import 'vehicle_license_details_screen.dart';
@@ -43,16 +47,43 @@ class _VehicleLostLicenseSelectionScreenState
     });
     try {
       final repository = getIt<VehicleLicenseRepository>();
+      final violationsRepo = getIt<ViolationsRepository>();
 
       // Fetch fresh from API directly
       final result = await repository.getMyLicenses();
       if (result.isSuccess && result.data != null) {
+        final List<main_model.VehicleLicenseModel> licenses = result.data!;
+        final List<main_model.VehicleLicenseModel> updatedLicenses = [];
+
+        for (final license in licenses) {
+          bool hasUnpaid = license.hasUnpaidViolations;
+          try {
+            final violationsResult = await violationsRepo.getVehicleLicenseViolations(
+              licenseNumber: license.vehicleLicenseNumber,
+            );
+            if (violationsResult.isSuccess && violationsResult.data != null) {
+              hasUnpaid = violationsResult.data!.violations.any((v) => !v.isPaid);
+            }
+          } catch (_) {
+            // fallback if fetch fails
+          }
+          updatedLicenses.add(license.copyWith(hasUnpaidViolations: hasUnpaid));
+        }
+
         if (mounted) {
           setState(() {
-            _vehicles = result.data!;
+            _vehicles = updatedLicenses;
             _isLoading = false;
+            
+            // Auto-select if there is exactly 1 vehicle that is not restricted and has no unpaid violations
             if (_vehicles.length == 1) {
-              _selectedIndex = 0;
+              final firstModel = _toReplacementModel(_vehicles[0]);
+              final isRestricted = firstModel.status == VehicleLicenseStatus.suspended || firstModel.status == VehicleLicenseStatus.withdrawn;
+              if (!isRestricted && !firstModel.hasUnpaidViolations) {
+                _selectedIndex = 0;
+              } else {
+                _selectedIndex = null;
+              }
             } else {
               _selectedIndex = null;
             }
@@ -99,12 +130,15 @@ class _VehicleLostLicenseSelectionScreenState
   /// Maps the main VehicleLicenseModel → replacement-flow VehicleLicenseModel.
   VehicleLicenseModel _toReplacementModel(main_model.VehicleLicenseModel v) {
     VehicleLicenseStatus status;
-    switch (v.status.name) {
-      case 'expired':
+    switch (v.status) {
+      case LicenseStatus.expired:
         status = VehicleLicenseStatus.expired;
         break;
-      case 'withdrawn':
+      case LicenseStatus.withdrawn:
         status = VehicleLicenseStatus.withdrawn;
+        break;
+      case LicenseStatus.suspended:
+        status = VehicleLicenseStatus.suspended;
         break;
       default:
         status = VehicleLicenseStatus.valid;
@@ -139,7 +173,7 @@ class _VehicleLostLicenseSelectionScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -148,109 +182,153 @@ class _VehicleLostLicenseSelectionScreenState
             onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'تفاصيل رخصة المركبة',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontFamily: 'Tajawal',
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF222222),
-                    ),
-                  ),
-                  SizedBox(height: 12.h),
-
-                  if (_isLoading)
-                    Center(child: CustomLoadingIndicator())
-                  else if (_errorMessage != null)
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 40.h),
-                          Icon(
-                            _errorMessage!.contains('اتصال')
-                                ? Icons.wifi_off_rounded
-                                : Icons.error_outline_rounded,
-                            size: 64.r,
-                            color: const Color(0xFFE74C3C),
-                          ),
-                          SizedBox(height: 16.h),
-                          Text(
-                            _errorMessage!,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Tajawal',
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF555555),
+            child: _isLoading
+                ? const Center(child: CustomLoadingIndicator())
+                : _errorMessage != null
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 40.h),
+                            Icon(
+                              _errorMessage!.contains('اتصال')
+                                  ? Icons.wifi_off_rounded
+                                  : Icons.error_outline_rounded,
+                              size: 64.r,
+                              color: AppColors.redError,
                             ),
-                          ),
-                          SizedBox(height: 20.h),
-                          ElevatedButton.icon(
-                            onPressed: _loadVehicles,
-                            icon: const Icon(
-                              Icons.refresh_rounded,
-                              color: Colors.white,
-                            ),
-                            label: Text(
-                              'إعادة المحاولة',
+                            SizedBox(height: 16.h),
+                            Text(
+                              _errorMessage!,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Tajawal',
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.bodyGrey,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                            ElevatedButton.icon(
+                              onPressed: _loadVehicles,
+                              icon: const Icon(
+                                Icons.refresh_rounded,
                                 color: Colors.white,
                               ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF27AE60),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 24.w,
-                                vertical: 12.h,
+                              label: Text(
+                                'إعادة المحاولة',
+                                style: TextStyle(
+                                  fontFamily: 'Tajawal',
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.r),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 24.w,
+                                  vertical: 12.h,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 40.h),
-                        ],
-                      ),
-                    )
-                  else if (_vehicles.isEmpty)
-                    const EmptyStateWidget(
-                      message: 'لا توجد رخص مركبات مسجلة حالياً',
-                    )
-                  else
-                    ..._vehicles.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final model = _toReplacementModel(entry.value);
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 12.h),
-                        child: VehicleLicenseCard(
-                          vehicle: model,
-                          isSelected: _selectedIndex == index,
-                          onTap: () => setState(() => _selectedIndex = index),
+                            SizedBox(height: 40.h),
+                          ],
                         ),
-                      );
-                    }),
-
-                  SizedBox(height: 12.h),
-                  PrimaryButton(
-                    label: 'التالي',
-                    onPressed: _canProceed ? _onNextPressed : null,
-                    height: 48.h,
-                    backgroundColor: const Color(0xFF27AE60),
-                  ),
-                  SizedBox(height: 24.h),
-                ],
-              ),
-            ),
+                      )
+                    : _vehicles.isEmpty
+                        ? const EmptyStateWidget(
+                            message: 'لا توجد رخص مركبات مسجلة حالياً',
+                          )
+                        : Column(
+                            children: [
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w, vertical: 16.h),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'تفاصيل رخصة المركبة',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontFamily: 'Tajawal',
+                                          fontSize: 17.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                      ),
+                                      SizedBox(height: 12.h),
+                                      ..._vehicles.asMap().entries.map((entry) {
+                                        final index = entry.key;
+                                        final model =
+                                            _toReplacementModel(entry.value);
+                                        return Padding(
+                                          padding:
+                                              EdgeInsets.only(bottom: 12.h),
+                                          child: VehicleLicenseCard(
+                                            vehicle: model,
+                                            isSelected: _selectedIndex == index,
+                                            onTap: () => setState(() =>
+                                                _selectedIndex = index),
+                                            onShowViolations: () {
+                                              final license = entry.value;
+                                              final violationModel =
+                                                  VehicleLicenseViolationModel(
+                                                id: license.id,
+                                                vehicleLicenseNumber: license
+                                                    .vehicleLicenseNumber,
+                                                plateNumber: license
+                                                        .plateNumber ??
+                                                    license
+                                                        .vehicleLicenseNumber,
+                                                vehicleType: _formatVehicleType(
+                                                    license.category,
+                                                    license.brand,
+                                                    license.model),
+                                                brand: license.brand,
+                                                model: license.model,
+                                                status: license.status,
+                                                issueDate: license.issueDate,
+                                                expiryDate: license.expiryDate,
+                                                hasUnpaidViolations: license
+                                                    .hasUnpaidViolations,
+                                              );
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      VehicleViolationsListScreen(
+                                                    vehicle: violationModel,
+                                                  ),
+                                                ),
+                                              ).then((_) => _loadVehicles());
+                                            },
+                                          ),
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    16.w, 8.h, 16.w, 24.h),
+                                child: PrimaryButton(
+                                  label: 'التالي',
+                                  onPressed:
+                                      _canProceed ? _onNextPressed : null,
+                                  height: 48.h,
+                                  backgroundColor: AppColors.primary,
+                                ),
+                              ),
+                            ],
+                          ),
           ),
         ],
       ),

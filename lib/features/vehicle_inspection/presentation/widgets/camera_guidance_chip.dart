@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A small pill-shaped chip that displays a guidance message to the user
@@ -14,7 +15,7 @@ class CameraGuidanceChip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
+        color: AppColors.dividerLight,
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
@@ -28,11 +29,11 @@ class CameraGuidanceChip extends StatelessWidget {
               fontFamily: 'Tajawal',
               fontSize: 13.sp,
               fontWeight: FontWeight.w500,
-              color: const Color(0xFF666666),
+              color: AppColors.softGrey,
             ),
           ),
           SizedBox(width: 6.w),
-          Icon(Icons.info_outline, size: 16.w, color: const Color(0xFF999999)),
+          Icon(Icons.info_outline, size: 16.w, color: AppColors.inputHint),
         ],
       ),
     );

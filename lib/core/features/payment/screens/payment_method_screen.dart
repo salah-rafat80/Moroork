@@ -1,10 +1,9 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:traffic/core/api/api_client.dart';
-import 'package:traffic/core/features/payment/data/repositories/payment_repository.dart';
 import 'package:traffic/core/features/payment/presentation/cubits/payment_cubit.dart';
 import 'package:traffic/core/features/payment/presentation/cubits/payment_state.dart';
 import 'package:traffic/core/features/payment/models/payment_intent.dart';
@@ -45,6 +44,7 @@ class _PaymentMethodScreenContentState
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isVisaSelected = true;
   DateTime? _lastClickTime;
+  bool _isVerifyingDialogShown = false;
 
   void _onNextPressed(BuildContext context) {
     final now = DateTime.now();
@@ -86,25 +86,6 @@ class _PaymentMethodScreenContentState
     }
   }
 
-  void _handlePaymentResult(dynamic result) {
-    if (result != null && result is Map<String, dynamic>) {
-      final isSuccess = result['paymentSuccess'] == true;
-      if (isSuccess) {
-        _showSuccessDialog();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'تم إلغاء عملية الدفع أو فشلت',
-              textDirection: TextDirection.rtl,
-            ),
-            backgroundColor: Color(0xFFE53935),
-          ),
-        );
-      }
-    }
-  }
-
   void _showSuccessDialog() {
     showDialog(
       context: context,
@@ -127,7 +108,7 @@ class _PaymentMethodScreenContentState
           children: [
             Icon(
               Icons.check_circle_outline,
-              color: const Color(0xFF27AE60),
+              color: AppColors.primary,
               size: 64.w,
             ),
             SizedBox(height: 16.h),
@@ -135,7 +116,7 @@ class _PaymentMethodScreenContentState
               'تم استلام المبلغ بنجاح، وتأكيد طلبك.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: const Color(0xFF444444),
+                color: AppColors.deepGrey,
                 fontFamily: 'Tajawal',
                 fontSize: 14.sp,
               ),
@@ -166,7 +147,7 @@ class _PaymentMethodScreenContentState
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: BlocConsumer<PaymentCubit, PaymentState>(
         listener: (context, state) async {
@@ -175,7 +156,7 @@ class _PaymentMethodScreenContentState
             name: 'PaymentMethodScreen',
           );
           if (state is PaymentInitSuccess) {
-            final result = await Navigator.push(
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => PaymentWebviewScreen(
@@ -186,18 +167,70 @@ class _PaymentMethodScreenContentState
                 ),
               ),
             );
-            _handlePaymentResult(result);
+
+            // Verify status via backend immediately
+            if (context.mounted && ModalRoute.of(context)?.isCurrent == true) {
+              context.read<PaymentCubit>().verifyPayment(state.response.merchantOrderId);
+            }
+          } else if (state is PaymentVerifying) {
+            _isVerifyingDialogShown = true;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (dialogContext) {
+                return PopScope(
+                  canPop: false,
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.r),
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomLoadingIndicator(color: AppColors.primary),
+                        SizedBox(height: 16.h),
+                        Text(
+                          'جاري التحقق من عملية الدفع...',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Tajawal',
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          } else if (state is PaymentVerifySuccess) {
+            if (_isVerifyingDialogShown) {
+              Navigator.of(context).pop();
+              _isVerifyingDialogShown = false;
+            }
+            _showSuccessDialog();
+          } else if (state is PaymentVerifyFailure) {
+            if (_isVerifyingDialogShown) {
+              Navigator.of(context).pop();
+              _isVerifyingDialogShown = false;
+            }
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message, textDirection: TextDirection.rtl),
+                backgroundColor: AppColors.alertRed,
+              ),
+            );
           } else if (state is PaymentFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message, textDirection: TextDirection.rtl),
-                backgroundColor: const Color(0xFFE53935),
+                backgroundColor: AppColors.alertRed,
               ),
             );
           }
         },
         builder: (context, state) {
-          final isLoading = state is PaymentLoading;
+          final isLoading = state is PaymentLoading || state is PaymentVerifying;
 
           return Column(
             children: [
@@ -215,7 +248,7 @@ class _PaymentMethodScreenContentState
                     vertical: 24.h,
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       // Section title
                       Text(
@@ -224,7 +257,7 @@ class _PaymentMethodScreenContentState
                           fontFamily: 'Tajawal',
                           fontSize: 17.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       SizedBox(height: 16.h),
@@ -254,8 +287,8 @@ class _PaymentMethodScreenContentState
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
                 child: isLoading
-                    ? const Center(
-                        child: CustomLoadingIndicator(color: Color(0xFF27AE60)),
+                    ? Center(
+                        child: CustomLoadingIndicator(color: AppColors.primary),
                       )
                     : PrimaryButton(
                         label: 'التالي',

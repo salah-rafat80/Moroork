@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 
 enum OfficerRole {
   examinator, // Practical Test
@@ -46,7 +47,7 @@ class DashboardConfig {
           cardButtonText: 'تسجيل النتيجة',
           detailsTitle: 'تسجيل الكشف الطبي',
           typeTagText: 'كشف طبي',
-          typeTagColor: const Color(0xFFF39C12), // Orange
+          typeTagColor: AppColors.alertAmber, // Orange
           passButtonText: 'لائق طبياً',
           failButtonText: 'غير لائق طبياً',
           searchHint: 'بحث برقم الكشف أو الرقم القومي',
@@ -62,7 +63,7 @@ class DashboardConfig {
           cardButtonText: 'عرض التفاصيل',
           detailsTitle: 'تفاصيل المتقدم للفحص',
           typeTagText: 'فحص فني',
-          typeTagColor: const Color(0xFF3498DB), // Blue
+          typeTagColor: AppColors.themeBlue, // Blue
           passButtonText: 'سليم',
           failButtonText: 'غير سليم',
           searchHint: 'بحث برقم الطلب أو اللوحة',
@@ -79,7 +80,7 @@ class DashboardConfig {
           cardButtonText: 'تسجيل النتيجة',
           detailsTitle: 'تسجيل نتيجة الاختبار',
           typeTagText: 'اختبار قيادة عملي',
-          typeTagColor: const Color(0xFF9B59B6), // Purple
+          typeTagColor: AppColors.purpleAccent, // Purple
           passButtonText: 'ناجح',
           failButtonText: 'راسب',
           searchHint: 'بحث برقم الطلب أو الرقم القومي',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
@@ -72,7 +73,7 @@ class _GenericTermsScreenState extends State<GenericTermsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -97,7 +98,7 @@ class _GenericTermsScreenState extends State<GenericTermsScreen> {
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 17.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w700,
@@ -112,7 +113,7 @@ class _GenericTermsScreenState extends State<GenericTermsScreen> {
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF333333),
+                      color: AppColors.darkGrey,
                       fontSize: 14.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w500,
@@ -128,7 +129,7 @@ class _GenericTermsScreenState extends State<GenericTermsScreen> {
                       textAlign: TextAlign.right,
                       textDirection: TextDirection.rtl,
                       style: TextStyle(
-                        color: const Color(0xFF333333),
+                        color: AppColors.darkGrey,
                         fontSize: 12.sp,
                         fontFamily: 'Tajawal',
                         fontWeight: FontWeight.w500,
@@ -142,11 +143,11 @@ class _GenericTermsScreenState extends State<GenericTermsScreen> {
                   // ── Expansion tiles container ──────────────────────────────
                   Container(
                     decoration: ShapeDecoration(
-                      color: const Color(0xFFF8F9F9),
+                      color: AppColors.cardBg,
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
                           width: 1.w,
-                          color: const Color(0xFFDADADA),
+                          color: AppColors.greyBorder,
                         ),
                         borderRadius: BorderRadius.circular(5.r),
                       ),
@@ -201,7 +202,7 @@ class _GenericTermsScreenState extends State<GenericTermsScreen> {
           content: section.content,
           icon: Icon(
             section.iconData,
-            color: const Color(0xFF27AE60),
+            color: AppColors.primary,
             size: 22.r,
           ),
         ),
@@ -213,7 +214,7 @@ class _GenericTermsScreenState extends State<GenericTermsScreen> {
           Divider(
             height: 1.h,
             thickness: 1.h,
-            color: const Color(0xFFDADADA),
+            color: AppColors.greyBorder,
             indent: 12.w,
             endIndent: 12.w,
           ),

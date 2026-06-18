@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/features/checkout/models/order_summary.dart';
 import 'package:traffic/core/widgets/info_row_item.dart';
@@ -42,14 +43,14 @@ class _OrderCardShell extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFDADADA)),
-        boxShadow: const [
+        border: Border.all(color: AppColors.greyBorder),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x1F000000),
+            color: AppColors.shadowLight,
             blurRadius: 4,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -68,12 +69,12 @@ class _OrderCardShell extends StatelessWidget {
                   fontFamily: 'Cairo',
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
           ),
-          Divider(height: 1.h, thickness: 1.h, color: const Color(0xFFDADADA)),
+          Divider(height: 1.h, thickness: 1.h, color: AppColors.greyBorder),
           child,
         ],
       ),

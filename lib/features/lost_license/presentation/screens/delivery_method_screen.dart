@@ -14,8 +14,6 @@ import 'package:traffic/features/driving_license/data/models/driving_license_mod
 import 'package:traffic/features/driving_license/data/models/driving_renewal_model.dart';
 import 'package:traffic/features/driving_license/presentation/cubits/driving_renewal_cubit.dart';
 import 'package:traffic/features/profile/data/models/profile_model.dart';
-import 'package:traffic/core/api/api_client.dart';
-import 'package:traffic/features/driving_license/data/repositories/driving_license_repository.dart';
 import 'package:traffic/features/driving_license/presentation/cubits/driving_replacement_cubit.dart';
 import 'package:traffic/features/driving_license/presentation/cubits/driving_replacement_state.dart';
 import '../widgets/custom_text_form_field.dart';
@@ -97,7 +95,6 @@ class DeliveryMethodScreen extends StatefulWidget {
        renewalRequestNumber = null;
 
   bool get _isRenewalFinalizeMode => renewalRequestNumber != null;
-  bool get _isIssuanceFinalizeMode => issuanceRequestNumber != null;
 
   @override
   State<DeliveryMethodScreen> createState() => _DeliveryMethodScreenState();
@@ -372,7 +369,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
 
     Widget body = Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -401,7 +398,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
                         fontFamily: 'Tajawal',
                         fontSize: 17.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF222222),
+                        color: AppColors.textPrimary,
                       ),
                     ),
 
@@ -418,8 +415,8 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
                         'assets/tabler_building-bank.svg',
                         width: 24.w,
                         height: 24.w,
-                        colorFilter: const ColorFilter.mode(
-                          Color(0xFF27AE60),
+                        colorFilter: ColorFilter.mode(
+                          AppColors.primary,
                           BlendMode.srcIn,
                         ),
                       ),
@@ -438,8 +435,8 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
                         'assets/home2.svg',
                         width: 24.w,
                         height: 24.w,
-                        colorFilter: const ColorFilter.mode(
-                          Color(0xFF27AE60),
+                        colorFilter: ColorFilter.mode(
+                          AppColors.primary,
                           BlendMode.srcIn,
                         ),
                       ),
@@ -525,13 +522,13 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
       return BlocBuilder<DrivingRenewalCubit, DrivingRenewalState>(
         builder: (BuildContext ctx, DrivingRenewalState state) {
           if (state is DrivingRenewalFinalizeLoading) {
-            return Center(child: CustomLoadingIndicator());
+            return const Center(child: CustomLoadingIndicator());
           }
           return PrimaryButton(
             label: 'التالي',
             onPressed: _isButtonEnabled ? _onNextPressed : null,
             height: 48.h,
-            backgroundColor: const Color(0xFF27AE60),
+            backgroundColor: AppColors.primary,
             fontSize: 18.sp,
           );
         },
@@ -541,13 +538,13 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
         bloc: _replacementCubit,
         builder: (ctx, state) {
           if (state is DrivingReplacementLoading) {
-            return Center(child: CustomLoadingIndicator());
+            return const Center(child: CustomLoadingIndicator());
           }
           return PrimaryButton(
             label: 'التالي',
             onPressed: _isButtonEnabled ? _onNextPressed : null,
             height: 48.h,
-            backgroundColor: const Color(0xFF27AE60),
+            backgroundColor: AppColors.primary,
             fontSize: 18.sp,
           );
         },
@@ -558,7 +555,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
       label: 'التالي',
       onPressed: _isButtonEnabled ? _onNextPressed : null,
       height: 48.h,
-      backgroundColor: const Color(0xFF27AE60),
+      backgroundColor: AppColors.primary,
       fontSize: 18.sp,
     );
   }

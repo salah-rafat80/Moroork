@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A highly-reusable modal bottom sheet that displays a scrollable list of
@@ -52,7 +53,7 @@ class GenericListBottomSheet extends StatelessWidget {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: const Color(0xFFDADADA),
+                color: AppColors.greyBorder,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -68,7 +69,7 @@ class GenericListBottomSheet extends StatelessWidget {
                     title!,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 16.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w700,
@@ -86,10 +87,10 @@ class GenericListBottomSheet extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5.r),
                   child: Material(
-                    color: const Color(0xFFF8F9F9),
+                    color: AppColors.cardBg,
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: const Color(0xFFDADADA),
+                        color: AppColors.greyBorder,
                         width: 1.w,
                       ),
                       borderRadius: BorderRadius.circular(5.r),
@@ -101,7 +102,7 @@ class GenericListBottomSheet extends StatelessWidget {
                       separatorBuilder: (_, __) => Divider(
                         height: 1.h,
                         thickness: 1.h,
-                        color: const Color(0xFFDADADA),
+                        color: AppColors.greyBorder,
                       ),
                       itemBuilder: (context, index) {
                         final item = items[index];
@@ -120,7 +121,7 @@ class GenericListBottomSheet extends StatelessWidget {
                               textAlign: TextAlign.right,
                               textDirection: TextDirection.rtl,
                               style: TextStyle(
-                                color: const Color(0xFF222222),
+                                color: AppColors.textPrimary,
                                 fontSize: 15.sp,
                                 fontFamily: 'Cairo',
                                 fontWeight: FontWeight.w500,

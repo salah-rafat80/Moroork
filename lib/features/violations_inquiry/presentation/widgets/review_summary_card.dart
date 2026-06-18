@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Summary card displayed at the top of the violation review screen.
@@ -19,16 +20,16 @@ class ReviewSummaryCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
         border: Border.all(
-          color: const Color(0xFF27AE60),
+          color: AppColors.primary,
         ),
         boxShadow: [
-          const BoxShadow(
-            color: Color(0x3F000000),
+          BoxShadow(
+            color: AppColors.shadowColor,
             blurRadius: 4,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -49,7 +50,7 @@ class ReviewSummaryCard extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF222222),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 SizedBox(height: 6.h),
@@ -62,7 +63,7 @@ class ReviewSummaryCard extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF222222),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ],
@@ -72,7 +73,7 @@ class ReviewSummaryCard extends StatelessWidget {
           Container(
             width: 1,
             height: 40.h,
-            color: const Color(0xFFDADADA),
+            color: AppColors.greyBorder,
             margin: EdgeInsets.symmetric(horizontal: 16.w),
           ),
 
@@ -90,7 +91,7 @@ class ReviewSummaryCard extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black,
+                    color: AppColors.charcoal,
                   ),
                 ),
                 SizedBox(height: 6.h),
@@ -103,7 +104,7 @@ class ReviewSummaryCard extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF222222),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ],

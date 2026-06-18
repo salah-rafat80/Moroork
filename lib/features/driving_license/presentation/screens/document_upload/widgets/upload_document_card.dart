@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A reusable card that represents a single uploadable document.
@@ -34,12 +35,12 @@ class UploadDocumentCard extends StatelessWidget {
   final String? fileName;
 
   // ── Colours ───────────────────────────────────────────────────────────────
-  static const Color _uploadedBorder = Color(0xFF14AE5C);
-  static const Color _uploadedBg = Color(0xFFDAEEE3);
-  static const Color _pendingBorder = Color(0xFFAEAEAE);
-  static const Color _cardBg = Color(0xFFF8F9F9);
-  static const Color _cardBorder = Color(0xFFDADADA);
-  static const Color _subtitleColor = Color(0xFF9490A1);
+  static final Color _uploadedBorder = AppColors.successGreen;
+  static final Color _uploadedBg = AppColors.lightGreenBorder;
+  static final Color _pendingBorder = AppColors.greyIcon;
+  static final Color _cardBg = AppColors.cardBg;
+  static final Color _cardBorder = AppColors.greyBorder;
+  static final Color _subtitleColor = AppColors.lightPurpleGrey;
 
   const UploadDocumentCard({
     super.key,
@@ -101,7 +102,7 @@ class UploadDocumentCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: const Color(0xFF9490A1),
+                      color: AppColors.lightPurpleGrey,
                       fontSize: 11.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w400,
@@ -143,7 +144,7 @@ class _TitleRow extends StatelessWidget {
         title,
         textDirection: TextDirection.rtl,
         style: TextStyle(
-          color: const Color(0xFF222222),
+          color: AppColors.textPrimary,
           fontSize: 15.sp,
           fontFamily: 'Cairo',
           fontWeight: FontWeight.w700,
@@ -156,7 +157,7 @@ class _TitleRow extends StatelessWidget {
           TextSpan(
             text: title,
             style: TextStyle(
-              color: const Color(0xFF222222),
+              color: AppColors.textPrimary,
               fontSize: 15.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w700,
@@ -165,7 +166,7 @@ class _TitleRow extends StatelessWidget {
           TextSpan(
             text: ' *',
             style: TextStyle(
-              color: const Color(0xFFE53935),
+              color: AppColors.alertRed,
               fontSize: 15.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w700,
@@ -224,7 +225,7 @@ class _UploadZone extends StatelessWidget {
               Text(
                 'تم الرفع',
                 style: TextStyle(
-                  color: const Color(0xFF333333),
+                  color: AppColors.darkGrey,
                   fontSize: 12.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w500,
@@ -233,14 +234,14 @@ class _UploadZone extends StatelessWidget {
             ] else ...[
               Icon(
                 Icons.cloud_upload_outlined,
-                color: const Color(0xFF333333),
+                color: AppColors.darkGrey,
                 size: 20.r,
               ),
               SizedBox(width: 6.w),
               Text(
                 'اضغط لرفع الملف',
                 style: TextStyle(
-                  color: const Color(0xFF333333),
+                  color: AppColors.darkGrey,
                   fontSize: 12.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w500,
@@ -272,12 +273,12 @@ class _SideActions extends StatelessWidget {
               Icon(
                 Icons.delete_outline,
                 size: 16.r,
-                color: const Color(0xFF9490A1),
+                color: AppColors.lightPurpleGrey,
               ),
               Text(
                 'حذف',
                 style: TextStyle(
-                  color: const Color(0xFF9490A1),
+                  color: AppColors.lightPurpleGrey,
                   fontSize: 10.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w600,
@@ -294,12 +295,12 @@ class _SideActions extends StatelessWidget {
               Icon(
                 Icons.visibility_outlined,
                 size: 16.r,
-                color: const Color(0xFF9490A1),
+                color: AppColors.lightPurpleGrey,
               ),
               Text(
                 'معاينة',
                 style: TextStyle(
-                  color: const Color(0xFF9490A1),
+                  color: AppColors.lightPurpleGrey,
                   fontSize: 10.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w600,

@@ -11,6 +11,7 @@ import '../models/issue_replacement_response_model.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/api/request_id_manager.dart';
 import '../../../driving_license/data/models/driving_renewal_model.dart';
+import 'package:flutter/foundation.dart';
 
 @lazySingleton
 class VehicleLicenseRepository {
@@ -373,27 +374,253 @@ class VehicleLicenseRepository {
     required AppointmentBookingRequestModel request,
   }) async {
     try {
-      final response = await _apiClient.dio.post(
-        '/appointments/book',
-        data: request.toJson(),
-      );
-
-      final data = response.data;
-      if (data is Map<String, dynamic> && data['isSuccess'] == true) {
-        return ApiResult.success(
-          AppointmentBookingResponseModel.fromJson(
-            data['details'] as Map<String, dynamic>,
-          ),
+      // Enforce Request ID for Booking
+      final effectiveRequestNumber = (request.requestNumber == null || request.requestNumber!.isEmpty)
+          ? RequestIdManager().currentRequestId
+          : request.requestNumber;
+      
+      if (effectiveRequestNumber == null || effectiveRequestNumber.isEmpty) {
+        debugPrint('BookAppointment: FAILED - Request ID is missing.');
+        return ApiResult<AppointmentBookingResponseModel>.failure(
+          'لا يمكن حجز موعد بدون رقم طلب. يرجى إتمام الخطوات السابقة أولاً.',
         );
       }
-      final msg = data is Map<String, dynamic> ? data['message']?.toString() : null;
-      return ApiResult.failure(msg ?? 'فشل حجز الموعد.');
-    } on DioException catch (e) {
-      ApiErrorHandler.logError('BookAppointment', e);
-      return ApiResult.failure(ApiErrorHandler.extractMessage(e));
-    } catch (e) {
-      return ApiResult.failure('حدث خطأ غير متوقع.');
+
+      debugPrint('BookAppointment: Sending Booking with Request ID = $effectiveRequestNumber');
+
+      // Create a new request object with the effective request number
+      final finalRequest = AppointmentBookingRequestModel(
+        governorateId: request.governorateId,
+        trafficUnitId: request.trafficUnitId,
+        type: request.type,
+        serviceTypeOverride: request.serviceTypeOverride,
+        date: request.date,
+        startTime: request.startTime,
+        requestNumber: effectiveRequestNumber,
+      );
+
+      debugPrint('BookAppointment Request Body: ${finalRequest.toJson()}');
+
+      final response = await _apiClient.dio.post(
+        '/appointments/book',
+        data: finalRequest.toJson(),
+      );
+
+      final AppointmentBookingResponseModel parsed =
+          _parseBookingResponse(response.data);
+          
+      final extractedId = RequestIdManager().extractId(response.data);
+      if (extractedId != null) {
+        RequestIdManager().updateRequestId(extractedId);
+      }
+
+      if (parsed.serviceNumber.isEmpty || parsed.applicationId.isEmpty) {
+        return ApiResult<AppointmentBookingResponseModel>.failure(
+          'تم الحجز لكن لم يتم استلام بيانات الموعد كاملة.',
+        );
+      }
+
+      return ApiResult<AppointmentBookingResponseModel>.success(parsed);
+    } on DioException catch (error) {
+      final String? errorCode = _extractErrorCode(error.response?.data);
+      if (errorCode == 'INVALID_SERVICE_TYPE') {
+        final ApiResult<AppointmentBookingResponseModel>? retryResult =
+            await _retryBookWithServiceTypeFallbacks(request);
+        if (retryResult != null) {
+          return retryResult;
+        }
+      }
+
+      ApiErrorHandler.logError('BookAppointment', error);
+      return ApiResult<AppointmentBookingResponseModel>.failure(
+        _mapBookingError(error),
+      );
+    } catch (_) {
+      return ApiResult<AppointmentBookingResponseModel>.failure('حدث خطأ غير متوقع.');
     }
+  }
+
+  Future<ApiResult<AppointmentBookingResponseModel>?>
+      _retryBookWithServiceTypeFallbacks(
+    AppointmentBookingRequestModel request,
+  ) async {
+    final List<String> candidates = _serviceTypeCandidates(request.type);
+
+    for (final String candidate in candidates) {
+      if (candidate == request.serviceTypeOverride ||
+          candidate == request.type.serviceTypeValue) {
+        continue;
+      }
+
+      try {
+        final AppointmentBookingRequestModel fallbackRequest =
+            AppointmentBookingRequestModel(
+          governorateId: request.governorateId,
+          trafficUnitId: request.trafficUnitId,
+          type: request.type,
+          serviceTypeOverride: candidate,
+          date: request.date,
+          startTime: request.startTime,
+          requestNumber: request.requestNumber,
+        );
+
+        debugPrint('BookAppointment Retry Body: ${fallbackRequest.toJson()}');
+
+        final retryResponse = await _apiClient.dio.post(
+          '/appointments/book',
+          data: fallbackRequest.toJson(),
+        );
+
+        final AppointmentBookingResponseModel parsed =
+            _parseBookingResponse(retryResponse.data);
+        if (parsed.serviceNumber.isEmpty || parsed.applicationId.isEmpty) {
+          return ApiResult<AppointmentBookingResponseModel>.failure(
+            'تم الحجز لكن لم يتم استلام بيانات الموعد كاملة.',
+          );
+        }
+
+        return ApiResult<AppointmentBookingResponseModel>.success(parsed);
+      } on DioException catch (retryError) {
+        ApiErrorHandler.logError('BookAppointmentRetryServiceType', retryError);
+        if (_extractErrorCode(retryError.response?.data) !=
+            'INVALID_SERVICE_TYPE') {
+          return ApiResult<AppointmentBookingResponseModel>.failure(
+            _mapBookingError(retryError),
+          );
+        }
+      }
+    }
+
+    return null;
+  }
+
+  List<String> _serviceTypeCandidates(AppointmentType type) {
+    switch (type) {
+      case AppointmentType.medical:
+        return const <String>['كشف طبي', 'Medical'];
+      case AppointmentType.driving:
+        return const <String>[
+          'قيادة عملي',
+          'اختبار قيادة عملي',
+          'Driving',
+          'فحص فني',
+          'Technical',
+        ];
+      case AppointmentType.technical:
+        return const <String>['فحص فني', 'Technical'];
+    }
+  }
+
+  AppointmentBookingResponseModel _parseBookingResponse(Object? rawData) {
+    if (rawData is Map<String, Object?>) {
+      if (rawData['details'] is Map<String, Object?>) {
+        return AppointmentBookingResponseModel.fromJson(
+          rawData['details']! as Map<String, Object?>,
+        );
+      }
+      return AppointmentBookingResponseModel.fromJson(rawData);
+    }
+
+    return const AppointmentBookingResponseModel(
+      serviceNumber: '',
+      applicationId: '',
+      date: '',
+      startTime: '',
+      status: '',
+      type: '',
+    );
+  }
+
+  String? _extractErrorCode(Object? rawData) {
+    if (rawData is Map) {
+      final Object? rawCode = rawData['errorCode'] ?? rawData['code'];
+      if (rawCode != null) {
+        return rawCode.toString();
+      }
+    }
+    return null;
+  }
+
+  String _mapBookingError(DioException error) {
+    final String? detailedMessage = _extractDetailedApiMessage(
+      error.response?.data,
+    );
+    if (detailedMessage != null) {
+      return detailedMessage;
+    }
+
+    final int? statusCode = error.response?.statusCode;
+    final String? code = _extractErrorCode(error.response?.data);
+
+    const Map<String, String> codeMessages = <String, String>{
+      'BODY_MISSING': 'بيانات حجز الموعد ناقصة أو غير صحيحة.',
+      'INVALID_FORMAT': 'صيغة التاريخ أو الوقت غير صحيحة.',
+      'AUTH_ERROR': 'يجب تسجيل الدخول لحجز الموعد.',
+      'AUTHZ_ERROR': 'ليس لديك صلاحية لحجز هذا النوع من المواعيد.',
+      'SLOT_UNAVAILABLE': 'هذا الموعد لم يعد متاحاً، اختر موعداً آخر.',
+      'CITIZEN_BOOKING_CONFLICT': 'لديك موعد آخر في نفس التاريخ والوقت.',
+      'SYSTEM_ERROR': 'حدث خطأ في الخادم أثناء حجز الموعد.',
+    };
+
+    if (code != null && codeMessages.containsKey(code)) {
+      return ApiErrorHandler.extractMessage(error, fallback: codeMessages[code]!);
+    }
+
+    const Map<int, String> statusMessages = <int, String>{
+      400: 'بيانات حجز الموعد غير صحيحة.',
+      401: 'يجب تسجيل الدخول لحجز الموعد.',
+      403: 'ليس لديك صلاحية لحجز الموعد.',
+      409: 'الموعد المحدد غير متاح حالياً.',
+      500: 'حدث خطأ في الخادم أثناء حجز الموعد.',
+    };
+
+    final String fallback = statusMessages[statusCode] ?? 'تعذر إتمام حجز الموعد.';
+    return ApiErrorHandler.extractMessage(error, fallback: fallback);
+  }
+
+  String? _extractDetailedApiMessage(Object? rawData) {
+    if (rawData is! Map) {
+      return null;
+    }
+
+    final String baseMessage =
+        (rawData['message'] ?? rawData['error'] ?? '').toString().trim();
+    final Object? rawDetails = rawData['details'];
+
+    if (rawDetails is List) {
+      final List<String> reasons = <String>[];
+      for (final Object? item in rawDetails) {
+        if (item is! Map) {
+          continue;
+        }
+
+        final String field = (item['field'] ?? '').toString().trim();
+        final String reason =
+            (item['error'] ?? item['message'] ?? '').toString().trim();
+        if (reason.isEmpty) {
+          continue;
+        }
+
+        if (field.isNotEmpty) {
+          reasons.add('$field: $reason');
+        } else {
+          reasons.add(reason);
+        }
+      }
+
+      if (reasons.isNotEmpty) {
+        if (baseMessage.isNotEmpty) {
+          return '$baseMessage\n${reasons.join('\n')}';
+        }
+        return reasons.join('\n');
+      }
+    }
+
+    if (baseMessage.isNotEmpty) {
+      return baseMessage;
+    }
+
+    return null;
   }
 
   Future<ApiResult<List<LocationLookupModel>>> fetchGovernorates() async {
@@ -438,7 +665,7 @@ class VehicleLicenseRepository {
     }
   }
 
-  Future<ApiResult<List<String>>> fetchAvailableSlots(
+  Future<ApiResult<List<AppointmentSlotModel>>> fetchAvailableSlots(
       DateTime date, String type) async {
     try {
       final dateStr =
@@ -449,8 +676,38 @@ class VehicleLicenseRepository {
       );
       final data = response.data;
       if (data is Map<String, dynamic> && data['isSuccess'] == true) {
-        final List<dynamic> details = data['details'];
-        return ApiResult.success(details.map((e) => e.toString()).toList());
+        final rawDetails = data['details'];
+        List<dynamic> rawSlots = [];
+        if (rawDetails is List) {
+          rawSlots = rawDetails;
+        } else if (rawDetails is Map) {
+          final nestedData = rawDetails['data'] ?? rawDetails['slots'] ?? rawDetails['items'];
+          if (nestedData is List) {
+            rawSlots = nestedData;
+          }
+        }
+
+        final List<AppointmentSlotModel> slots = [];
+        for (final item in rawSlots) {
+          if (item is String) {
+            if (item.isNotEmpty) {
+              slots.add(
+                AppointmentSlotModel(
+                  startTime: item,
+                  endTime: null,
+                  isAvailable: true,
+                ),
+              );
+            }
+          } else if (item is Map) {
+            final parsed = AppointmentSlotModel.fromJson(Map<String, Object?>.from(item));
+            if (parsed.startTime.isNotEmpty) {
+              slots.add(parsed);
+            }
+          }
+        }
+        final filteredSlots = slots.where((slot) => slot.isAvailable).toList();
+        return ApiResult.success(filteredSlots);
       }
       return ApiResult.failure('فشل تحميل المواعيد المتاحة');
     } on DioException catch (e) {

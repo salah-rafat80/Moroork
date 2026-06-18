@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:traffic/core/constants/colors.dart';
 
 class FormTitleWidget extends StatelessWidget {
   final String title;
@@ -13,7 +14,7 @@ class FormTitleWidget extends StatelessWidget {
       style: TextStyle(
         fontSize: 20.sp,
         fontWeight: FontWeight.w600,
-        color: Colors.black,
+        color: AppColors.charcoal,
         fontFamily: 'Tajawal',
       ),
     );

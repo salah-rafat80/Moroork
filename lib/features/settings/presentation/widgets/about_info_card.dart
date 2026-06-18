@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AboutInfoCard extends StatelessWidget {
@@ -13,8 +14,8 @@ class AboutInfoCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFF27AE60), width: 1.w),
+        color: AppColors.cardBg,
+        border: Border.all(color: AppColors.primary, width: 1.w),
         borderRadius: BorderRadius.circular(5.r),
       ),
       child: Column(
@@ -25,7 +26,7 @@ class AboutInfoCard extends StatelessWidget {
             title,
             textDirection: TextDirection.rtl,
             style: TextStyle(
-              color: const Color(0xFF222222),
+              color: AppColors.textPrimary,
               fontSize: 15.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.bold,
@@ -36,7 +37,7 @@ class AboutInfoCard extends StatelessWidget {
             content,
             textDirection: TextDirection.rtl,
             style: TextStyle(
-              color: const Color(0xFF333333),
+              color: AppColors.darkGrey,
               fontSize: 13.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.w500,

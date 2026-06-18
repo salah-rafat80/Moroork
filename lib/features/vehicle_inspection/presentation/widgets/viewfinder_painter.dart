@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 
 /// Draws four green corner brackets to create a camera viewfinder frame.
 class ViewfinderPainter extends CustomPainter {
@@ -8,11 +9,11 @@ class ViewfinderPainter extends CustomPainter {
   final double cornerRadius;
 
   ViewfinderPainter({
-    this.color = const Color(0xFF27AE60),
+    Color? color,
     this.strokeWidth = 3.0,
     this.cornerLength = 30.0,
     this.cornerRadius = 12.0,
-  });
+  }) : color = color ?? AppColors.primary;
 
   @override
   void paint(Canvas canvas, Size size) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/constants/app_sizes.dart';
 import 'widgets/form_title_widget.dart';
@@ -87,7 +88,7 @@ class SignupStep3Form extends StatelessWidget {
                 'كلمتا المرور غير متطابقتين',
                 style: TextStyle(
                   fontSize: 12.sp,
-                  color: const Color(0xFFD32F2F),
+                  color: AppColors.error,
                   fontFamily: 'Tajawal',
                 ),
               ),

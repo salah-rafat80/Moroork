@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:traffic/core/features/checkout/generic_order_review_screen.dart';
@@ -149,7 +150,7 @@ class _VehicleRenewalDeliveryScreenState
                       state.message,
                       textDirection: TextDirection.rtl,
                     ),
-                    backgroundColor: const Color(0xFFE74C3C),
+                    backgroundColor: AppColors.redError,
                   ),
                 );
               }
@@ -158,7 +159,7 @@ class _VehicleRenewalDeliveryScreenState
               return LoadingOverlay(
                 isLoading: state is VehicleRenewalLoading,
                 child: Scaffold(
-                  backgroundColor: const Color(0xFFF5F5F5),
+                  backgroundColor: AppColors.lightGreyBg,
                   body: Column(
                     children: [
                       const ServiceScreenAppBar(title: 'تجديد رخصة مركبة'),
@@ -180,7 +181,7 @@ class _VehicleRenewalDeliveryScreenState
                                     fontFamily: 'Tajawal',
                                     fontSize: 17.sp,
                                     fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF222222),
+                                    color: AppColors.textPrimary,
                                   ),
                                 ),
                                 SizedBox(height: 16.h),
@@ -199,8 +200,8 @@ class _VehicleRenewalDeliveryScreenState
                                     'assets/tabler_building-bank.svg',
                                     width: 24.w,
                                     height: 24.w,
-                                    colorFilter: const ColorFilter.mode(
-                                      Color(0xFF27AE60),
+                                    colorFilter: ColorFilter.mode(
+                                      AppColors.primary,
                                       BlendMode.srcIn,
                                     ),
                                   ),
@@ -221,8 +222,8 @@ class _VehicleRenewalDeliveryScreenState
                                     'assets/home2.svg',
                                     width: 24.w,
                                     height: 24.w,
-                                    colorFilter: const ColorFilter.mode(
-                                      Color(0xFF27AE60),
+                                    colorFilter: ColorFilter.mode(
+                                      AppColors.primary,
                                       BlendMode.srcIn,
                                     ),
                                   ),
@@ -272,7 +273,7 @@ class _VehicleRenewalDeliveryScreenState
                               ? () => _onNextPressed(context)
                               : null,
                           height: 48.h,
-                          backgroundColor: const Color(0xFF27AE60),
+                          backgroundColor: AppColors.primary,
                           fontSize: 18.sp,
                         ),
                       ),

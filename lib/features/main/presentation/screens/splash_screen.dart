@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/features/auth/presentation/screens/onboarding_screen/onboarding_screen.dart';
 import 'package:traffic/features/auth/data/repositories/auth_repository.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:traffic/features/home/presentation/screens/main_navigation_screen.dart';
 import 'package:traffic/features/examiner_dashboard/presentation/screens/daily_tests_screen.dart';
 import 'package:traffic/injection_container.dart';
-
 
 import 'package:traffic/features/profile/data/repositories/profile_repository.dart';
 import 'package:traffic/features/auth/presentation/screens/login_screen/login_screen.dart';
@@ -43,8 +42,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
         if (profileResult.isSuccess) {
           final roles = await authRepository.getRoles();
-          final isStaff =
-              roles.any((r) => ['INSPECTOR', 'DOCTOR', 'EXAMINATOR'].contains(r));
+          final isStaff = roles.any(
+            (r) => ['INSPECTOR', 'DOCTOR', 'EXAMINATOR'].contains(r),
+          );
 
           if (!mounted) return;
           if (isStaff) {
@@ -54,18 +54,22 @@ class _SplashScreenState extends State<SplashScreen> {
           } else {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                  builder: (context) => const MainNavigationScreen()),
+                builder: (context) => const MainNavigationScreen(),
+              ),
             );
           }
         } else {
           // Token validation failed. Let's see if it's an authorization issue
           final errorMessage = profileResult.error ?? '';
-          final isUnauthorized = errorMessage.contains('غير مصرح') ||
+          final isUnauthorized =
+              errorMessage.contains('غير مصرح') ||
               errorMessage.contains('401') ||
               errorMessage.contains('تسجيل الدخول');
 
           if (isUnauthorized) {
-            debugPrint('⚠️ Token is expired or unauthorized: $errorMessage. Logging out.');
+            debugPrint(
+              '⚠️ Token is expired or unauthorized: $errorMessage. Logging out.',
+            );
             await authRepository.logout(); // Clear token and cache
 
             if (!mounted) return;
@@ -76,20 +80,26 @@ class _SplashScreenState extends State<SplashScreen> {
           } else {
             // It's a network issue or temporary server failure (not 401).
             // Let the user in anyway because they already have a token saved.
-            debugPrint('🌐 Network issue or server error: $errorMessage. Allowing entry.');
+            debugPrint(
+              '🌐 Network issue or server error: $errorMessage. Allowing entry.',
+            );
             final roles = await authRepository.getRoles();
-            final isStaff =
-                roles.any((r) => ['INSPECTOR', 'DOCTOR', 'EXAMINATOR'].contains(r));
+            final isStaff = roles.any(
+              (r) => ['INSPECTOR', 'DOCTOR', 'EXAMINATOR'].contains(r),
+            );
 
             if (!mounted) return;
             if (isStaff) {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const DailyTestsScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const DailyTestsScreen(),
+                ),
               );
             } else {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                    builder: (context) => const MainNavigationScreen()),
+                  builder: (context) => const MainNavigationScreen(),
+                ),
               );
             }
           }
@@ -103,7 +113,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } catch (e, stack) {
       debugPrint('🚨 CRITICAL ERROR during SplashScreen init: $e');
       debugPrint('Stack trace: $stack');
-      
+
       if (!mounted) return;
       // If error occurs, fallback to onboarding to avoid stuck splash
       Navigator.of(context).pushReplacement(
@@ -118,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final logoSize = 250.r;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF27AE60),
+      backgroundColor: AppColors.primary,
       body: Center(
         child: Image.asset(
           'assets/لوجو_2-removebg-preview (2).png',

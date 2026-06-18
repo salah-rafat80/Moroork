@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:traffic/core/utils/date_time_formatter.dart';
 
 /// A selectable 2-column grid of time slots.
 ///
@@ -53,22 +55,22 @@ class TimeSlotGrid extends StatelessWidget {
             alignment: Alignment.center,
             decoration: ShapeDecoration(
               color: isSelected
-                  ? const Color(0xFF27AE60)
-                  : const Color(0xFFF8F9F9),
+                  ? AppColors.primary
+                  : AppColors.cardBg,
               shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1.w, color: const Color(0xFFDADADA)),
+                side: BorderSide(width: 1.w, color: AppColors.greyBorder),
                 borderRadius: BorderRadius.circular(5.r),
               ),
             ),
             child: Text(
-              slot,
+              DateTimeFormatter.formatTimeSlot(slot),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: isSelected
-                    ? const Color(0xFFF8F9F9)
-                    : const Color(0xFF222222),
+                    ? AppColors.cardBg
+                    : AppColors.textPrimary,
                 fontSize: 13.sp,
-                fontFamily: 'Inter',
+                fontFamily: 'Tajawal',
                 fontWeight: FontWeight.w600,
                 letterSpacing: -0.30,
               ),

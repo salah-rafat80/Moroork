@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/features/payment/models/payment_intent.dart';
@@ -42,8 +43,8 @@ class _CreditCardEntryScreenState extends State<CreditCardEntryScreen> {
     if (_formKey.currentState?.validate() ?? false) {
       if (!_isAgreedToTerms) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
+          SnackBar(
+            content: const Text(
               'برجاء الموافقة على الشروط والأحكام',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -51,7 +52,7 @@ class _CreditCardEntryScreenState extends State<CreditCardEntryScreen> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            backgroundColor: Color(0xFFE53935),
+            backgroundColor: AppColors.alertRed,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -73,13 +74,13 @@ class _CreditCardEntryScreenState extends State<CreditCardEntryScreen> {
 
       // Show success toast
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
+        SnackBar(
+          content: const Text(
             'تم تأكيد الدفع بنجاح!', // Placeholder success
             textAlign: TextAlign.center,
             style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w600),
           ),
-          backgroundColor: Color(0xFF27AE60),
+          backgroundColor: AppColors.primary,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -94,7 +95,7 @@ class _CreditCardEntryScreenState extends State<CreditCardEntryScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: AppColors.lightGreyBg,
         body: Column(
           children: [
             // App bar
@@ -114,7 +115,7 @@ class _CreditCardEntryScreenState extends State<CreditCardEntryScreen> {
                         fontFamily: 'Tajawal',
                         fontSize: 17.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF222222),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 16.h),
@@ -214,7 +215,7 @@ class _CreditCardEntryScreenState extends State<CreditCardEntryScreen> {
                               Icon(
                                 Icons
                                     .gpp_good_outlined, // Closer to the shield/secure icon
-                                color: const Color(0xFF27AE60),
+                                color: AppColors.primary,
                                 size: 16.w,
                               ),
                               SizedBox(width: 4.w),
@@ -224,7 +225,7 @@ class _CreditCardEntryScreenState extends State<CreditCardEntryScreen> {
                                   fontFamily: 'Tajawal',
                                   fontSize: 10.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF444444),
+                                  color: AppColors.deepGrey,
                                 ),
                               ),
                             ],
@@ -249,9 +250,9 @@ class _CreditCardEntryScreenState extends State<CreditCardEntryScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
               child: _isLoading
-                  ? const Center(
+                  ? Center(
                       child: CustomLoadingIndicator(
-                        color: Color(0xFF27AE60),
+                        color: AppColors.primary,
                       ),
                     )
                   : PrimaryButton(

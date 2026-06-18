@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:open_filex/open_filex.dart';
@@ -87,7 +88,7 @@ class _GenericDocumentUploadScreenState
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       builder: (_) => GenericOptionsBottomSheet(
         title: config.hint,
         options: config.options,
@@ -149,7 +150,7 @@ class _GenericDocumentUploadScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -169,7 +170,7 @@ class _GenericDocumentUploadScreenState
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 17.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w700,
@@ -181,7 +182,7 @@ class _GenericDocumentUploadScreenState
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF333333),
+                      color: AppColors.darkGrey,
                       fontSize: 14.sp,
                       fontFamily: 'Tajawal',
                       fontWeight: FontWeight.w500,
@@ -198,7 +199,7 @@ class _GenericDocumentUploadScreenState
                           textAlign: TextAlign.right,
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
-                            color: const Color(0xFF222222),
+                            color: AppColors.textPrimary,
                             fontSize: 16.sp,
                             fontFamily: 'Tajawal',
                             fontWeight: FontWeight.w500,
@@ -276,8 +277,8 @@ class _CategoryPickerField extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.r),
-          border: Border.all(color: const Color(0xFF27AE60), width: 1.w),
-          color: Colors.white,
+          border: Border.all(color: AppColors.primary, width: 1.w),
+          color: AppColors.inputFieldBg,
         ),
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         child: Row(
@@ -291,8 +292,8 @@ class _CategoryPickerField extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: hasSelection
-                      ? const Color(0xFF222222)
-                      : const Color(0xFFAEAEAE),
+                      ? AppColors.textPrimary
+                      : AppColors.greyIcon,
                   fontSize: 15.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w600,
@@ -302,7 +303,7 @@ class _CategoryPickerField extends StatelessWidget {
             Icon(
               Icons.keyboard_arrow_down_rounded,
               size: 22.r,
-              color: const Color(0xFF27AE60),
+              color: AppColors.primary,
             ),
           ],
         ),
@@ -336,7 +337,7 @@ class GenericOptionsBottomSheet extends StatelessWidget {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: const Color(0xFFDADADA),
+                color: AppColors.greyBorder,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -347,7 +348,7 @@ class GenericOptionsBottomSheet extends StatelessWidget {
                 title,
                 textDirection: TextDirection.rtl,
                 style: TextStyle(
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                   fontSize: 16.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w700,
@@ -361,10 +362,10 @@ class GenericOptionsBottomSheet extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5.r),
                   child: Material(
-                    color: const Color(0xFFF8F9F9),
+                    color: AppColors.cardBg,
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: const Color(0xFFDADADA),
+                        color: AppColors.greyBorder,
                         width: 1.w,
                       ),
                       borderRadius: BorderRadius.circular(5.r),
@@ -390,7 +391,7 @@ class GenericOptionsBottomSheet extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: const Color(0xFF222222),
+                                      color: AppColors.textPrimary,
                                       fontSize: 15.sp,
                                       fontFamily: 'Cairo',
                                       fontWeight: FontWeight.w500,
@@ -403,7 +404,7 @@ class GenericOptionsBottomSheet extends StatelessWidget {
                               Divider(
                                 height: 1.h,
                                 thickness: 1.h,
-                                color: const Color(0xFFDADADA),
+                                color: AppColors.greyBorder,
                                 indent: 0,
                                 endIndent: 0,
                               ),

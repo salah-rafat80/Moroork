@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,9 @@ import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:traffic/core/widgets/generic_document_upload_screen.dart';
 import 'package:traffic/features/vehicle_license/presentation/cubits/vehicle_license_cubit.dart';
 import 'package:traffic/features/vehicle_license/presentation/cubits/vehicle_license_state.dart';
-import 'package:traffic/features/home/presentation/screens/main_navigation_screen.dart';
+import 'package:traffic/features/vehicle_license/presentation/screens/vehicle_inspection_booking_screen.dart';
+import 'package:traffic/features/vehicle_license/presentation/cubits/vehicle_renewal_cubit.dart';
+import 'package:traffic/injection_container.dart';
 import 'package:traffic/features/vehicle_license/data/models/vehicle_type_model.dart';
 import '../widgets/insurance_company_card.dart';
 
@@ -133,15 +136,17 @@ class _VehicleInsuranceScreenState extends State<VehicleInsuranceScreen> {
                 textDirection: TextDirection.rtl,
                 style: TextStyle(fontFamily: 'Cairo', fontSize: 13.sp),
               ),
-              backgroundColor: const Color(0xFF27AE60),
+              backgroundColor: AppColors.primary,
             ),
           );
-          Navigator.pushAndRemoveUntil(
+          Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const MainNavigationScreen(),
+              builder: (_) => BlocProvider<VehicleRenewalCubit>(
+                create: (_) => getIt<VehicleRenewalCubit>(),
+                child: VehicleInspectionBookingScreen(requestNumber: state.requestNumber),
+              ),
             ),
-            (route) => false,
           );
         } else if (state is VehicleLicenseFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -162,7 +167,7 @@ class _VehicleInsuranceScreenState extends State<VehicleInsuranceScreen> {
 
         return Scaffold(
           key: _scaffoldKey,
-          backgroundColor: const Color(0xFFF5F5F5),
+          backgroundColor: AppColors.lightGreyBg,
           drawer: const AppDrawer(),
           body: Column(
             children: [
@@ -189,7 +194,7 @@ class _VehicleInsuranceScreenState extends State<VehicleInsuranceScreen> {
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: TextStyle(
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                           fontSize: 17.sp,
                           fontFamily: 'Tajawal',
                           fontWeight: FontWeight.w700,
@@ -201,7 +206,7 @@ class _VehicleInsuranceScreenState extends State<VehicleInsuranceScreen> {
                         textAlign: TextAlign.right,
                         textDirection: TextDirection.rtl,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: AppColors.charcoal,
                           fontSize: 16.sp,
                           fontFamily: 'Tajawal',
                           fontWeight: FontWeight.w500,

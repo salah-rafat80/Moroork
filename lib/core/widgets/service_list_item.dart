@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -25,12 +26,12 @@ class ServiceListItem extends StatelessWidget {
         height: 60.h,
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(15.r),
-          border: Border.all(color: const Color(0xFFE8E8E8)),
+          border: Border.all(color: AppColors.borderLight),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.15),
+              color: AppColors.shadowLight,
               blurRadius: 8,
               offset: const Offset(0, -1),
             ),
@@ -44,7 +45,7 @@ class ServiceListItem extends StatelessWidget {
               width: 45.w,
               height: 45.w,
               decoration: BoxDecoration(
-                color: const Color(0xFFEFEFEF),
+                color: AppColors.extraLightGrey,
                 borderRadius: BorderRadius.circular(50.r),
               ),
               child: Center(
@@ -67,7 +68,7 @@ class ServiceListItem extends StatelessWidget {
                   fontSize: 15.sp,
                   // letterSpacing: -0.5,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF222222),
+                  color: AppColors.textPrimary,
                   // height: 1.3,
                 ),
               ),

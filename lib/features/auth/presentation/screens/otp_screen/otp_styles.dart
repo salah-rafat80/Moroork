@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Extracted styles for OTP screen - ensures UI consistency.
@@ -9,14 +10,14 @@ class OtpStyles {
   // ─────────────────────────────────────────────────────────────────
   // Colors
   // ─────────────────────────────────────────────────────────────────
-  static const Color backgroundColor = Colors.white;
-  static const Color primaryGreen = Color(0xFF27AE60);
-  static const Color textPrimary = Color(0xFF222222);
-  static const Color textSecondary = Color(0xFF6B7280);
-  static const Color borderDefault = Color(0xFFE5E7EB);
-  static const Color errorRed = Color(0xFFD32F2F);
-  static const Color resendDisabled = Color(0x802E7D32); // 50% opacity green
-  static const Color barrierColor = Color(0x80000000); // 50% black
+  static Color get backgroundColor => AppColors.background;
+  static final Color primaryGreen = AppColors.primary;
+  static final Color textPrimary = AppColors.textPrimary;
+  static final Color textSecondary = AppColors.textSecondary;
+  static final Color borderDefault = AppColors.border;
+  static final Color errorRed = AppColors.error;
+  static final Color resendDisabled = AppColors.greenOpacityBg; // 50% opacity green
+  static final Color barrierColor = AppColors.blackOpacityBg; // 50% black
 
   // ─────────────────────────────────────────────────────────────────
   // Sizes (using getters for responsive values)

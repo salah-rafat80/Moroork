@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A reusable card representing a selectable payment method option.
@@ -27,12 +28,12 @@ class PaymentOptionCard extends StatelessWidget {
         height: 60.h,
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F9F9),
+          color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(5.r),
           border: Border.all(
             color: isSelected
-                ? const Color(0xFF27AE60)
-                : const Color(0xFFDADADA),
+                ? AppColors.primary
+                : AppColors.greyBorder,
             width: isSelected ? 2.w : 1.w,
           ),
         ),
@@ -49,7 +50,7 @@ class PaymentOptionCard extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                       fontSize: 14.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w600,
@@ -58,7 +59,7 @@ class PaymentOptionCard extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: const Color(0xFF707070),
+                      color: AppColors.mediumGrey,
                       fontSize: 12.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w600,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// The secondary "اعادة التصوير" (Retake) outlined button on the preview screen.
@@ -16,8 +17,8 @@ class InspectionRetakeButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: const Color(0xFF27AE60),
-          side: const BorderSide(color: Color(0xFF27AE60), width: 1.5),
+          foregroundColor: AppColors.primary,
+          side: BorderSide(color: AppColors.primary, width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
           ),

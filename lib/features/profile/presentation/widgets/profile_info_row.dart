@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileInfoRow extends StatelessWidget {
@@ -25,7 +26,7 @@ class ProfileInfoRow extends StatelessWidget {
           Icon(
             icon,
             size: 20.r,
-            color: const Color(0xFF27AE60),
+            color: AppColors.primary,
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -36,7 +37,7 @@ class ProfileInfoRow extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    color: const Color(0xFF707070),
+                    color: AppColors.mediumGrey,
                     fontSize: 12.sp,
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w500,
@@ -48,7 +49,7 @@ class ProfileInfoRow extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: const Color(0xFF222222),
+                    color: AppColors.textPrimary,
                     fontSize: 15.sp,
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w600,

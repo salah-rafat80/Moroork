@@ -1,5 +1,6 @@
 // path: lib/features/home/presentation/widgets/section_title.dart
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SectionTitle extends StatelessWidget {
@@ -17,7 +18,7 @@ class SectionTitle extends StatelessWidget {
         fontFamily: 'Tajawal',
         fontSize: 17.sp,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF1A1A1A),
+        color: AppColors.charcoal,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A tappable form field that mimics a dropdown selector.
@@ -51,7 +52,7 @@ class CustomDropdownField extends StatelessWidget {
           textAlign: TextAlign.right,
           textDirection: TextDirection.rtl,
           style: TextStyle(
-            color: const Color(0xFF222222),
+            color: AppColors.textPrimary,
             fontSize: 17.sp,
             fontFamily: 'Tajawal',
             fontWeight: FontWeight.w500,
@@ -66,9 +67,9 @@ class CustomDropdownField extends StatelessWidget {
             height: 48.h,
             padding: EdgeInsets.symmetric(horizontal: 14.w),
             decoration: ShapeDecoration(
-              color: Colors.white,
+              color: AppColors.inputFieldBg,
               shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1.w, color: const Color(0xFF27AE60)),
+                side: BorderSide(width: 1.w, color: AppColors.primary),
                 borderRadius: BorderRadius.circular(5.r),
               ),
             ),
@@ -86,8 +87,8 @@ class CustomDropdownField extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: hasValue
-                          ? const Color(0xFF222222)
-                          : const Color(0xFFAEAEAE),
+                          ? AppColors.textPrimary
+                          : AppColors.greyIcon,
                       fontSize: 15.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w600,
@@ -101,7 +102,7 @@ class CustomDropdownField extends StatelessWidget {
                 Icon(
                   Icons.keyboard_arrow_down_rounded,
                   size: 22.r,
-                  color: const Color(0xFF27AE60),
+                  color: AppColors.primary,
                 ),
               ],
             ),

@@ -1,10 +1,9 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/api/api_client.dart';
 import '../../../core/widgets/primary_button.dart';
-import '../../profile/data/repositories/profile_repository.dart';
 import 'cubits/profile_cubit.dart';
 import 'cubits/profile_state.dart';
 import 'edit_profile_screen.dart';
@@ -32,7 +31,7 @@ class _ProfileScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
           return Column(
@@ -48,7 +47,7 @@ class _ProfileScreenBody extends StatelessWidget {
 
   Widget _buildContent(BuildContext context, ProfileState state) {
     if (state is ProfileLoading || state is ProfileInitial) {
-      return Center(child: CustomLoadingIndicator());
+      return const Center(child: CustomLoadingIndicator());
     }
 
     if (state is ProfileFailure) {
@@ -60,7 +59,7 @@ class _ProfileScreenBody extends StatelessWidget {
               state.message,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: const Color(0xFFE53935),
+                color: AppColors.alertRed,
                 fontSize: 14.sp,
                 fontFamily: 'Cairo',
               ),
@@ -116,7 +115,7 @@ class _ProfileScreenBody extends StatelessWidget {
                       cubit.loadProfile();
                     });
                   },
-            backgroundColor: const Color(0xFF27AE60),
+            backgroundColor: AppColors.primary,
           ),
         ],
       ),
@@ -127,7 +126,7 @@ class _ProfileScreenBody extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-        color: const Color(0xFF222222),
+        color: AppColors.textPrimary,
         fontSize: 17.sp,
         fontFamily: 'Tajawal',
         fontWeight: FontWeight.w500,

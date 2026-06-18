@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Bottom action buttons for the violation review screen.
@@ -29,7 +30,7 @@ class BottomActionButtons extends StatelessWidget {
                 child: Container(
                   height: 48.h,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF27AE60),
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(5.r),
                   ),
                   child: Center(
@@ -56,8 +57,8 @@ class BottomActionButtons extends StatelessWidget {
                 child: Container(
                   height: 48.h,
                   decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF27AE60)),
-                    color: const Color(0xFFF5F5F5),
+                    border: Border.all(color: AppColors.primary),
+                    color: AppColors.lightGreyBg,
                     borderRadius: BorderRadius.circular(5.r),
                   ),
                   child: Center(
@@ -67,7 +68,7 @@ class BottomActionButtons extends StatelessWidget {
                         fontFamily: 'Cairo',
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF27AE60),
+                        color: AppColors.primary,
                       ),
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/features/payment/models/payment_intent.dart';
 import 'package:traffic/core/features/payment/screens/payment_method_screen.dart';
@@ -30,7 +31,7 @@ class _ViolationDetailsScreenState extends State<ViolationDetailsScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Column(
         children: [
@@ -57,7 +58,7 @@ class _ViolationDetailsScreenState extends State<ViolationDetailsScreen> {
                       fontFamily: 'Tajawal',
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF222222),
+                      color: AppColors.textPrimary,
                     ),
                   ),
 

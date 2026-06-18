@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,9 +35,9 @@ class ViolationListItem extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 14.h),
       padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+          color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: const Color(0xFFE8E8E8)),
+        border: Border.all(color: AppColors.borderLight),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -59,7 +60,7 @@ class ViolationListItem extends StatelessWidget {
                   height: 40.h,
                   padding: EdgeInsets.all(2.w),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFD4ECDE),
+                    color: AppColors.lightGreenBg,
                     borderRadius: BorderRadius.circular(5.r),
                   ),
                   child: Center(
@@ -76,13 +77,13 @@ class ViolationListItem extends StatelessWidget {
                   height: 40.h,
                   padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE8F5E9),
+                    color: AppColors.successLight,
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: SvgPicture.asset(
                     'assets/license.svg', // Fallback icon
-                    colorFilter: const ColorFilter.mode(
-                      Color(0xFF27AE60),
+                    colorFilter: ColorFilter.mode(
+                      AppColors.primary,
                       BlendMode.srcIn,
                     ),
                   ),
@@ -103,7 +104,7 @@ class ViolationListItem extends StatelessWidget {
                         fontFamily: 'Cairo',
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1A1A1A),
+                        color: AppColors.charcoal,
                       ),
                     ),
                     SizedBox(height: 4.h),
@@ -114,7 +115,7 @@ class ViolationListItem extends StatelessWidget {
                         fontFamily: 'Cairo',
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF27AE60),
+                        color: AppColors.primary,
                       ),
                     ),
                   ],
@@ -132,11 +133,11 @@ class ViolationListItem extends StatelessWidget {
                     height: 18.h,
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? const Color(0xFF27AE60)
+                          ? AppColors.primary
                           : Colors.white,
                       borderRadius: BorderRadius.circular(4.r),
                       border: Border.all(
-                        color: const Color(0xFF27AE60),
+                        color: AppColors.primary,
                         width: 1.5,
                       ),
                     ),
@@ -155,7 +156,7 @@ class ViolationListItem extends StatelessWidget {
           SizedBox(height: 14.h),
 
           // ── Divider ──
-          const Divider(color: Color(0xFFEEEEEE), height: 1),
+          Divider(color: AppColors.dividerSolid, height: 1),
           SizedBox(height: 14.h),
 
           // ── Violation number row ──
@@ -167,7 +168,7 @@ class ViolationListItem extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF27AE60),
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.circular(6.r),
                 ),
                 child: Text(
@@ -188,7 +189,7 @@ class ViolationListItem extends StatelessWidget {
                   fontFamily: 'Cairo',
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF555555),
+                  color: AppColors.bodyGrey,
                 ),
               ),
               SizedBox(width: 6.w),
@@ -230,7 +231,7 @@ class ViolationListItem extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF555555),
+                    color: AppColors.bodyGrey,
                   ),
                 ),
               ),
@@ -238,7 +239,7 @@ class ViolationListItem extends StatelessWidget {
               Icon(
                 Icons.location_on,
                 size: 25.w,
-                color: const Color(0xFF27AE60),
+                color: AppColors.primary,
               ),
             ],
           ),
@@ -249,13 +250,19 @@ class ViolationListItem extends StatelessWidget {
             textDirection: TextDirection.ltr,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                '${violation.time} , ${violation.date}',
-                style: TextStyle(
-                  fontFamily: 'Cairo',
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF555555),
+              Flexible(
+                child: Text(
+                  violation.formattedDateTime,
+                  textAlign: TextAlign.right,
+                  textDirection: TextDirection.rtl,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.bodyGrey,
+                  ),
                 ),
               ),
               SizedBox(width: 8.w),
@@ -279,9 +286,9 @@ class ViolationListItem extends StatelessWidget {
                   fontFamily: 'Cairo',
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF27AE60),
+                  color: AppColors.primary,
                   decoration: TextDecoration.underline,
-                  decorationColor: const Color(0xFF27AE60),
+                  decorationColor: AppColors.primary,
                   decorationThickness: 0.5,
                 ),
               ),

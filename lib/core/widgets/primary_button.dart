@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -86,9 +87,8 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           // Fully transparent touch-absorbing background
           Positioned.fill(
             child: AbsorbPointer(
-              absorbing: true,
               child: Container(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
               ),
             ),
           ),
@@ -113,8 +113,8 @@ class _PrimaryButtonState extends State<PrimaryButton> {
   Widget build(BuildContext context) {
     final bool isEnabled = widget.onPressed != null;
     final Color currentBackgroundColor = isEnabled
-        ? (widget.backgroundColor ?? const Color(0xFF27AE60))
-        : (widget.disabledBackgroundColor ?? const Color(0xFFBDBDBD));
+        ? (widget.backgroundColor ?? AppColors.primary)
+        : (widget.disabledBackgroundColor ?? AppColors.mutedGrey);
     final Color currentTextColor = isEnabled
         ? (widget.textColor ?? Colors.white)
         : (widget.disabledTextColor ?? Colors.white70);
@@ -138,7 +138,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                 fontFamily: 'Cairo',
                 fontSize: widget.fontSize ?? 18.sp,
                 fontWeight: FontWeight.w600,
-                color: widget.isLoading ? currentTextColor.withOpacity(0.5) : currentTextColor,
+                color: widget.isLoading ? currentTextColor.withValues(alpha: 0.5) : currentTextColor,
               ),
             ),
           ),

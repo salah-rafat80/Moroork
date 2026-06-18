@@ -1,4 +1,5 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,7 +53,7 @@ class _ConfirmEmailChangeScreenState extends State<ConfirmEmailChangeScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: const Color(0xFFF8F9F9),
+          backgroundColor: AppColors.cardBg,
           body: Column(
             children: [
               const ProfileHeader(title: 'حسابي'),
@@ -69,7 +70,7 @@ class _ConfirmEmailChangeScreenState extends State<ConfirmEmailChangeScreen> {
                           'تأكيد البريد الإلكتروني',
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
-                            color: const Color(0xFF222222),
+                            color: AppColors.textPrimary,
                             fontSize: 20.sp,
                             fontFamily: 'Tajawal',
                             fontWeight: FontWeight.w700,
@@ -80,7 +81,7 @@ class _ConfirmEmailChangeScreenState extends State<ConfirmEmailChangeScreen> {
                           'تم إرسال رمز التحقق إلى:\n${widget.newEmail}',
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
-                            color: const Color(0xFF707070),
+                            color: AppColors.mediumGrey,
                             fontSize: 13.sp,
                             fontFamily: 'Cairo',
                           ),
@@ -100,7 +101,7 @@ class _ConfirmEmailChangeScreenState extends State<ConfirmEmailChangeScreen> {
                         ),
                         SizedBox(height: 32.h),
                         if (state is ProfileLoading)
-                          Center(child: CustomLoadingIndicator())
+                          const Center(child: CustomLoadingIndicator())
                         else
                           PrimaryButton(
                             label: 'تأكيد',
@@ -112,7 +113,7 @@ class _ConfirmEmailChangeScreenState extends State<ConfirmEmailChangeScreen> {
                                     );
                               }
                             },
-                            backgroundColor: const Color(0xFF27AE60),
+                            backgroundColor: AppColors.primary,
                           ),
                       ],
                     ),

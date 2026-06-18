@@ -1,8 +1,8 @@
 import 'package:traffic/core/widgets/custom_loading_indicator.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:traffic/core/features/payment/screens/payment_method_screen.dart';
 import 'package:traffic/core/features/payment/models/payment_intent.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
@@ -11,7 +11,6 @@ import 'package:traffic/core/widgets/service_screen_appbar.dart';
 import 'package:traffic/core/widgets/empty_state_widget.dart';
 import 'package:traffic/features/driving_license/data/models/driving_license_model.dart';
 import 'package:traffic/features/violations_inquiry/data/models/violation_model.dart';
-import 'package:traffic/features/violations_inquiry/data/repositories/violations_repository.dart';
 import 'package:traffic/features/violations_inquiry/presentation/cubits/violations_cubit.dart';
 import 'package:traffic/features/violations_inquiry/presentation/cubits/violations_state.dart';
 import 'package:traffic/injection_container.dart';
@@ -56,8 +55,7 @@ class _ViolationsListViewState extends State<_ViolationsListView> {
   List<ViolationModel> _getFiltered(List<ViolationModel> all) =>
       all.where((v) => v.isPaid == _showPaid).toList();
 
-  double _totalAmount(List<ViolationModel> all) =>
-      all.fold(0, (sum, v) => sum + v.fineAmount);
+
 
   double _selectedAmount(List<ViolationModel> all) => all
       .where((v) => !v.isPaid && _selectedViolationIds.contains(v.id))
@@ -100,7 +98,7 @@ class _ViolationsListViewState extends State<_ViolationsListView> {
 
         return Scaffold(
           key: _scaffoldKey,
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.background,
           drawer: const AppDrawer(),
           body: Column(
             children: [
@@ -182,7 +180,7 @@ class _ViolationsListViewState extends State<_ViolationsListView> {
     required double totalAmt,
   }) {
     if (state is ViolationsLoading) {
-      return Center(child: CustomLoadingIndicator());
+      return const Center(child: CustomLoadingIndicator());
     }
 
     if (state is ViolationsFailure && allViolations.isEmpty) {
@@ -243,7 +241,7 @@ class _ViolationsListViewState extends State<_ViolationsListView> {
                 fontFamily: 'Tajawal',
                 fontSize: 17.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF1A1A1A),
+                color: AppColors.charcoal,
               ),
             ),
             SizedBox(height: 16.h),

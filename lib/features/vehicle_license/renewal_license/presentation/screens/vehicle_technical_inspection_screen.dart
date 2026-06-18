@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traffic/core/widgets/generic_booking_screen.dart';
 import 'package:traffic/core/widgets/loading_overlay.dart';
@@ -6,6 +7,7 @@ import '../../data/models/renewal_vehicle_license_model.dart';
 import '../../../presentation/cubits/vehicle_renewal_cubit.dart';
 import '../../../presentation/cubits/vehicle_renewal_state.dart';
 import '../../../../driving_license/data/models/driving_renewal_model.dart';
+import 'package:traffic/core/utils/date_time_formatter.dart';
 
 // ── Screen ─────────────────────────────────────────────────────────────────────
 
@@ -30,7 +32,7 @@ class VehicleTechnicalInspectionScreen extends StatelessWidget {
       governorateId: data.selectedGovernorateId ?? data.selectedGovernorate,
       trafficUnitId: data.selectedSecondaryId ?? data.selectedSecondary,
       date: data.selectedDate,
-      startTime: data.selectedSlot.split('-').first.trim(),
+      startTime: DateTimeFormatter.extractRawStartTime(data.selectedSlot),
       requestNumber: requestNumber,
     );
   }
@@ -47,7 +49,7 @@ class VehicleTechnicalInspectionScreen extends StatelessWidget {
                     'تم تقديم طلب التجديد بنجاح. يمكنك متابعة الطلب واستكماله من قائمة "طلباتي".',
                 textDirection: TextDirection.rtl,
               ),
-              backgroundColor: const Color(0xFF27AE60),
+              backgroundColor: AppColors.primary,
             ),
           );
           Navigator.of(context).popUntil((route) => route.isFirst);
@@ -99,7 +101,9 @@ class VehicleTechnicalInspectionScreen extends StatelessWidget {
               final result =
                   await cubit.repository.fetchAvailableSlots(date, 'Technical');
               if (result.isSuccess) {
-                return result.data!;
+                return result.data!
+                    .map((AppointmentSlotModel slot) => slot.displayLabel)
+                    .toList();
               }
               throw Exception(result.error);
             },

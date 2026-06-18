@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A single RTL bullet-point row with a check-circle icon and text.
@@ -24,7 +25,7 @@ class InspectionBulletPoint extends StatelessWidget {
               fontFamily: 'Tajawal',
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: const Color(0xFF333333),
+              color: AppColors.darkGrey,
               height: 1.5,
             ),
           ),
@@ -35,7 +36,7 @@ class InspectionBulletPoint extends StatelessWidget {
           child: Icon(
             Icons.check_circle,
             size: 20.w,
-            color: const Color(0xFF27AE60),
+            color: AppColors.primary,
           ),
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingsMenuItem extends StatelessWidget {
@@ -35,16 +36,16 @@ class SettingsMenuItem extends StatelessWidget {
                   width: 30.w,
                   height: 30.w,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE3FAED),
+                    color: AppColors.activeGreenLightBg,
                     borderRadius: BorderRadius.circular(5.r),
                   ),
-                  child: Icon(icon, color: const Color(0xFF27AE60), size: 18.w),
+                  child: Icon(icon, color: AppColors.primary, size: 18.w),
                 ),
                 SizedBox(width: 12.w),
                 Text(
                   title,
                   style: TextStyle(
-                    color: const Color(0xFF222222),
+                    color: AppColors.textPrimary,
                     fontSize: 14.sp,
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w600,
@@ -55,7 +56,7 @@ class SettingsMenuItem extends StatelessWidget {
                   Text(
                     trailingText!,
                     style: TextStyle(
-                      color: const Color(0xFF707070),
+                      color: AppColors.mediumGrey,
                       fontSize: 15.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w600,
@@ -66,7 +67,7 @@ class SettingsMenuItem extends StatelessWidget {
                 if (!hideArrow)
                   Icon(
                     Icons.arrow_back_ios_rounded,
-                    color: const Color(0xFF27AE60),
+                    color: AppColors.primary,
                     size: 14.w,
                   ),
               ],
@@ -77,7 +78,7 @@ class SettingsMenuItem extends StatelessWidget {
           Divider(
             height: 1.h,
             thickness: 1.h,
-            color: const Color(0xFFDADADA),
+            color: AppColors.greyBorder,
             indent: 16.w,
             endIndent: 16.w,
           ),

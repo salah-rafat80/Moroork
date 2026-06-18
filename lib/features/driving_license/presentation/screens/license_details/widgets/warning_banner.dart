@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
 import 'package:traffic/features/driving_license/data/models/driving_license_model.dart';
@@ -39,7 +40,7 @@ class WarningBanner extends StatelessWidget {
                   fontFamily: 'Cairo',
                   fontSize: 11.sp,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFFE53935),
+                  color: AppColors.alertRed,
                 ),
               ),
               SizedBox(height: 4.h),
@@ -53,9 +54,9 @@ class WarningBanner extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFFE53935),
+                    color: AppColors.alertRed,
                     decoration: TextDecoration.underline,
-                    decorationColor: const Color(0xFFE53935),
+                    decorationColor: AppColors.alertRed,
                   ),
                 ),
               ),
@@ -73,7 +74,22 @@ class WarningBanner extends StatelessWidget {
               fontFamily: 'Cairo',
               fontSize: 12.sp,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFFE53935),
+              color: AppColors.alertRed,
+            ),
+          ),
+        );
+
+      case LicenseStatus.suspended:
+        return _buildBanner(
+          child: Text(
+            'هذه الرخصة موقوفة. لا يمكن استكمال تجديدها أو استخراج بدل لها.',
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.rtl,
+            style: TextStyle(
+              fontFamily: 'Cairo',
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w700,
+              color: AppColors.alertRed,
             ),
           ),
         );
@@ -85,7 +101,7 @@ class WarningBanner extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFE9E9),
+        color: AppColors.alertRedLight,
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: child,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TestResultButtons extends StatelessWidget {
@@ -22,12 +23,12 @@ class TestResultButtons extends StatelessWidget {
       child: Container(
         padding: EdgeInsetsDirectional.all(16.r),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F9F9),
+          color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(5.r),
-          border: Border.all(color: const Color(0xFF27AE60), width: 1.w),
+          border: Border.all(color: AppColors.primary, width: 1.w),
           boxShadow: [
             BoxShadow(
-              color: const Color(0x3F000000),
+              color: AppColors.shadowColor,
               blurRadius: 4.r,
               offset: const Offset(0, 1),
             ),
@@ -39,7 +40,7 @@ class TestResultButtons extends StatelessWidget {
             Text(
               'تسجيل النتيجة',
               style: TextStyle(
-                color: Colors.black,
+                color: AppColors.charcoal,
                 fontSize: 16.sp,
                 fontFamily: 'Cairo',
                 fontWeight: FontWeight.w700,
@@ -51,7 +52,7 @@ class TestResultButtons extends StatelessWidget {
                 Expanded(
                   child: _buildButton(
                     text: passLabel,
-                    color: const Color(0xFF27AE60),
+                    color: AppColors.primary,
                     onPressed: onPass,
                   ),
                 ),
@@ -59,7 +60,7 @@ class TestResultButtons extends StatelessWidget {
                 Expanded(
                   child: _buildButton(
                     text: failLabel,
-                    color: const Color(0xFFE53935),
+                    color: AppColors.alertRed,
                     onPressed: onFail,
                   ),
                 ),

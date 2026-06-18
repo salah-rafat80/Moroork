@@ -1,9 +1,7 @@
 import 'package:traffic/core/widgets/generic_booking_screen.dart';
 import 'package:traffic/features/driving_license/data/models/driving_renewal_model.dart';
 import 'package:traffic/features/driving_license/data/repositories/driving_renewal_repository.dart';
-import 'package:traffic/core/api/api_client.dart';
 import 'package:injectable/injectable.dart';
-import 'package:traffic/injection_container.dart';
 
 /// Provides appointment booking data-fetch callbacks for the
 /// First-Time Driving License issuance flow.

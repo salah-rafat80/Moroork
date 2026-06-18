@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
@@ -36,7 +37,7 @@ class ViolationReviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.lightGreyBg,
       drawer: const AppDrawer(),
       body: Builder(
         builder: (innerContext) {
@@ -69,7 +70,7 @@ class ViolationReviewScreen extends StatelessWidget {
                           fontFamily: 'Tajawal',
                           fontSize: 17.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                         ),
                       ),
 
@@ -91,7 +92,7 @@ class ViolationReviewScreen extends StatelessWidget {
                           fontFamily: 'Tajawal',
                           fontSize: 17.sp,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF222222),
+                          color: AppColors.textPrimary,
                         ),
                       ),
 

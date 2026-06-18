@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'profile_info_row.dart';
 
@@ -18,9 +19,9 @@ class ContactInfoCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9F9),
+        color: AppColors.cardBg,
         borderRadius: BorderRadius.circular(5.r),
-        border: Border.all(color: const Color(0xFFDADADA), width: 1.r),
+        border: Border.all(color: AppColors.greyBorder, width: 1.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -36,7 +37,7 @@ class ContactInfoCard extends StatelessWidget {
             value: email,
             icon: Icons.email_outlined,
           ),
-          Divider(color: const Color(0xFFDADADA), thickness: 1.r),
+          Divider(color: AppColors.greyBorder, thickness: 1.r),
           ProfileInfoRow(
             label: 'رقم الهاتف',
             value: phoneNumber,

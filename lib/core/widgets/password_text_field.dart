@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PasswordTextField extends StatefulWidget {
@@ -37,7 +38,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             fontFamily: 'Tajawal',
             fontSize: 17.sp,
             fontWeight: FontWeight.w500,
-            color: const Color(0xFF222222),
+            color: AppColors.textPrimary,
           ),
         ),
         SizedBox(height: 8.h),
@@ -52,7 +53,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             fontFamily: 'Cairo',
             fontSize: 15.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF444444),
+            color: AppColors.deepGrey,
           ),
           decoration: InputDecoration(
             hintText: widget.hintText,
@@ -60,24 +61,24 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               fontFamily: 'Cairo',
               fontSize: 15.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFFAEAEAE),
+              color: AppColors.greyIcon,
             ),
             errorStyle: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 10.sp,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFFE53935),
+              color: AppColors.alertRed,
             ),
             contentPadding: EdgeInsets.symmetric(
               horizontal: 12.w,
               vertical: 12.h,
             ),
             filled: true,
-            fillColor: const Color(0xFFFAFAFA),
+            fillColor: AppColors.whiteBg,
             prefixIcon: IconButton(
               icon: Icon(
                 _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                color: const Color(0xFF27AE60),
+                color: AppColors.primary,
                 size: 20.r,
               ),
               onPressed: () {
@@ -89,28 +90,28 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
               borderSide: BorderSide(
-                color: const Color(0xFFDADADA),
+                color: AppColors.greyBorder,
                 width: 1.w,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
               borderSide: BorderSide(
-                color: const Color(0xFF27AE60),
+                color: AppColors.primary,
                 width: 1.5.w,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
               borderSide: BorderSide(
-                color: const Color(0xFFE53935),
+                color: AppColors.alertRed,
                 width: 1.w,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
               borderSide: BorderSide(
-                color: const Color(0xFFE53935),
+                color: AppColors.alertRed,
                 width: 1.5.w,
               ),
             ),

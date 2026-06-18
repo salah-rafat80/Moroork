@@ -1,23 +1,24 @@
 // path: lib/features/home/data/home_mock_data.dart
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 
 class HomeMockData {
   static final List<Map<String, dynamic>> popularServices = [
     {
       'title': 'استعلام عن\nمخالفات',
       'icon': Icons.search,
-      'color': const Color(0xFFE8F5E9), // Light Green
+      'color': AppColors.successLight, // Light Green
     },
     {
       'title': 'تجديد رخصة\nقيادة',
       'icon': Icons.assignment_ind_outlined,
-      'color': const Color(0xFFE8F5E9),
+      'color': AppColors.successLight,
     },
     {
       'title':
           'تجديد رخصة\nمركبة', // Added for variety based on scroll potential
       'icon': Icons.directions_car_outlined,
-      'color': const Color(0xFFE8F5E9),
+      'color': AppColors.successLight,
     },
   ];
 

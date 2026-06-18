@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A fully custom, reusable expansion tile that matches the Figma design for
@@ -110,7 +111,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
           // Background transitions from transparent → light grey when expanded.
           color: Color.lerp(
             Colors.transparent,
-            const Color(0xFFF0F0F0),
+            AppColors.dividerLight,
             _expandAnimation.value,
           ),
           child: Column(
@@ -133,7 +134,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                         width: 40.r,
                         height: 40.r,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEFEFEF),
+                          color: AppColors.extraLightGrey,
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: Center(child: widget.icon),
@@ -148,7 +149,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                           textAlign: TextAlign.right,
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
-                            color: const Color(0xFF222222),
+                            color: AppColors.textPrimary,
                             fontSize: 15.sp,
                             fontFamily: 'Cairo',
                             fontWeight: FontWeight.w700,
@@ -164,7 +165,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                         child: Icon(
                           Icons.keyboard_arrow_down_rounded,
                           size: 24.r,
-                          color: const Color(0xFF27AE60),
+                          color: AppColors.primary,
                         ),
                       ),
                     ],
@@ -187,7 +188,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: TextStyle(
-                      color: const Color(0xFF333333),
+                      color: AppColors.darkGrey,
                       fontSize: 12.sp,
                       fontFamily: 'Cairo',
                       fontWeight: FontWeight.w500,

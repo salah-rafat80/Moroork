@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// A "dumb" checkbox row that lets the user agree to the Terms & Conditions.
@@ -26,8 +27,12 @@ class AgreementCheckbox extends StatelessWidget {
           child: Checkbox(
             value: isAgreed,
             onChanged: onChanged != null ? (v) => onChanged!(v ?? false) : null,
-            activeColor: const Color(0xFF27AE60),
-            side: BorderSide(width: 1.r),
+            activeColor: AppColors.primary,
+            checkColor: Colors.white,
+            side: BorderSide(
+              color: AppColors.charcoal,
+              width: 1.5.r,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.r),
             ),
@@ -44,7 +49,7 @@ class AgreementCheckbox extends StatelessWidget {
               TextSpan(
                 text: 'أوافق على جميع ',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.charcoal,
                   fontSize: 13.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w600,
@@ -53,7 +58,7 @@ class AgreementCheckbox extends StatelessWidget {
               TextSpan(
                 text: 'الشروط والأحكام',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.charcoal,
                   fontSize: 13.sp,
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.w700,
