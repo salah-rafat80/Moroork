@@ -229,6 +229,26 @@ void main() {
       );
       expect(OrderDetailsHelper.showFinalizeButton(order), isFalse);
     });
+
+    test('يظهر لطلب بدل فاقد رخصة مركبة في حالة pending', () {
+      final order = _makeOrder(
+        title: 'استخراج بدل فاقد - رخصة مركبة',
+        id: 'RPL-2026-301',
+        statusLabel: 'في انتظار الدفع',
+        stepCode: 'PAYMENT',
+      );
+      expect(OrderDetailsHelper.showFinalizeButton(order), isTrue);
+    });
+
+    test('يظهر لطلب بدل تالف رخصة قيادة في حالة pending', () {
+      final order = _makeOrder(
+        title: 'اصدار بدل تالف رخصة قيادة',
+        id: 'RPL-2026-302',
+        statusLabel: 'في انتظار الدفع',
+        stepCode: 'PAYMENT',
+      );
+      expect(OrderDetailsHelper.showFinalizeButton(order), isTrue);
+    });
   });
 
   // ────────────────────────────────────────────────

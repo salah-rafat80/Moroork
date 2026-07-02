@@ -7,13 +7,11 @@ import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
 import 'package:traffic/core/widgets/empty_state_widget.dart';
 import 'package:traffic/features/vehicle_license/data/repositories/vehicle_license_repository.dart';
-import 'package:traffic/features/vehicle_license/data/models/vehicle_license_model.dart'
-    as main_model;
+import 'package:traffic/features/vehicle_license/data/models/vehicle_license_model.dart';
 import 'package:traffic/features/violations_inquiry/data/repositories/violations_repository.dart';
 import 'package:traffic/features/vehicle_license/violations_inquiry/data/models/vehicle_license_violation_model.dart';
 import 'package:traffic/features/vehicle_license/violations_inquiry/presentation/screens/vehicle_violations_list_screen.dart';
 import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
-import '../../data/models/vehicle_license_model.dart';
 import '../widgets/vehicle_license_card.dart';
 import 'vehicle_license_details_screen.dart';
 import 'package:traffic/injection_container.dart';
@@ -30,7 +28,7 @@ class _VehicleLostLicenseSelectionScreenState
     extends State<VehicleLostLicenseSelectionScreen> {
   int? _selectedIndex;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<main_model.VehicleLicenseModel> _vehicles = [];
+  List<VehicleLicenseModel> _vehicles = [];
   bool _isLoading = true;
   String? _errorMessage;
 
@@ -52,8 +50,8 @@ class _VehicleLostLicenseSelectionScreenState
       // Fetch fresh from API directly
       final result = await repository.getMyLicenses();
       if (result.isSuccess && result.data != null) {
-        final List<main_model.VehicleLicenseModel> licenses = result.data!;
-        final List<main_model.VehicleLicenseModel> updatedLicenses = [];
+        final List<VehicleLicenseModel> licenses = result.data!;
+        final List<VehicleLicenseModel> updatedLicenses = [];
 
         for (final license in licenses) {
           bool hasUnpaid = license.hasUnpaidViolations;
@@ -77,8 +75,8 @@ class _VehicleLostLicenseSelectionScreenState
             
             // Auto-select if there is exactly 1 vehicle that is not restricted and has no unpaid violations
             if (_vehicles.length == 1) {
-              final firstModel = _toReplacementModel(_vehicles[0]);
-              final isRestricted = firstModel.status == VehicleLicenseStatus.suspended || firstModel.status == VehicleLicenseStatus.withdrawn;
+              final firstModel = _vehicles[0];
+              final isRestricted = firstModel.status == LicenseStatus.suspended || firstModel.status == LicenseStatus.withdrawn;
               if (!isRestricted && !firstModel.hasUnpaidViolations) {
                 _selectedIndex = 0;
               } else {
@@ -127,37 +125,16 @@ class _VehicleLostLicenseSelectionScreenState
     }
   }
 
-  /// Maps the main VehicleLicenseModel → replacement-flow VehicleLicenseModel.
-  VehicleLicenseModel _toReplacementModel(main_model.VehicleLicenseModel v) {
-    VehicleLicenseStatus status;
-    switch (v.status) {
-      case LicenseStatus.expired:
-        status = VehicleLicenseStatus.expired;
-        break;
-      case LicenseStatus.withdrawn:
-        status = VehicleLicenseStatus.withdrawn;
-        break;
-      case LicenseStatus.suspended:
-        status = VehicleLicenseStatus.suspended;
-        break;
-      default:
-        status = VehicleLicenseStatus.valid;
-    }
-    return VehicleLicenseModel(
-      plateNumber: (v.plateNumber != null && v.plateNumber!.isNotEmpty) ? v.plateNumber! : v.vehicleLicenseNumber,
-      vehicleType: _formatVehicleType(v.category, v.brand, v.model),
-      expiryDate: v.expiryDate,
-      status: status,
-      hasUnpaidViolations: v.hasUnpaidViolations,
-    );
-  }
-
   VehicleLicenseModel? get _selectedVehicle => _selectedIndex != null
-      ? _toReplacementModel(_vehicles[_selectedIndex!])
+      ? _vehicles[_selectedIndex!]
       : null;
 
-  bool get _canProceed =>
-      _selectedVehicle != null && !_selectedVehicle!.hasUnpaidViolations;
+  bool get _canProceed {
+    final lic = _selectedVehicle;
+    if (lic == null) return false;
+    final isRestricted = lic.status == LicenseStatus.suspended || lic.status == LicenseStatus.withdrawn;
+    return !isRestricted && !lic.hasUnpaidViolations;
+  }
 
   void _onNextPressed() {
     if (_selectedVehicle == null) return;
@@ -229,7 +206,7 @@ class _VehicleLostLicenseSelectionScreenState
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 24.w,
                                   vertical: 12.h,
-                                ),
+                                  ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.r),
                                 ),
@@ -266,18 +243,16 @@ class _VehicleLostLicenseSelectionScreenState
                                       SizedBox(height: 12.h),
                                       ..._vehicles.asMap().entries.map((entry) {
                                         final index = entry.key;
-                                        final model =
-                                            _toReplacementModel(entry.value);
+                                        final license = entry.value;
                                         return Padding(
                                           padding:
                                               EdgeInsets.only(bottom: 12.h),
                                           child: VehicleLicenseCard(
-                                            vehicle: model,
+                                            vehicle: license,
                                             isSelected: _selectedIndex == index,
                                             onTap: () => setState(() =>
                                                 _selectedIndex = index),
                                             onShowViolations: () {
-                                              final license = entry.value;
                                               final violationModel =
                                                   VehicleLicenseViolationModel(
                                                 id: license.id,

@@ -12,7 +12,7 @@ import 'package:traffic/features/driving_license/data/models/driving_renewal_mod
 import 'package:traffic/features/driving_license/presentation/cubits/driving_renewal_cubit.dart';
 import 'package:traffic/features/driving_license/presentation/screens/license_details/license_details_screen.dart';
 import 'package:traffic/features/driving_license/presentation/screens/terms_and_conditions/terms_and_conditions_screen.dart';
-import 'package:traffic/features/driving_license/presentation/screens/practical_test/practical_test_booking_screen.dart';
+import 'package:traffic/features/driving_license/presentation/screens/theory_test/theory_test_booking_screen.dart';
 import 'package:traffic/features/violations_inquiry/presentation/screens/select_license_screen.dart';
 import 'package:traffic/injection_container.dart';
 
@@ -50,8 +50,7 @@ class _DrivingLicenseScreenState extends State<DrivingLicenseScreen> {
       MaterialPageRoute(
         builder: (_) => GenericTermsScreen(
           appBarTitle: 'تجديد رخصة القيادة',
-          subtitle:
-              'يرجى قراءة الشروط بعناية قبل متابعة التجديد.',
+          subtitle: 'يرجى قراءة الشروط بعناية قبل متابعة التجديد.',
           disclaimer:
               'قبل المتابعة، يرجى التأكد أن المركبة تستوفي جميع الشروط المطلوبة. في حال عدم استيفاء أي شرط، لن تتمكن من إتمام التجديد إلكترونيًا.',
           termsData: const [
@@ -112,23 +111,47 @@ class _DrivingLicenseScreenState extends State<DrivingLicenseScreen> {
     required BookingFlowData bookingData,
     required String renewalRequestNumber,
   }) async {
-    if (!mounted) {
+    if (!mounted) return;
+
+    // استدعاء API حجز اختبار الإشارات النظري (نفس ريكويست الكشف الطبي)
+    final result = await _renewalDataHandler.bookAppointmentFromUi(
+      governorateId:
+          bookingData.selectedGovernorateId ?? bookingData.selectedGovernorate,
+      trafficUnitId:
+          bookingData.selectedSecondaryId ?? bookingData.selectedSecondary,
+      date: bookingData.selectedDate,
+      selectedSlot: bookingData.selectedSlot,
+      type: AppointmentType.medical,
+      requestNumber: renewalRequestNumber,
+    );
+
+    if (!mounted) return;
+
+    if (!result.isSuccess || result.data == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            result.error ??
+                'تعذر تأكيد موعد اختبار الإشارات. الرجاء المحاولة مرة أخرى.',
+            textDirection: TextDirection.rtl,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
       return;
     }
-
-    final String appointmentReference =
-        bookingData.requestNumber ?? bookingData.bookingNumber ?? '-';
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'تم حفظ موعدك بنجاح. رقم طلب التجديد: $renewalRequestNumber - مرجع الموعد: $appointmentReference',
+          'تم حجز موعد اختبار الإشارات النظري بنجاح. رقم طلب التجديد: $renewalRequestNumber',
           textDirection: TextDirection.rtl,
         ),
+        backgroundColor: AppColors.primary,
       ),
     );
 
-    await CompletionWarningDialog.show(context);
+    await CompletionWarningDialog.show(context, isRenewal: true);
   }
 
   Future<void> _submitRenewalAfterLicenseSelection(
@@ -173,11 +196,11 @@ class _DrivingLicenseScreenState extends State<DrivingLicenseScreen> {
           await Navigator.push<BookingFlowData>(
             context,
             MaterialPageRoute(
-              builder: (_) => PracticalTestBookingScreen(
+              builder: (_) => TheoryTestBookingScreen(
                 appBarTitle: 'تجديد رخصة القيادة',
                 loadGovernorates: _loadGovernorates,
                 loadTrafficUnits: _loadTrafficUnits,
-                loadSlotsForDate: _loadDrivingSlots,
+                loadSlotsForDate: _loadTheorySlots,
               ),
             ),
           );
@@ -242,10 +265,11 @@ class _DrivingLicenseScreenState extends State<DrivingLicenseScreen> {
         .toList(growable: false);
   }
 
-  Future<List<String>> _loadDrivingSlots(DateTime selectedDate) async {
+  Future<List<String>> _loadTheorySlots(DateTime selectedDate, String trafficUnitId) async {
     final result = await _renewalDataHandler.fetchSlotsForUi(
       date: selectedDate,
-      type: AppointmentType.driving,
+      type: AppointmentType.theory,
+      trafficUnitId: trafficUnitId,
     );
     if (!result.isSuccess || result.data == null) {
       throw Exception(result.error ?? 'تعذر تحميل المواعيد المتاحة.');
@@ -255,8 +279,6 @@ class _DrivingLicenseScreenState extends State<DrivingLicenseScreen> {
         .map((AppointmentSlotModel item) => item.displayLabel)
         .toList(growable: false);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -317,11 +339,6 @@ class _DrivingLicenseScreenState extends State<DrivingLicenseScreen> {
                     ),
                   ),
                   SizedBox(height: 24.h),
-                  // ServiceListItem(
-                  //   title: 'سداد مخالفات رخصة القيادة',
-                  //   icon: "assets/cart_payment.svg",
-                  // ),
-                  // SizedBox(height: 24.h),
                 ],
               ),
             ),

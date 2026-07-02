@@ -23,13 +23,15 @@ class InspectionAnalyzeButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.r),
           ),
           elevation: 0,
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
         ),
         child: Text(
           'تحليل المركبة',
           style: TextStyle(
             fontFamily: 'Tajawal',
-            fontSize: 17.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
+            height: 1.4,
           ),
         ),
       ),

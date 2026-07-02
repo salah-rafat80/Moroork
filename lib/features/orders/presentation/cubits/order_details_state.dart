@@ -27,6 +27,9 @@ class OrderDetailsMedicalBookingSuccess extends OrderDetailsState {
   OrderDetailsMedicalBookingSuccess(this.requestNumber);
 }
 
+/// ✅ نجاح حجز موعد اختبار الإشارات النظري (تجديد رخصة القيادة)
+class OrderDetailsTheoryBookingSuccess extends OrderDetailsState {}
+
 class OrderDetailsPracticalBookingSuccess extends OrderDetailsState {}
 
 class OrderDetailsFailure extends OrderDetailsState {

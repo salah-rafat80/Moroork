@@ -9,16 +9,16 @@ import 'package:traffic/core/features/checkout/models/fees_details.dart';
 import 'package:traffic/core/features/checkout/models/order_summary.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
-import '../widgets/custom_text_form_field.dart';
 import '../widgets/selection_option_card.dart';
-import '../../data/models/vehicle_license_model.dart';
+import 'package:traffic/features/vehicle_license/data/models/vehicle_license_model.dart';
 import 'vehicle_replacement_type_selection_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../presentation/cubits/vehicle_replacement_cubit.dart';
 import '../../../presentation/cubits/vehicle_replacement_state.dart';
 import 'package:traffic/injection_container.dart';
 import 'package:traffic/core/api/order_payment_cache.dart';
-
+import 'package:traffic/core/api/user_address_cache.dart';
+import 'package:traffic/core/widgets/saved_addresses_selector.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 
 
@@ -49,6 +49,9 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _addressDetailsController = TextEditingController();
 
+  UserAddress? _selectedAddress;
+  bool _useSavedAddress = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,20 +67,47 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
     super.dispose();
   }
 
+  bool get isDelivery => selectedMethod == VehicleDeliveryMethod.delivery;
+
   bool get _isButtonEnabled => selectedMethod != null;
 
-  void _onNextPressed() {
+  void _onMethodTap(VehicleDeliveryMethod method) {
+    if (selectedMethod == method) return;
+    setState(() {
+      selectedMethod = method;
+      _useSavedAddress = false;
+      _selectedAddress = null;
+      _governorateController.clear();
+      _cityController.clear();
+      _addressDetailsController.clear();
+    });
+  }
+
+  void _onNextPressed() async {
     if (selectedMethod == VehicleDeliveryMethod.delivery) {
-      if (!(_formKey.currentState?.validate() ?? false)) return;
+      if (_useSavedAddress && _selectedAddress != null) {
+        _governorateController.text = _selectedAddress!.governorate;
+        _cityController.text = _selectedAddress!.city;
+        _addressDetailsController.text = _selectedAddress!.details;
+      } else {
+        if (!(_formKey.currentState?.validate() ?? false)) return;
+        final newAddr = UserAddress(
+          governorate: _governorateController.text.trim(),
+          city: _cityController.text.trim(),
+          details: _addressDetailsController.text.trim(),
+        );
+        await UserAddressCache.saveAddress(newAddr);
+      }
     }
 
     final int method = selectedMethod == VehicleDeliveryMethod.delivery ? 2 : 1;
     final String repType = widget.replacementType == VehicleReplacementType.lost
-        ? "0" // "بدل فاقد" maps to 0 in API as per driving license? Wait, driving license was "Lost" and "Damaged". Vehicle API docs say: "بدل فاقد" (0), "بدل تالف" (1). But wait, driving license actually sends "Lost" or "Damaged". Let's check API docs. It says `replacementtype`: "بدل فاقد" (0), "بدل تالف" (1). I'll send string '0' or '1' or int? The API doc says: `replacementtype`: "بدل فاقد" (0), "بدل تالف" (1).
-        : "1";
+        ? "بدل فاقد"
+        : "بدل تالف";
 
+    if (!mounted) return;
     _replacementCubit?.issueReplacement(
-      licenseNumber: widget.vehicle.plateNumber,
+      licenseNumber: widget.vehicle.licenseNumber,
       replacementType: repType,
       method: method,
       governorate: method == 2 ? _governorateController.text.trim() : null,
@@ -94,6 +124,10 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
             ? 'التوصيل للعنوان'
             : 'الاستلام من وحدة المرور';
 
+    final String? shippingAddress = selectedMethod == VehicleDeliveryMethod.delivery
+        ? '${_governorateController.text.trim()}، ${_cityController.text.trim()}، ${_addressDetailsController.text.trim()}'
+        : null;
+
     final String orderTypeLabel =
         widget.replacementType == VehicleReplacementType.lost
             ? 'بدل فاقد رخصة مركبة'
@@ -102,7 +136,8 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
     final orderSummary = OrderSummary(
       orderType: orderTypeLabel,
       paymentMethod: paymentMethodLabel,
-      orderId: widget.vehicle.plateNumber,
+      orderId: widget.vehicle.licenseNumber,
+      shippingAddress: shippingAddress,
     );
 
     final double baseFee = state.response.fees?.baseFee ?? 0;
@@ -151,114 +186,101 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
 
   @override
   Widget build(BuildContext context) {
-    Widget body = Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: AppColors.lightGreyBg,
-        drawer: const AppDrawer(),
-        body: Column(
-          children: [
-            ServiceScreenAppBar(
-              title: 'اصدار بدل فاقد / تالف رخصة مركبة',
-              onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'طريقة استلام الرخصة',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontFamily: 'Tajawal',
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+    Widget body = Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: AppColors.lightGreyBg,
+      drawer: const AppDrawer(),
+      body: Column(
+        children: [
+          ServiceScreenAppBar(
+            title: 'اصدار بدل فاقد / تالف رخصة مركبة',
+            onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'طريقة استلام الرخصة',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontFamily: 'Tajawal',
+                        fontSize: 17.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    SelectionOptionCard(
+                      title: 'استلام من وحدة المرور',
+                      subtitle:
+                          'استلم الرخصة شخصيًا من وحدة المرور التي تم تسجيلها في بياناتك',
+                      isSelected: selectedMethod == VehicleDeliveryMethod.pickup,
+                      onTap: () => _onMethodTap(VehicleDeliveryMethod.pickup),
+                      icon: SvgPicture.asset(
+                        'assets/tabler_building-bank.svg',
+                        width: 24.w,
+                        height: 24.w,
+                        colorFilter: ColorFilter.mode(
+                          AppColors.primary,
+                          BlendMode.srcIn,
                         ),
                       ),
-                      SizedBox(height: 16.h),
-                      SelectionOptionCard(
-                        title: 'استلام من وحدة المرور',
-                        subtitle:
-                            'استلم الرخصة شخصيًا من وحدة المرور التي تم تسجيلها في بياناتك',
-                        isSelected: selectedMethod == VehicleDeliveryMethod.pickup,
-                        onTap: () =>
-                            setState(() => selectedMethod = VehicleDeliveryMethod.pickup),
-                        icon: SvgPicture.asset(
-                          'assets/tabler_building-bank.svg',
-                          width: 24.w,
-                          height: 24.w,
-                          colorFilter: ColorFilter.mode(
-                            AppColors.primary,
-                            BlendMode.srcIn,
-                          ),
+                    ),
+                    SizedBox(height: 12.h),
+                    SelectionOptionCard(
+                      title: 'التوصيل للعنوان',
+                      subtitle:
+                          'سيتم توصيل رخصتك الجديدة للعنوان الذي تحدده, يرجى التأكد من صحة العنوان لتجنب أي تأخير.',
+                      isSelected: selectedMethod == VehicleDeliveryMethod.delivery,
+                      onTap: () => _onMethodTap(VehicleDeliveryMethod.delivery),
+                      icon: SvgPicture.asset(
+                        'assets/home2.svg',
+                        width: 24.w,
+                        height: 24.w,
+                        colorFilter: ColorFilter.mode(
+                          AppColors.primary,
+                          BlendMode.srcIn,
                         ),
                       ),
-                      SizedBox(height: 12.h),
-                      SelectionOptionCard(
-                        title: 'التوصيل للعنوان',
-                        subtitle:
-                            'سيتم توصيل رخصتك الجديدة للعنوان الذي تحدده, يرجى التأكد من صحة العنوان لتجنب أي تأخير.',
-                        isSelected: selectedMethod == VehicleDeliveryMethod.delivery,
-                        onTap: () => setState(
-                            () => selectedMethod = VehicleDeliveryMethod.delivery),
-                        icon: SvgPicture.asset(
-                          'assets/home2.svg',
-                          width: 24.w,
-                          height: 24.w,
-                          colorFilter: ColorFilter.mode(
-                            AppColors.primary,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
-                      if (selectedMethod == VehicleDeliveryMethod.delivery) ...[
-                        SizedBox(height: 20.h),
-                        CustomTextFormField(
-                          labelText: 'المحافظة',
-                          hintText: 'اكتب المحافظة',
-                          controller: _governorateController,
-                          validator: (v) => v?.isEmpty ?? true
-                              ? 'برجاء إدخال اسم محافظة صحيح'
-                              : null,
-                        ),
-                        SizedBox(height: 16.h),
-                        CustomTextFormField(
-                          labelText: 'المدينة / المركز',
-                          hintText: 'اكتب المدينة / المركز',
-                          controller: _cityController,
-                          validator: (v) => v?.isEmpty ?? true
-                              ? 'برجاء إدخال اسم مدينة / مركز صحيح'
-                              : null,
-                        ),
-                        SizedBox(height: 16.h),
-                        CustomTextFormField(
-                          labelText: 'تفاصيل إضافية للعنوان',
-                          hintText: 'اكتب تفاصيل العنوان....',
-                          controller: _addressDetailsController,
-                          validator: (v) => v?.isEmpty ?? true
-                              ? 'تعذر التحقق من العنوان…برجاء كتابة العنوان بشكل أوضح'
-                              : null,
-                          minLines: 3,
-                          maxLines: 5,
-                        ),
-                      ],
-                    ],
-                  ),
+                    ),
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      child: isDelivery
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                SizedBox(height: 20.h),
+                                SavedAddressesSelector(
+                                  governorateController: _governorateController,
+                                  cityController: _cityController,
+                                  addressDetailsController: _addressDetailsController,
+                                  onChanged: (useSaved, address) {
+                                    setState(() {
+                                      _useSavedAddress = useSaved;
+                                      _selectedAddress = address;
+                                    });
+                                  },
+                                ),
+                              ],
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 24.h),
-              child: _buildBottomButton(),
-            ),
-          ],
-        ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 24.h),
+            child: _buildBottomButton(),
+          ),
+        ],
       ),
     );
 
@@ -301,8 +323,6 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
             label: 'التالي',
             onPressed: _isButtonEnabled ? _onNextPressed : null,
             height: 48.h,
-            backgroundColor: AppColors.primary,
-            fontSize: 18.sp,
           );
         },
       );
@@ -312,8 +332,6 @@ class _VehicleDeliveryMethodScreenState extends State<VehicleDeliveryMethodScree
       label: 'التالي',
       onPressed: _isButtonEnabled ? _onNextPressed : null,
       height: 48.h,
-      backgroundColor: AppColors.primary,
-      fontSize: 18.sp,
     );
   }
 }

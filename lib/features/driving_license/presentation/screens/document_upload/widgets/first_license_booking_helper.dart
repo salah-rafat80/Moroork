@@ -43,10 +43,11 @@ class FirstLicenseBookingHelper {
         .toList(growable: false);
   }
 
-  Future<List<String>> loadMedicalSlots(DateTime selectedDate) async {
+  Future<List<String>> loadMedicalSlots(DateTime selectedDate, String medicalCenterId) async {
     final result = await _handler.fetchSlotsForUi(
       date: selectedDate,
       type: AppointmentType.medical,
+      trafficUnitId: medicalCenterId,
     );
     if (!result.isSuccess || result.data == null) {
       throw Exception(result.error ?? 'تعذر تحميل مواعيد الكشف الطبي.');
@@ -56,13 +57,28 @@ class FirstLicenseBookingHelper {
         .toList(growable: false);
   }
 
-  Future<List<String>> loadDrivingSlots(DateTime selectedDate) async {
+  Future<List<String>> loadDrivingSlots(DateTime selectedDate, String trafficUnitId) async {
     final result = await _handler.fetchSlotsForUi(
       date: selectedDate,
       type: AppointmentType.driving,
+      trafficUnitId: trafficUnitId,
     );
     if (!result.isSuccess || result.data == null) {
       throw Exception(result.error ?? 'تعذر تحميل مواعيد الاختبار.');
+    }
+    return result.data!
+        .map((AppointmentSlotModel item) => item.displayLabel)
+        .toList(growable: false);
+  }
+
+  Future<List<String>> loadTheorySlots(DateTime selectedDate, String trafficUnitId) async {
+    final result = await _handler.fetchSlotsForUi(
+      date: selectedDate,
+      type: AppointmentType.theory,
+      trafficUnitId: trafficUnitId,
+    );
+    if (!result.isSuccess || result.data == null) {
+      throw Exception(result.error ?? 'تعذر تحميل مواعيد اختبار الإشارات.');
     }
     return result.data!
         .map((AppointmentSlotModel item) => item.displayLabel)
@@ -86,6 +102,33 @@ class FirstLicenseBookingHelper {
     );
     if (!result.isSuccess || result.data == null) {
       throw Exception(result.error ?? 'تعذر تأكيد موعد الكشف الطبي.');
+    }
+    final data = result.data!;
+    return AppointmentBookingMeta(
+      bookingNumber: data.serviceNumber,
+      requestNumber: data.applicationId,
+      trafficUnitAddress: data.trafficUnitAddress,
+      workingHours: data.workingHours,
+    );
+  }
+
+  Future<AppointmentBookingMeta?> submitTheoryAppointment(
+    String governorateId,
+    String trafficUnitId,
+    DateTime selectedDate,
+    String selectedSlot, [
+    String? requestNumber,
+  ]) async {
+    final result = await _handler.bookAppointmentFromUi(
+      governorateId: governorateId,
+      trafficUnitId: trafficUnitId,
+      date: selectedDate,
+      selectedSlot: selectedSlot,
+      type: AppointmentType.theory,
+      requestNumber: requestNumber,
+    );
+    if (!result.isSuccess || result.data == null) {
+      throw Exception(result.error ?? 'تعذر تأكيد موعد اختبار الإشارات النظري.');
     }
     final data = result.data!;
     return AppointmentBookingMeta(

@@ -16,12 +16,12 @@ import 'package:traffic/features/driving_license/presentation/cubits/driving_ren
 import 'package:traffic/features/profile/data/models/profile_model.dart';
 import 'package:traffic/features/driving_license/presentation/cubits/driving_replacement_cubit.dart';
 import 'package:traffic/features/driving_license/presentation/cubits/driving_replacement_state.dart';
-import '../widgets/custom_text_form_field.dart';
 import '../widgets/selection_option_card.dart';
 import 'replacement_type_selection_screen.dart';
 import 'package:traffic/injection_container.dart';
 import 'package:traffic/core/api/order_payment_cache.dart';
-
+import 'package:traffic/core/api/user_address_cache.dart';
+import 'package:traffic/core/widgets/saved_addresses_selector.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 
 
@@ -118,6 +118,9 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
   final TextEditingController _addressDetailsController =
       TextEditingController();
 
+  UserAddress? _selectedAddress;
+  bool _useSavedAddress = false;
+
   // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   @override
@@ -150,11 +153,25 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
     setState(() => selectedMethod = method);
   }
 
-  void _onNextPressed() {
+  void _onNextPressed() async {
     // Validate address fields only when delivery is selected.
     if (selectedMethod == DeliveryMethod.delivery) {
-      if (!(_formKey.currentState?.validate() ?? false)) return;
+      if (_useSavedAddress && _selectedAddress != null) {
+        _governorateController.text = _selectedAddress!.governorate;
+        _cityController.text = _selectedAddress!.city;
+        _addressDetailsController.text = _selectedAddress!.details;
+      } else {
+        if (!(_formKey.currentState?.validate() ?? false)) return;
+        final newAddr = UserAddress(
+          governorate: _governorateController.text.trim(),
+          city: _cityController.text.trim(),
+          details: _addressDetailsController.text.trim(),
+        );
+        await UserAddressCache.saveAddress(newAddr);
+      }
     }
+
+    if (!mounted) return;
 
     // ── Renewal finalize mode ─────────────────────────────────────────────
     if (widget._isRenewalFinalizeMode) {
@@ -194,6 +211,10 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
         ? 'التوصيل للعنوان'
         : 'الاستلام من وحدة المرور';
 
+    final String? shippingAddress = selectedMethod == DeliveryMethod.delivery
+        ? '${_governorateController.text.trim()}، ${_cityController.text.trim()}، ${_addressDetailsController.text.trim()}'
+        : null;
+
     final String orderTypeLabel = widget.replacementType == ReplacementType.lost
         ? 'بدل فاقد رخصة قيادة'
         : 'بدل تالف رخصة قيادة';
@@ -202,6 +223,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
       orderType: orderTypeLabel,
       paymentMethod: paymentMethodLabel,
       orderId: widget.license!.licenseNumber,
+      shippingAddress: shippingAddress,
     );
 
     final double baseFee = state.response.fees?.baseFee ?? 0;
@@ -263,6 +285,10 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
         ? 'التوصيل للعنوان'
         : 'الاستلام من وحدة المرور';
 
+    final String? shippingAddress = selectedMethod == DeliveryMethod.delivery
+        ? '${_governorateController.text.trim()}، ${_cityController.text.trim()}، ${_addressDetailsController.text.trim()}'
+        : null;
+
     final String orderId = response.requestNumber.trim().isNotEmpty
         ? response.requestNumber
         : widget.renewalRequestNumber ?? '';
@@ -271,6 +297,7 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
       orderType: 'تجديد رخصة قيادة',
       paymentMethod: paymentMethodLabel,
       orderId: orderId,
+      shippingAddress: shippingAddress,
     );
 
     final FinalizeRenewalFeesModel feesPayload =
@@ -336,29 +363,6 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
       return '${amount.toInt()} جنية مصري';
     }
     return '$amount جنية مصري';
-  }
-
-  // ── Validators ────────────────────────────────────────────────────────────
-
-  String? _validateGovernorate(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'برجاء إدخال اسم محافظة صحيح';
-    }
-    return null;
-  }
-
-  String? _validateCity(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'برجاء إدخال اسم مدينة / مركز صحيح';
-    }
-    return null;
-  }
-
-  String? _validateAddressDetails(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'تعذر التحقق من العنوان…برجاء كتابة العنوان بشكل أوضح';
-    }
-    return null;
   }
 
   // ── Build ─────────────────────────────────────────────────────────────────
@@ -447,14 +451,23 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                       child: isDelivery
-                          ? _DeliveryAddressForm(
-                              governorateController: _governorateController,
-                              cityController: _cityController,
-                              addressDetailsController:
-                                  _addressDetailsController,
-                              validateGovernorate: _validateGovernorate,
-                              validateCity: _validateCity,
-                              validateAddressDetails: _validateAddressDetails,
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                SizedBox(height: 20.h),
+                                SavedAddressesSelector(
+                                  governorateController: _governorateController,
+                                  cityController: _cityController,
+                                  addressDetailsController:
+                                      _addressDetailsController,
+                                  onChanged: (useSaved, address) {
+                                    setState(() {
+                                      _useSavedAddress = useSaved;
+                                      _selectedAddress = address;
+                                    });
+                                  },
+                                ),
+                              ],
                             )
                           : const SizedBox.shrink(),
                     ),
@@ -561,68 +574,3 @@ class _DeliveryMethodScreenState extends State<DeliveryMethodScreen> {
   }
 }
 
-// ── Private sub-widget ────────────────────────────────────────────────────────
-
-/// The three address fields shown only when "التوصيل للعنوان" is selected.
-/// Extracted as a private widget to keep [_DeliveryMethodScreenState.build]
-/// readable.
-class _DeliveryAddressForm extends StatelessWidget {
-  final TextEditingController governorateController;
-  final TextEditingController cityController;
-  final TextEditingController addressDetailsController;
-  final FormFieldValidator<String> validateGovernorate;
-  final FormFieldValidator<String> validateCity;
-  final FormFieldValidator<String> validateAddressDetails;
-
-  const _DeliveryAddressForm({
-    required this.governorateController,
-    required this.cityController,
-    required this.addressDetailsController,
-    required this.validateGovernorate,
-    required this.validateCity,
-    required this.validateAddressDetails,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(height: 20.h),
-
-        // ── Governorate ──────────────────────────────────────────────────
-        CustomTextFormField(
-          labelText: 'المحافظة',
-          hintText: 'اكتب المحافظة',
-          controller: governorateController,
-          validator: validateGovernorate,
-        ),
-
-        SizedBox(height: 16.h),
-
-        // ── City / District ──────────────────────────────────────────────
-        CustomTextFormField(
-          labelText: 'المدينة / المركز',
-          hintText: 'اكتب المدينة / المركز',
-          controller: cityController,
-          validator: validateCity,
-        ),
-
-        SizedBox(height: 16.h),
-
-        // ── Additional address details (multiline textarea) ───────────────
-        CustomTextFormField(
-          labelText: 'تفاصيل إضافية للعنوان',
-          hintText: 'اكتب تفاصيل العنوان....',
-          controller: addressDetailsController,
-          validator: validateAddressDetails,
-          minLines: 3,
-          maxLines: 5,
-          keyboardType: TextInputType.multiline,
-        ),
-
-        SizedBox(height: 8.h),
-      ],
-    );
-  }
-}

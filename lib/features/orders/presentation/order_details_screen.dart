@@ -133,6 +133,21 @@ class _OrderDetailsViewState extends State<_OrderDetailsView> {
             ),
           );
 
+        } else if (state is OrderDetailsTheoryBookingSuccess) {
+          try {
+            context.read<MyOrdersCubit>().fetchMyOrders();
+          } catch (_) {}
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'تم حجز موعد اختبار الإشارات بنجاح! يمكنك متابعة طلبك من قائمة طلباتي.',
+                textDirection: TextDirection.rtl,
+              ),
+              backgroundColor: AppColors.primary,
+            ),
+          );
+
         } else if (state is OrderDetailsFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

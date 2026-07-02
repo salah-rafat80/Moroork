@@ -93,6 +93,7 @@ class VehicleLicenseRepository {
     try {
       final Map<String, dynamic> body = {
         'replacementtype': replacementType,
+        'replacementType': replacementType,
         'delivery': <String, dynamic>{
           'method': method,
         }
@@ -498,6 +499,13 @@ class VehicleLicenseRepository {
     switch (type) {
       case AppointmentType.medical:
         return const <String>['كشف طبي', 'Medical'];
+      case AppointmentType.theory:
+        return const <String>[
+          'اختبار إشارات نظري',
+          'إشارات',
+          'Theory',
+          'اختبار نظري',
+        ];
       case AppointmentType.driving:
         return const <String>[
           'قيادة عملي',
@@ -666,13 +674,13 @@ class VehicleLicenseRepository {
   }
 
   Future<ApiResult<List<AppointmentSlotModel>>> fetchAvailableSlots(
-      DateTime date, String type) async {
+      DateTime date, String type, String trafficUnitId) async {
     try {
       final dateStr =
           "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
       final response = await _apiClient.dio.get(
         '/appointments/available-slots',
-        queryParameters: {'date': dateStr, 'type': type},
+        queryParameters: {'date': dateStr, 'type': type, 'trafficUnitId': trafficUnitId},
       );
       final data = response.data;
       if (data is Map<String, dynamic> && data['isSuccess'] == true) {

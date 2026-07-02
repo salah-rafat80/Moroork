@@ -41,29 +41,33 @@ class ReviewSummaryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  'اجمالي المخالفات',
-                  textAlign: TextAlign.right,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textPrimary,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'اجمالي المخالفات',
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
                 SizedBox(height: 6.h),
-                Text(
-                  '$totalViolations مخالفات',
-                  textAlign: TextAlign.right,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    '$totalViolations مخالفات',
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
               ],
@@ -80,31 +84,35 @@ class ReviewSummaryCard extends StatelessWidget {
           // ── Total amount ──
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  'اجمالي المبلغ المستحق',
-                  textAlign: TextAlign.left,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.charcoal,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'اجمالي المبلغ المستحق',
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.charcoal,
+                    ),
                   ),
                 ),
                 SizedBox(height: 6.h),
-                Text(
-                  '${totalAmount.toInt()} جنية مصري',
-                  textAlign: TextAlign.left,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    '${totalAmount.toInt()} جنية مصري',
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
               ],
@@ -115,4 +123,3 @@ class ReviewSummaryCard extends StatelessWidget {
     );
   }
 }
-

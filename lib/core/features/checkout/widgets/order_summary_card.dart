@@ -12,6 +12,7 @@ class OrderSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasAddress = summary.shippingAddress != null && summary.shippingAddress!.isNotEmpty;
     return _OrderCardShell(
       title: 'ملخص الطلب',
       child: Column(
@@ -19,6 +20,8 @@ class OrderSummaryCard extends StatelessWidget {
         children: [
           InfoRowItem(label: 'نوع الطلب', value: summary.orderType),
           InfoRowItem(label: 'طريقة السداد', value: summary.paymentMethod),
+          if (hasAddress)
+            InfoRowItem(label: 'عنوان التوصيل', value: summary.shippingAddress!),
           InfoRowItem(
             label: 'رقم الطلب',
             value: summary.orderId,

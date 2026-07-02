@@ -62,6 +62,7 @@ class DrivingRenewalRepository {
   Future<ApiResult<List<AppointmentSlotModel>>> fetchAvailableSlots({
     required DateTime date,
     required AppointmentType type,
+    required String trafficUnitId,
   }) async {
     try {
       final Response<Object?> response = await _apiClient.dio.get<Object?>(
@@ -69,6 +70,7 @@ class DrivingRenewalRepository {
         queryParameters: <String, Object?>{
           'date': _formatDate(date),
           'type': type.apiValue,
+          'trafficUnitId': trafficUnitId,
         },
       );
 
@@ -213,6 +215,13 @@ class DrivingRenewalRepository {
     switch (type) {
       case AppointmentType.medical:
         return const <String>['كشف طبي', 'Medical'];
+      case AppointmentType.theory:
+        return const <String>[
+          'اختبار إشارات نظري',
+          'إشارات',
+          'Theory',
+          'اختبار نظري',
+        ];
       case AppointmentType.driving:
         return const <String>[
           'قيادة عملي',
@@ -576,8 +585,9 @@ class DrivingLicenseRenewalDataHandler {
   Future<ApiResult<List<AppointmentSlotModel>>> fetchSlotsForUi({
     required DateTime date,
     required AppointmentType type,
+    required String trafficUnitId,
   }) {
-    return _repository.fetchAvailableSlots(date: date, type: type);
+    return _repository.fetchAvailableSlots(date: date, type: type, trafficUnitId: trafficUnitId);
   }
 
   Future<ApiResult<AppointmentBookingResponseModel>> bookAppointmentFromUi({

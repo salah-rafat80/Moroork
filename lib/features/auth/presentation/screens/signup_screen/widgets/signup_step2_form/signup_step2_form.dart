@@ -51,7 +51,7 @@ class SignupStep2Form extends StatelessWidget {
             SizedBox(height: 5.h),
             CustomTextField(
               controller: firstNameController,
-              hintText: 'أميرة',
+              hintText: 'أدخل الاسم الأول',
               textAlign: TextAlign.right,
               onChanged: onFieldChanged,
             ),
@@ -61,7 +61,7 @@ class SignupStep2Form extends StatelessWidget {
             SizedBox(height: 5.h),
             CustomTextField(
               controller: familyNameController,
-              hintText: 'بدر',
+              hintText: 'أدخل اسم العائلة',
               textAlign: TextAlign.right,
               onChanged: onFieldChanged,
             ),
@@ -71,7 +71,7 @@ class SignupStep2Form extends StatelessWidget {
             SizedBox(height: 5.h),
             CustomTextField(
               controller: nationalIdController,
-              hintText: '12345678900-',
+              hintText: 'أدخل الرقم القومي',
               textAlign: TextAlign.right,
               keyboardType: TextInputType.number,
               hasError: nationalIdError != null,

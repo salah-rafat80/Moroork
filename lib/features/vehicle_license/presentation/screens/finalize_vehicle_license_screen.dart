@@ -11,11 +11,12 @@ import 'package:traffic/core/features/checkout/models/order_summary.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
-import 'package:traffic/features/lost_license/presentation/widgets/custom_text_form_field.dart';
 import 'package:traffic/features/lost_license/presentation/widgets/selection_option_card.dart';
 import 'package:traffic/features/vehicle_license/presentation/cubits/vehicle_license_cubit.dart';
 import 'package:traffic/features/vehicle_license/presentation/cubits/vehicle_license_state.dart';
 import 'package:traffic/core/api/order_payment_cache.dart';
+import 'package:traffic/core/api/user_address_cache.dart';
+import 'package:traffic/core/widgets/saved_addresses_selector.dart';
 
 /// Delivery method picker for vehicle license issuance.
 /// Works exactly like [FinalizeDrivingLicenseScreen] but wired to
@@ -43,6 +44,9 @@ class _FinalizeVehicleLicenseScreenState
   final TextEditingController _addressDetailsController =
       TextEditingController();
 
+  UserAddress? _selectedAddress;
+  bool _useSavedAddress = false;
+
   @override
   void initState() {
     super.initState();
@@ -58,12 +62,25 @@ class _FinalizeVehicleLicenseScreenState
     super.dispose();
   }
 
-  void _onFinalize(BuildContext context) {
+  void _onFinalize(BuildContext context) async {
+    final cubit = context.read<VehicleLicenseCubit>();
     if (_deliveryMethod == 2) {
-      if (!(_formKey.currentState?.validate() ?? false)) return;
+      if (_useSavedAddress && _selectedAddress != null) {
+        _governorateController.text = _selectedAddress!.governorate;
+        _cityController.text = _selectedAddress!.city;
+        _addressDetailsController.text = _selectedAddress!.details;
+      } else {
+        if (!(_formKey.currentState?.validate() ?? false)) return;
+        final newAddr = UserAddress(
+          governorate: _governorateController.text.trim(),
+          city: _cityController.text.trim(),
+          details: _addressDetailsController.text.trim(),
+        );
+        await UserAddressCache.saveAddress(newAddr);
+      }
     }
 
-    context.read<VehicleLicenseCubit>().finalizeLicense(
+    cubit.finalizeLicense(
       method: _deliveryMethod ?? 1,
       governorate: _deliveryMethod == 2
           ? _governorateController.text.trim()
@@ -87,6 +104,10 @@ class _FinalizeVehicleLicenseScreenState
         ? 'التوصيل للعنوان'
         : 'الاستلام من وحدة المرور';
 
+    final String? shippingAddress = _deliveryMethod == 2
+        ? '${_governorateController.text.trim()}، ${_cityController.text.trim()}، ${_addressDetailsController.text.trim()}'
+        : null;
+
     // Prefer requestNumber from the API response (may differ from the one we sent).
     final String orderId = state.response.requestNumber.trim().isNotEmpty
         ? state.response.requestNumber
@@ -96,6 +117,7 @@ class _FinalizeVehicleLicenseScreenState
       orderType: 'إصدار رخصة مركبة',
       paymentMethod: paymentMethodLabel,
       orderId: orderId,
+      shippingAddress: shippingAddress,
     );
 
     // Use real fees returned by the API.
@@ -150,27 +172,6 @@ class _FinalizeVehicleLicenseScreenState
       return '${amount.toInt()} جنية مصري';
     }
     return '$amount جنية مصري';
-  }
-
-  String? _validateGovernorate(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'برجاء إدخال اسم محافظة صحيح';
-    }
-    return null;
-  }
-
-  String? _validateCity(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'برجاء إدخال اسم مدينة / مركز صحيح';
-    }
-    return null;
-  }
-
-  String? _validateAddressDetails(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'تعذر التحقق من العنوان…برجاء كتابة العنوان بشكل أوضح';
-    }
-    return null;
   }
 
   @override
@@ -243,7 +244,7 @@ class _FinalizeVehicleLicenseScreenState
                         SelectionOptionCard(
                           title: 'استلام من وحدة المرور',
                           subtitle:
-                              'استلم الرخصة شخصيًا من وحدة المرور التي تم تسجيلها في بياناتك',
+                              'استلم الرخصة شخصيًا من وحدة المرور التي تم تسجيلها in بياناتك',
                           isSelected: _deliveryMethod == 1,
                           onTap: () => setState(() => _deliveryMethod = 1),
                           icon: SvgPicture.asset(
@@ -282,28 +283,18 @@ class _FinalizeVehicleLicenseScreenState
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     SizedBox(height: 20.h),
-                                    CustomTextFormField(
-                                      labelText: 'المحافظة',
-                                      hintText: 'اكتب المحافظة',
-                                      controller: _governorateController,
-                                      validator: _validateGovernorate,
-                                    ),
-                                    SizedBox(height: 16.h),
-                                    CustomTextFormField(
-                                      labelText: 'المدينة / المركز',
-                                      hintText: 'اكتب المدينة / المركز',
-                                      controller: _cityController,
-                                      validator: _validateCity,
-                                    ),
-                                    SizedBox(height: 16.h),
-                                    CustomTextFormField(
-                                      labelText: 'تفاصيل إضافية للعنوان',
-                                      hintText: 'اكتب تفاصيل العنوان....',
-                                      controller: _addressDetailsController,
-                                      validator: _validateAddressDetails,
-                                      minLines: 3,
-                                      maxLines: 5,
-                                      keyboardType: TextInputType.multiline,
+                                    SavedAddressesSelector(
+                                      governorateController:
+                                          _governorateController,
+                                      cityController: _cityController,
+                                      addressDetailsController:
+                                          _addressDetailsController,
+                                      onChanged: (useSaved, address) {
+                                        setState(() {
+                                          _useSavedAddress = useSaved;
+                                          _selectedAddress = address;
+                                        });
+                                      },
                                     ),
                                     SizedBox(height: 8.h),
                                   ],

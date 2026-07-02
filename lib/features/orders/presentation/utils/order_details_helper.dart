@@ -10,6 +10,7 @@ import '../../../driving_license/presentation/cubits/driving_renewal_cubit.dart'
 import '../../../lost_license/presentation/screens/delivery_method_screen.dart';
 import '../../../driving_license/presentation/screens/medical_check/medical_check_screen.dart';
 import '../../../driving_license/presentation/screens/practical_test/practical_test_booking_screen.dart';
+import '../../../driving_license/presentation/screens/theory_test/theory_test_booking_screen.dart';
 import '../../../driving_license/presentation/screens/document_upload/widgets/first_license_booking_helper.dart';
 import 'package:traffic/core/widgets/generic_booking_screen.dart';
 import 'package:traffic/features/vehicle_license/presentation/screens/vehicle_inspection_booking_screen.dart';
@@ -69,7 +70,11 @@ class OrderDetailsHelper {
         order.title.contains('إصدار رخصة قيادة') ||
         order.title.contains('تجديد رخصة مركبة') ||
         order.title.contains('إصدار رخصة مركبة') ||
-        order.title.contains('اصدار رخصة مركبة');
+        order.title.contains('اصدار رخصة مركبة') ||
+        order.title.contains('بدل فاقد') ||
+        order.title.contains('بدل تالف') ||
+        order.title.contains('استبدال رخصة') ||
+        order.id.startsWith('RPL-');
 
     final String step = order.stepCode ?? '';
     final String label = order.statusLabel;
@@ -118,6 +123,11 @@ class OrderDetailsHelper {
     } else if (step == 'MEDICAL_EXAM_BOOKING_WAITING' ||
         statusLabel.contains('حجز الكشف الطبي')) {
       return 'حجز الكشف الطبي';
+    } else if (step == 'THEORY_TEST_BOOKING_WAITING' ||
+        statusLabel.contains('حجز اختبار الإشارات') ||
+        statusLabel.contains('حجز اختبار الاشارات') ||
+        statusLabel.contains('حجز الاختبار النظري')) {
+      return 'حجز اختبار الإشارات النظري';
     } else if (step == 'PRACTICAL_TEST_BOOKING_WAITING' ||
         step == 'DRIVING_TEST_BOOKING_WAITING' ||
         step == 'DRIVING_SCHOOL_BOOKING_WAITING' ||
@@ -210,6 +220,7 @@ class OrderDetailsHelper {
         orderType: orderType,
         paymentMethod: paymentMethodLabel,
         orderId: order.id,
+        shippingAddress: order.delivery?.address,
       );
 
       if (context.mounted) {
@@ -328,11 +339,16 @@ class OrderDetailsHelper {
     } else if (title.contains('إصدار رخصة قيادة') ||
         requestNumber.startsWith('LR-') ||
         requestNumber.startsWith('DL-')) {
-      // ─── إصدار رخصة قيادة ─────────────────────────────────────────
+      // ─── إصدار رخصة قيادة ───────────────────────────────────────────────
       if (hasMedicalFailure(order) ||
           step == 'MEDICAL_EXAM_BOOKING_WAITING' ||
           statusLabel.contains('حجز الكشف الطبي')) {
-        await startMedicalBooking(context, requestNumber);
+        await startMedicalBooking(context, requestNumber, title);
+      } else if (step == 'THEORY_TEST_BOOKING_WAITING' ||
+          statusLabel.contains('حجز اختبار الإشارات') ||
+          statusLabel.contains('حجز اختبار الاشارات') ||
+          statusLabel.contains('حجز الاختبار النظري')) {
+        await startTheoryBooking(context, requestNumber);
       } else if (hasPracticalFailure(order) ||
           step == 'PRACTICAL_TEST_BOOKING_WAITING' ||
           step == 'DRIVING_TEST_BOOKING_WAITING' ||
@@ -371,7 +387,13 @@ class OrderDetailsHelper {
       if (hasMedicalFailure(order) ||
           step == 'MEDICAL_EXAM_BOOKING_WAITING' ||
           statusLabel.contains('حجز الكشف الطبي')) {
-        await startMedicalBooking(context, requestNumber);
+        await startMedicalBooking(context, requestNumber, title);
+      } else if (step == 'THEORY_TEST_BOOKING_WAITING' ||
+          statusLabel.contains('حجز اختبار الإشارات') ||
+          statusLabel.contains('حجز اختبار الاشارات') ||
+          statusLabel.contains('حجز الاختبار النظري')) {
+        // ✅ اختبار الإشارات النظري — الخطوة الصحيحة في تجديد رخصة القيادة
+        await startTheoryBooking(context, requestNumber);
       } else if (hasPracticalFailure(order) ||
           step == 'PRACTICAL_TEST_BOOKING_WAITING' ||
           step == 'DRIVING_TEST_BOOKING_WAITING' ||
@@ -419,14 +441,16 @@ class OrderDetailsHelper {
 
   static Future<void> startMedicalBooking(
     BuildContext context,
-    String requestNumber,
-  ) async {
+    String requestNumber, [
+    String? orderTitle,
+  ]) async {
     final bookingHelper = getIt<FirstLicenseBookingHelper>();
+    final String screenTitle = orderTitle ?? 'اصدار رخصة قيادة';
     final BookingFlowData? medicalData = await Navigator.push<BookingFlowData>(
       context,
       MaterialPageRoute(
         builder: (_) => MedicalCheckScreen(
-          appBarTitle: 'اصدار رخصة قيادة',
+          appBarTitle: screenTitle,
           loadGovernorates: bookingHelper.loadGovernorates,
           loadMedicalCenters: bookingHelper.loadTrafficUnits,
           loadSlotsForDate: bookingHelper.loadMedicalSlots,
@@ -436,10 +460,39 @@ class OrderDetailsHelper {
 
     if (medicalData != null && context.mounted) {
       context.read<OrderDetailsCubit>().submitMedicalAppointment(
-        medicalData.selectedGovernorateId ?? '',
-        medicalData.selectedSecondaryId ?? '',
+        medicalData.selectedGovernorateId ?? medicalData.selectedGovernorate,
+        medicalData.selectedSecondaryId ?? medicalData.selectedSecondary,
         medicalData.selectedDate,
         medicalData.selectedSlot,
+        requestNumber,
+      );
+    }
+  }
+
+  static Future<void> startTheoryBooking(
+    BuildContext context,
+    String requestNumber,
+  ) async {
+    final bookingHelper = getIt<FirstLicenseBookingHelper>();
+    final BookingFlowData? theoryData =
+        await Navigator.push<BookingFlowData>(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TheoryTestBookingScreen(
+              appBarTitle: 'تجديد رخصة القيادة',
+              loadGovernorates: bookingHelper.loadGovernorates,
+              loadTrafficUnits: bookingHelper.loadTrafficUnits,
+              loadSlotsForDate: bookingHelper.loadTheorySlots,
+            ),
+          ),
+        );
+
+    if (theoryData != null && context.mounted) {
+      context.read<OrderDetailsCubit>().submitTheoryAppointment(
+        theoryData.selectedGovernorateId ?? theoryData.selectedGovernorate,
+        theoryData.selectedSecondaryId ?? theoryData.selectedSecondary,
+        theoryData.selectedDate,
+        theoryData.selectedSlot,
         requestNumber,
       );
     }

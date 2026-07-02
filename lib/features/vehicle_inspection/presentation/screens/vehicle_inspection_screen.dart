@@ -30,6 +30,7 @@ class _VehicleInspectionScreenState extends State<VehicleInspectionScreen> {
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.image,
+        allowCompression: false,
       );
 
       if (result == null || result.files.isEmpty) return;
@@ -86,17 +87,17 @@ class _VehicleInspectionScreenState extends State<VehicleInspectionScreen> {
                   // ── Camera icon card ──
                   const InspectionCameraIconCard(),
 
-                  SizedBox(height: 32.h),
+                  SizedBox(height: 24.h),
 
                   // ── Feature bullet points ──
                   const InspectionBulletPoint(
                     text: 'صوّر سيارتك أو ارفع صورة للحصول على تقرير فوري عن حالتها.',
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 12.h),
                   const InspectionBulletPoint(
                     text: 'اكتشف أي مشاكل محتملة قبل الذهاب للمرور.',
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 12.h),
                   const InspectionBulletPoint(
                     text: 'فحص سريع وبسيط لتتأكد أن سيارتك جاهزة وآمنة.',
                   ),

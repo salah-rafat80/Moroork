@@ -29,9 +29,10 @@ class OrderSummaryHeaderCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
+            textDirection: TextDirection.rtl,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -39,6 +40,7 @@ class OrderSummaryHeaderCard extends StatelessWidget {
                 child: Text(
                   order.title,
                   textAlign: TextAlign.right,
+                  textDirection: TextDirection.rtl,
                   style: TextStyle(
                     color: AppColors.charcoal,
                     fontSize: 16.sp,
@@ -51,14 +53,12 @@ class OrderSummaryHeaderCard extends StatelessWidget {
           ),
           SizedBox(height: 8.h),
           Row(
+            textDirection: TextDirection.rtl,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: _OrderStatusBadge(order: order),
-              ),
-              SizedBox(width: 8.w),
               Text(
-                ": الحالة ",
+                "الحالة : ",
+                textDirection: TextDirection.rtl,
                 style: TextStyle(
                   color: AppColors.mediumGrey,
                   fontSize: 12.sp,
@@ -66,16 +66,31 @@ class OrderSummaryHeaderCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              SizedBox(width: 8.w),
+              Flexible(child: _OrderStatusBadge(order: order)),
             ],
           ),
           SizedBox(height: 8.h),
           Row(
+            textDirection: TextDirection.rtl,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Text(
+                'رقم الطلب',
+                textDirection: TextDirection.rtl,
+                style: TextStyle(
+                  color: AppColors.mediumGrey,
+                  fontSize: 12.sp,
+                  fontFamily: 'Cairo',
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(width: 8.w),
               Expanded(
                 child: Text(
                   order.id,
                   textAlign: TextAlign.left,
+                  textDirection: TextDirection.ltr,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -84,28 +99,31 @@ class OrderSummaryHeaderCard extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w600,
                   ),
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                'رقم الطلب',
-                style: TextStyle(
-                  color: AppColors.mediumGrey,
-                  fontSize: 12.sp,
-                  fontFamily: 'Cairo',
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
           ),
           SizedBox(height: 8.h),
           Row(
+            textDirection: TextDirection.rtl,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Text(
+                'تاريخ التقديم',
+                textDirection: TextDirection.rtl,
+                style: TextStyle(
+                  color: AppColors.mediumGrey,
+                  fontSize: 12.sp,
+                  fontFamily: 'Cairo',
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(width: 8.w),
               Expanded(
                 child: Text(
                   order.date,
                   textAlign: TextAlign.left,
+                  textDirection: TextDirection.ltr,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -114,16 +132,6 @@ class OrderSummaryHeaderCard extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.w600,
                   ),
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                'تاريخ التقديم',
-                style: TextStyle(
-                  color: AppColors.mediumGrey,
-                  fontSize: 12.sp,
-                  fontFamily: 'Cairo',
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -193,6 +201,7 @@ class _OrderStatusBadge extends StatelessWidget {
         textAlign: TextAlign.center,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        textDirection: TextDirection.rtl,
         style: TextStyle(
           color: textColor,
           fontSize: 14.sp,

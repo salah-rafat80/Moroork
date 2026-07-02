@@ -222,6 +222,7 @@ class _OrderItemCardState extends State<OrderItemCard>
         textAlign: TextAlign.center,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        textDirection: TextDirection.rtl,
         style: TextStyle(
           color: textColor,
           fontSize: 12.sp,

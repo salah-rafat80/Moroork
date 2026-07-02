@@ -6,6 +6,9 @@ import 'package:traffic/core/constants/typography.dart';
 
 class AppTheme {
   static ThemeData light({bool arabic = true}) {
+    final originalDarkMode = AppColors.isDarkMode;
+    AppColors.isDarkMode = false;
+
     final text = arabic ? AppTypography.arabic() : AppTypography.latin();
     final baseScheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
@@ -19,7 +22,7 @@ class AppTheme {
       onSurface: AppColors.textPrimary,
     );
 
-    return ThemeData(
+    final themeData = ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.background,
@@ -172,9 +175,15 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
     );
+
+    AppColors.isDarkMode = originalDarkMode;
+    return themeData;
   }
 
   static ThemeData dark({bool arabic = true}) {
+    final originalDarkMode = AppColors.isDarkMode;
+    AppColors.isDarkMode = true;
+
     final text = arabic ? AppTypography.arabic() : AppTypography.latin();
     final baseScheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
@@ -189,7 +198,7 @@ class AppTheme {
       onSurface: AppColors.textPrimary,
     );
 
-    return ThemeData(
+    final themeData = ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colorScheme,
@@ -343,5 +352,8 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
     );
+
+    AppColors.isDarkMode = originalDarkMode;
+    return themeData;
   }
 }

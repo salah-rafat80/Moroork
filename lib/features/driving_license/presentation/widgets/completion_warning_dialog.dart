@@ -12,14 +12,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// - When "العودة للشاشة الرئيسية" is pressed, dismisses the dialog and
 ///   navigates back to the home screen (first route).
 class CompletionWarningDialog extends StatelessWidget {
-  const CompletionWarningDialog({super.key});
+  final bool isRenewal;
+
+  const CompletionWarningDialog({
+    super.key,
+    this.isRenewal = false,
+  });
 
   /// Shows this dialog using [showDialog].
-  static Future<void> show(BuildContext context) {
+  static Future<void> show(BuildContext context, {bool isRenewal = false}) {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const CompletionWarningDialog(),
+      builder: (_) => CompletionWarningDialog(isRenewal: isRenewal),
     );
   }
 
@@ -57,7 +62,9 @@ class CompletionWarningDialog extends StatelessWidget {
 
               // ── Warning message ──────────────────────────────────────────
               Text(
-                'لن تتمكن من استكمال إصدار الرخصة إلا بعد اجتياز اختبار الإشارات النظري، واختبار القيادة العملي',
+                isRenewal
+                    ? 'لن تتمكن من استكمال تجديد الرخصة إلا بعد اجتياز اختبار الإشارات النظري'
+                    : 'لن تتمكن من استكمال إصدار الرخصة إلا بعد اجتياز اختبار الإشارات النظري، واختبار القيادة العملي',
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   color: AppColors.textPrimary,

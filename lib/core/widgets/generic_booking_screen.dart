@@ -132,7 +132,7 @@ class GenericBookingScreen extends StatefulWidget {
   final Future<List<BookingSelectionOption>> Function()? loadGovernorates;
   final Future<List<BookingSelectionOption>> Function(String governorateId)?
   loadSecondaryOptions;
-  final Future<List<String>> Function(DateTime selectedDate)? loadSlotsForDate;
+  final Future<List<String>> Function(DateTime selectedDate, String secondaryId)? loadSlotsForDate;
 
   const GenericBookingScreen({
     super.key,
@@ -250,13 +250,27 @@ class _GenericBookingScreenState extends State<GenericBookingScreen> {
   }
 
   Future<void> _onBookAppointmentPressed() async {
+    if (_selectedSecondaryId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'يرجى اختيار ${widget.secondaryDropdown.label} أولاً.',
+            textDirection: TextDirection.rtl,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
     final result = await Navigator.push<AppointmentResult>(
       context,
       MaterialPageRoute(
         builder: (_) => AppointmentBookingScreen(
           appBarTitle: widget.appBarTitle,
           bookingHeaderTitle: widget.bookingCardTitle,
-          loadSlotsForDate: widget.loadSlotsForDate,
+          loadSlotsForDate: widget.loadSlotsForDate != null
+              ? (date) => widget.loadSlotsForDate!(date, _selectedSecondaryId!)
+              : null,
         ),
       ),
     );

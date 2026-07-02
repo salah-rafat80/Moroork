@@ -18,17 +18,19 @@ class InspectionRetakeButton extends StatelessWidget {
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
-          side: BorderSide(color: AppColors.primary, width: 1.5),
+          side: BorderSide(color: AppColors.primary, width: 1.5.w),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
           ),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
         ),
         child: Text(
           'اعادة التصوير',
           style: TextStyle(
             fontFamily: 'Tajawal',
-            fontSize: 17.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w700,
+            height: 1.4,
           ),
         ),
       ),

@@ -78,9 +78,9 @@ class VehicleInspectionBookingScreen extends StatelessWidget {
               }
               throw Exception(result.error);
             },
-            loadSlotsForDate: (date) async {
+            loadSlotsForDate: (date, trafficUnitId) async {
               final result =
-                  await cubit.repository.fetchAvailableSlots(date, 'Technical');
+                  await cubit.repository.fetchAvailableSlots(date, 'Technical', trafficUnitId);
               if (result.isSuccess) {
                 return result.data!
                     .map((AppointmentSlotModel slot) => slot.displayLabel)

@@ -6,7 +6,7 @@ import 'package:traffic/core/widgets/primary_button.dart';
 import 'package:traffic/core/widgets/service_screen_appbar.dart';
 import 'package:traffic/core/widgets/app_drawer.dart';
 import '../widgets/selection_option_card.dart';
-import '../../data/models/vehicle_license_model.dart';
+import 'package:traffic/features/vehicle_license/data/models/vehicle_license_model.dart';
 import 'vehicle_delivery_method_screen.dart';
 
 enum VehicleReplacementType { lost, damaged }
@@ -44,81 +44,77 @@ class _VehicleReplacementTypeSelectionScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: AppColors.lightGreyBg,
-        drawer: const AppDrawer(),
-        body: Column(
-          children: [
-            ServiceScreenAppBar(
-              title: 'اصدار بدل فاقد / تالف رخصة مركبة',
-              onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'نوع طلب الاستبدال',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontFamily: 'Tajawal',
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: AppColors.lightGreyBg,
+      drawer: const AppDrawer(),
+      body: Column(
+        children: [
+          ServiceScreenAppBar(
+            title: 'اصدار بدل فاقد / تالف رخصة مركبة',
+            onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'نوع طلب الاستبدال',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontFamily: 'Tajawal',
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  SelectionOptionCard(
+                    title: 'بدل فاقد',
+                    subtitle: 'استبدال رخصة المركبة المفقودة',
+                    isSelected: selectedType == VehicleReplacementType.lost,
+                    onTap: () => _onOptionTap(VehicleReplacementType.lost),
+                    icon: SvgPicture.asset(
+                      'assets/file.svg',
+                      width: 24.w,
+                      height: 24.w,
+                      colorFilter: ColorFilter.mode(
+                        AppColors.primary,
+                        BlendMode.srcIn,
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    SelectionOptionCard(
-                      title: 'بدل فاقد',
-                      subtitle: 'استبدال رخصة المركبة المفقودة',
-                      isSelected: selectedType == VehicleReplacementType.lost,
-                      onTap: () => _onOptionTap(VehicleReplacementType.lost),
-                      icon: SvgPicture.asset(
-                        'assets/file.svg',
-                        width: 24.w,
-                        height: 24.w,
-                        colorFilter: ColorFilter.mode(
-                          AppColors.primary,
-                          BlendMode.srcIn,
-                        ),
+                  ),
+                  SizedBox(height: 12.h),
+                  SelectionOptionCard(
+                    title: 'بدل تالف',
+                    subtitle: 'استبدال رخصة المركبة التالفة',
+                    isSelected: selectedType == VehicleReplacementType.damaged,
+                    onTap: () => _onOptionTap(VehicleReplacementType.damaged),
+                    icon: SvgPicture.asset(
+                      'assets/file.svg',
+                      width: 24.w,
+                      height: 24.w,
+                      colorFilter: ColorFilter.mode(
+                        AppColors.primary,
+                        BlendMode.srcIn,
                       ),
                     ),
-                    SizedBox(height: 12.h),
-                    SelectionOptionCard(
-                      title: 'بدل تالف',
-                      subtitle: 'استبدال رخصة المركبة التالفة',
-                      isSelected: selectedType == VehicleReplacementType.damaged,
-                      onTap: () => _onOptionTap(VehicleReplacementType.damaged),
-                      icon: SvgPicture.asset(
-                        'assets/file.svg',
-                        width: 24.w,
-                        height: 24.w,
-                        colorFilter: ColorFilter.mode(
-                          AppColors.primary,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 24.h),
-              child: PrimaryButton(
-                label: 'التالي',
-                onPressed: selectedType != null ? _onNextPressed : null,
-                height: 48.h,
-                backgroundColor: AppColors.primary,
-              ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 24.h),
+            child: PrimaryButton(
+              label: 'التالي',
+              onPressed: selectedType != null ? _onNextPressed : null,
+              height: 48.h,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

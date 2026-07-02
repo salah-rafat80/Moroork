@@ -25,7 +25,7 @@ class MedicalCheckScreen extends StatelessWidget {
   final Future<List<BookingSelectionOption>> Function()? loadGovernorates;
   final Future<List<BookingSelectionOption>> Function(String governorateId)?
       loadMedicalCenters;
-  final Future<List<String>> Function(DateTime selectedDate)? loadSlotsForDate;
+  final Future<List<String>> Function(DateTime selectedDate, String medicalCenterId)? loadSlotsForDate;
 
   const MedicalCheckScreen({
     super.key,

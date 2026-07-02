@@ -252,7 +252,7 @@ void main() {
 
       final exception = tester.takeException();
       if (exception != null) {
-        print('EXCEPTION: $exception');
+        debugPrint('EXCEPTION: $exception');
       }
       expect(exception, isNull);
     });

@@ -46,7 +46,9 @@ class ServiceScreenAppBar extends StatelessWidget {
           child: Row(
             children: [
               GestureDetector(
-                onTap: onMenuPressed,
+                onTap:
+                    onMenuPressed ??
+                    () => Scaffold.maybeOf(context)?.openDrawer(),
                 child: Icon(
                   Icons.menu,
                   size: 24.w,

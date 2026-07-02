@@ -3,6 +3,7 @@ import 'package:traffic/core/utils/date_time_formatter.dart';
 
 enum AppointmentType {
   medical('Medical'),
+  theory('Medical'),
   driving('Driving'),
   technical('Technical');
 
@@ -13,6 +14,8 @@ enum AppointmentType {
     switch (this) {
       case AppointmentType.medical:
         return 'كشف طبي';
+      case AppointmentType.theory:
+        return 'اختبار إشارات نظري';
       case AppointmentType.driving:
         return 'اختبار قيادة';
       case AppointmentType.technical:

@@ -54,6 +54,27 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     }
   }
 
+  Future<void> submitTheoryAppointment(
+      String governorateId,
+      String secondaryId,
+      DateTime selectedDate,
+      String selectedSlot,
+      String requestNumber) async {
+    emit(OrderDetailsLoading());
+    try {
+      await bookingHelper.submitTheoryAppointment(
+        governorateId,
+        secondaryId,
+        selectedDate,
+        selectedSlot,
+        requestNumber,
+      );
+      emit(OrderDetailsTheoryBookingSuccess());
+    } catch (e) {
+      emit(OrderDetailsFailure(e.toString().replaceAll('Exception: ', '')));
+    }
+  }
+
   Future<void> submitDrivingAppointment(
       String governorateId,
       String secondaryId,

@@ -69,7 +69,7 @@ class SignupStep1Form extends StatelessWidget {
                     SizedBox(height: 8.h),
                     CustomTextField(
                       controller: usernameController,
-                      hintText: 'salah',
+                      hintText: 'أدخل اسم المستخدم',
                       textAlign: TextAlign.right,
                       hasError: usernameError != null,
                       onChanged: onUsernameChanged,
@@ -81,7 +81,7 @@ class SignupStep1Form extends StatelessWidget {
                     SizedBox(height: 8.h),
                     CustomTextField(
                       controller: emailController,
-                      hintText: 'salah@gmail.com',
+                      hintText: 'أدخل البريد الإلكتروني',
                       textAlign: TextAlign.right,
                       keyboardType: TextInputType.emailAddress,
                       hasError: emailError != null,

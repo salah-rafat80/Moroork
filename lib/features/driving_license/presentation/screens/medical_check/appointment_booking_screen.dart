@@ -69,6 +69,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
 
   String? _selectedSlot;
   late List<String> _slots;
+  bool _isLoadingSlots = false;
 
   static const List<String> _kFallbackSlots = [
     '09:00-10:00 Am',
@@ -88,7 +89,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
     super.initState();
     _selectedDay = DateTime.now();
     _targetDateTime = DateTime.now();
-    _slots = List<String>.from(_kFallbackSlots);
+    _slots = const <String>[];
     _loadSlotsForDate(_selectedDay);
   }
 
@@ -98,8 +99,15 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
     final Future<List<String>> Function(DateTime selectedDate)? loader =
         widget.loadSlotsForDate;
     if (loader == null) {
+      setState(() {
+        _slots = List<String>.from(_kFallbackSlots);
+      });
       return;
     }
+
+    setState(() {
+      _isLoadingSlots = true;
+    });
 
     try {
       final List<String> loaded = await loader(selectedDate);
@@ -107,15 +115,17 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
         return;
       }
       setState(() {
-        _slots = loaded.isEmpty ? List<String>.from(_kFallbackSlots) : loaded;
+        _slots = loaded;
         _selectedSlot = null;
+        _isLoadingSlots = false;
       });
     } catch (error) {
       if (!mounted) {
         return;
       }
       setState(() {
-        _slots = List<String>.from(_kFallbackSlots);
+        _slots = const <String>[];
+        _isLoadingSlots = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -201,6 +211,13 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                     selectedDay: _selectedDay,
                     targetDateTime: _targetDateTime,
                     onDayPressed: (date, _) {
+                      final DateTime today = DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                      );
+                      if (date.isBefore(today)) return;
+
                       setState(() {
                         _selectedDay = date;
                         _selectedSlot = null; // reset slot on date change
@@ -229,12 +246,35 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                   SizedBox(height: 6.h),
 
                   // ── Time slot grid ─────────────────────────────────────
-                  TimeSlotGrid(
-                    slots: _slots,
-                    selectedSlot: _selectedSlot,
-                    onSlotSelected: (slot) =>
-                        setState(() => _selectedSlot = slot),
-                  ),
+                  if (_isLoadingSlots)
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24.h),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  else if (_slots.isEmpty)
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24.h),
+                      child: Text(
+                        'لا توجد مواعيد متاحة لهذا اليوم',
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 14.sp,
+                          fontFamily: 'Tajawal',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  else
+                    TimeSlotGrid(
+                      slots: _slots,
+                      selectedSlot: _selectedSlot,
+                      onSlotSelected: (slot) =>
+                          setState(() => _selectedSlot = slot),
+                    ),
                   SizedBox(height: 24.h),
                 ],
               ),
@@ -368,6 +408,18 @@ class _StyledCalendar extends StatelessWidget {
               targetDateTime: targetDateTime,
               onDayPressed: onDayPressed,
               onCalendarChanged: onTargetDateChanged,
+
+              // ── Minimum selectable date (today and onwards) ──────────────
+              minSelectedDate: DateTime(
+                DateTime.now().year,
+                DateTime.now().month,
+                DateTime.now().day,
+              ),
+              inactiveDaysTextStyle: TextStyle(
+                color: AppColors.greyIcon,
+                fontSize: 13.sp,
+                fontFamily: 'Inter',
+              ),
 
               // ── Suppress built-in header ─────────────────────────────────
               showHeader: false,

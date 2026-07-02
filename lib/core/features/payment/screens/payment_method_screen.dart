@@ -91,6 +91,7 @@ class _PaymentMethodScreenContentState
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
+        backgroundColor: AppColors.whiteBg,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.r),
         ),
@@ -101,6 +102,7 @@ class _PaymentMethodScreenContentState
             fontWeight: FontWeight.bold,
             fontFamily: 'Tajawal',
             fontSize: 20.sp,
+            color: AppColors.textPrimary,
           ),
         ),
         content: Column(
@@ -181,6 +183,7 @@ class _PaymentMethodScreenContentState
                 return PopScope(
                   canPop: false,
                   child: AlertDialog(
+                    backgroundColor: AppColors.whiteBg,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.r),
                     ),
@@ -195,6 +198,7 @@ class _PaymentMethodScreenContentState
                           style: TextStyle(
                             fontFamily: 'Tajawal',
                             fontSize: 16.sp,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ],
@@ -245,31 +249,54 @@ class _PaymentMethodScreenContentState
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
                     horizontal: 16.w,
-                    vertical: 24.h,
+                    vertical: 20.h,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       // Section title
                       Text(
-                        'تأكيد وسيلة دفع',
+                        'تأكيد وسيلة الدفع',
                         style: TextStyle(
                           fontFamily: 'Tajawal',
-                          fontSize: 17.sp,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        'يرجى مراجعة تفاصيل الفاتورة واختيار وسيلة الدفع المناسبة لإتمام المعاملة.',
+                        textDirection: TextDirection.rtl,
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.mediumGrey,
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+
+                      // Summary card (Ticket style)
+                      PaymentSummaryCard(paymentIntent: widget.paymentIntent),
+                      SizedBox(height: 24.h),
+
+                      // Selection Header
+                      Text(
+                        'اختر طريقة الدفع',
+                        style: TextStyle(
+                          fontFamily: 'Tajawal',
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w700,
                           color: AppColors.textPrimary,
                         ),
                       ),
-                      SizedBox(height: 16.h),
-
-                      // Summary card
-                      PaymentSummaryCard(paymentIntent: widget.paymentIntent),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 12.h),
 
                       // Payment option (Visa/MC)
                       PaymentOptionCard(
-                        title: 'فيزا/ ماستر كارد',
-                        subtitle: 'Visa/Mastercard',
+                        title: 'بطاقة الدفع البنكية',
+                        subtitle: 'فيزا / ماستر كارد / ميزة',
                         logoAssetPath: 'assets/visa_mc_logo.png',
                         isSelected: _isVisaSelected,
                         onTap: () {
@@ -278,24 +305,71 @@ class _PaymentMethodScreenContentState
                           });
                         },
                       ),
+                      SizedBox(height: 12.h),
+
+                      // Payment option (E-Wallet - coming soon)
+                      PaymentOptionCard(
+                        title: 'المحافظ الإلكترونية',
+                        subtitle: 'فودافون كاش / إنستاباي / فوري',
+                        logoAssetPath: 'assets/wallet_logo.png',
+                        isSelected: !_isVisaSelected,
+                        isAvailable: false,
+                        onTap: () {
+                          setState(() {
+                            _isVisaSelected = false;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ),
               ),
 
-              // Bottom action
+              // Bottom action with security lock info
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-                child: isLoading
-                    ? Center(
-                        child: CustomLoadingIndicator(color: AppColors.primary),
-                      )
-                    : PrimaryButton(
-                        label: 'التالي',
-                        onPressed: _isVisaSelected
-                            ? () => _onNextPressed(context)
-                            : null,
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    isLoading
+                        ? Center(
+                            child: CustomLoadingIndicator(color: AppColors.primary),
+                          )
+                        : PrimaryButton(
+                            label: 'تأكيد ودفع آمن',
+                            onPressed: _isVisaSelected
+                                ? () => _onNextPressed(context)
+                                : null,
+                          ),
+                    SizedBox(height: 12.h),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(
+                              Icons.lock_outline_rounded,
+                              size: 14.w,
+                              color: AppColors.mediumGrey,
+                            ),
+                          ),
+                          WidgetSpan(child: SizedBox(width: 6.w)),
+                          TextSpan(
+                            text: 'تشفير آمن 100% لجميع المعاملات المالية',
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 11.sp,
+                              color: AppColors.mediumGrey,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ],
           );

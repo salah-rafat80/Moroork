@@ -75,7 +75,8 @@ class ViolationItemCard extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.right,
-                  maxLines: 1,
+                  textDirection: TextDirection.rtl,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: 'Cairo',
@@ -88,6 +89,7 @@ class ViolationItemCard extends StatelessWidget {
                 Text(
                   violationNumber,
                   textAlign: TextAlign.right,
+                  textDirection: TextDirection.ltr,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -103,14 +105,18 @@ class ViolationItemCard extends StatelessWidget {
 
           SizedBox(width: 10.w),
 
-          // ── Amount ──
-          Text(
-            '${amount.toInt()} جنية مصري',
-            style: TextStyle(
-              fontFamily: 'Cairo',
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '${amount.toInt()} جنية مصري',
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primary,
+              ),
             ),
           ),
         ],

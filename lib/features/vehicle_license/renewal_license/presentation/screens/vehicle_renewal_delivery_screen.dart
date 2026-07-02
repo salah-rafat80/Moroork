@@ -11,10 +11,11 @@ import 'package:traffic/core/widgets/service_screen_appbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traffic/core/api/order_payment_cache.dart';
 import 'package:traffic/core/widgets/loading_overlay.dart';
+import 'package:traffic/core/api/user_address_cache.dart';
+import 'package:traffic/core/widgets/saved_addresses_selector.dart';
 import '../../data/models/renewal_vehicle_license_model.dart';
 import '../../../presentation/cubits/vehicle_renewal_cubit.dart';
 import '../../../presentation/cubits/vehicle_renewal_state.dart';
-import '../../../replacement_license/presentation/widgets/custom_text_form_field.dart';
 import '../../../replacement_license/presentation/widgets/selection_option_card.dart';
 import 'package:traffic/injection_container.dart';
 
@@ -47,6 +48,9 @@ class _VehicleRenewalDeliveryScreenState
   final TextEditingController _addressDetailsController =
       TextEditingController();
 
+  UserAddress? _selectedAddress;
+  bool _useSavedAddress = false;
+
   @override
   void dispose() {
     _governorateController.dispose();
@@ -57,14 +61,29 @@ class _VehicleRenewalDeliveryScreenState
 
   bool get _isButtonEnabled => selectedMethod != null;
 
-  void _onNextPressed(BuildContext context) {
+  void _onNextPressed(BuildContext context) async {
+    final cubit = context.read<VehicleRenewalCubit>();
     if (selectedMethod == VehicleDeliveryMethod.delivery) {
-      if (!(_formKey.currentState?.validate() ?? false)) return;
+      if (_useSavedAddress && _selectedAddress != null) {
+        // Use the selected saved address
+        _governorateController.text = _selectedAddress!.governorate;
+        _cityController.text = _selectedAddress!.city;
+        _addressDetailsController.text = _selectedAddress!.details;
+      } else {
+        // Validate new address input
+        if (!(_formKey.currentState?.validate() ?? false)) return;
+        final newAddr = UserAddress(
+          governorate: _governorateController.text.trim(),
+          city: _cityController.text.trim(),
+          details: _addressDetailsController.text.trim(),
+        );
+        await UserAddressCache.saveAddress(newAddr);
+      }
     }
 
     final int method = selectedMethod == VehicleDeliveryMethod.delivery ? 2 : 1;
 
-    context.read<VehicleRenewalCubit>().finalizeVehicleRenewal(
+    cubit.finalizeVehicleRenewal(
       requestNumber: widget.requestNumber,
       method: method,
       governorate: method == 2 ? _governorateController.text.trim() : null,
@@ -83,10 +102,15 @@ class _VehicleRenewalDeliveryScreenState
         ? 'التوصيل للعنوان'
         : 'الاستلام من وحدة المرور';
 
+    final String? shippingAddress = selectedMethod == VehicleDeliveryMethod.delivery
+        ? '${_governorateController.text.trim()}، ${_cityController.text.trim()}، ${_addressDetailsController.text.trim()}'
+        : null;
+
     final orderSummary = OrderSummary(
       orderType: 'تجديد رخصة مركبة',
       paymentMethod: paymentMethodLabel,
       orderId: widget.vehicle?.plateNumber ?? widget.plateNumber ?? '',
+      shippingAddress: shippingAddress,
     );
 
     final double baseFee = state.response.fees?.baseFee ?? 0;
@@ -231,33 +255,18 @@ class _VehicleRenewalDeliveryScreenState
                                 if (selectedMethod ==
                                     VehicleDeliveryMethod.delivery) ...[
                                   SizedBox(height: 20.h),
-                                  CustomTextFormField(
-                                    labelText: 'المحافظة',
-                                    hintText: 'اكتب المحافظة',
-                                    controller: _governorateController,
-                                    validator: (v) => v?.isEmpty ?? true
-                                        ? 'برجاء إدخال اسم محافظة صحيح'
-                                        : null,
-                                  ),
-                                  SizedBox(height: 16.h),
-                                  CustomTextFormField(
-                                    labelText: 'المدينة / المركز',
-                                    hintText: 'اكتب المدينة / المركز',
-                                    controller: _cityController,
-                                    validator: (v) => v?.isEmpty ?? true
-                                        ? 'برجاء إدخال اسم مدينة / مركز صحيح'
-                                        : null,
-                                  ),
-                                  SizedBox(height: 16.h),
-                                  CustomTextFormField(
-                                    labelText: 'تفاصيل إضافية للعنوان',
-                                    hintText: 'اكتب تفاصيل العنوان....',
-                                    controller: _addressDetailsController,
-                                    validator: (v) => v?.isEmpty ?? true
-                                        ? 'تعذر التحقق من العنوان…برجاء كتابة العنوان بشكل أوضح'
-                                        : null,
-                                    minLines: 3,
-                                    maxLines: 5,
+                                  SavedAddressesSelector(
+                                    governorateController:
+                                        _governorateController,
+                                    cityController: _cityController,
+                                    addressDetailsController:
+                                        _addressDetailsController,
+                                    onChanged: (useSaved, address) {
+                                      setState(() {
+                                        _useSavedAddress = useSaved;
+                                        _selectedAddress = address;
+                                      });
+                                    },
                                   ),
                                 ],
                               ],

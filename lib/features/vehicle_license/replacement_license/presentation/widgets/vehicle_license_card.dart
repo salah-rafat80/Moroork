@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:traffic/core/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:traffic/core/widgets/radio_dot.dart';
-import '../../data/models/vehicle_license_model.dart';
+import 'package:traffic/features/vehicle_license/data/models/vehicle_license_model.dart';
+import 'package:traffic/features/driving_license/domain/enums/license_status.dart';
 
 class VehicleLicenseCard extends StatelessWidget {
   final VehicleLicenseModel vehicle;
@@ -21,8 +22,8 @@ class VehicleLicenseCard extends StatelessWidget {
   });
 
   bool get _isRestricted =>
-      vehicle.status == VehicleLicenseStatus.suspended ||
-      vehicle.status == VehicleLicenseStatus.withdrawn;
+      vehicle.status == LicenseStatus.suspended ||
+      vehicle.status == LicenseStatus.withdrawn;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,9 @@ class VehicleLicenseCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     _Badge(
-                      text: vehicle.plateNumber,
+                      text: (vehicle.plateNumber != null && vehicle.plateNumber!.isNotEmpty)
+                          ? vehicle.plateNumber!
+                          : vehicle.vehicleLicenseNumber,
                       color: AppColors.primary,
                     ),
                   ],
@@ -72,7 +75,12 @@ class VehicleLicenseCard extends StatelessWidget {
                 const _Divider(),
 
                 // ── Info Rows ───────────────────────────────────────────────
-                _InfoRow(label: 'نوع المركبة', value: vehicle.vehicleType),
+                _InfoRow(
+                  label: 'نوع المركبة',
+                  value: [vehicle.category, vehicle.brand, vehicle.model]
+                      .where((s) => s.isNotEmpty)
+                      .join(' - '),
+                ),
                 const _Divider(),
                 _InfoRow(label: 'تاريخ انتهاء', value: vehicle.expiryDate),
                 const _Divider(),
@@ -179,7 +187,7 @@ class _Badge extends StatelessWidget {
 }
 
 class _StatusBadge extends StatelessWidget {
-  final VehicleLicenseStatus status;
+  final LicenseStatus status;
 
   const _StatusBadge({required this.status});
 
@@ -189,19 +197,19 @@ class _StatusBadge extends StatelessWidget {
     Color color;
 
     switch (status) {
-      case VehicleLicenseStatus.valid:
+      case LicenseStatus.valid:
         text = 'سارية';
         color = AppColors.primary;
         break;
-      case VehicleLicenseStatus.expired:
+      case LicenseStatus.expired:
         text = 'منتهية';
         color = AppColors.alertRed;
         break;
-      case VehicleLicenseStatus.suspended:
+      case LicenseStatus.suspended:
         text = 'موقوفة';
         color = AppColors.warningOrange;
         break;
-      case VehicleLicenseStatus.withdrawn:
+      case LicenseStatus.withdrawn:
         text = 'مسحوبة';
         color = AppColors.warningOrange;
         break;

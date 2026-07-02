@@ -27,7 +27,7 @@ class TheoryTestBookingScreen extends StatelessWidget {
   final Future<List<BookingSelectionOption>> Function()? loadGovernorates;
   final Future<List<BookingSelectionOption>> Function(String governorateId)?
   loadTrafficUnits;
-  final Future<List<String>> Function(DateTime selectedDate)? loadSlotsForDate;
+  final Future<List<String>> Function(DateTime selectedDate, String trafficUnitId)? loadSlotsForDate;
 
   const TheoryTestBookingScreen({
     super.key,
